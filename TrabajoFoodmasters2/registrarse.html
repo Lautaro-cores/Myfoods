@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse</title>
+</head>
+<body>
+    <h2>Registrarse</h2>
+    <form id="form-registro">
+        <input type="text" name="nombre" id="reg-nombre" placeholder="Nombre de usuario" required>
+        <input type="email" name="correo" id="reg-correo" placeholder="Correo electrónico" required>
+        <input type="password" name="contrasena" id="reg-contrasena" placeholder="Contraseña" required minlength="5">
+        <button type="submit" id="Registrar">Registrarse</button>
+    </form>
+    <div id="mensaje"></div>
+    <br>
+    <p>¿Ya tienes una cuenta? <a href="iniciar_sesion.html">Inicia sesión aquí</a></p>
+    <br>
+    <a href="index.html">Volver a la página principal</a>
+    <script src="script.js"></script>
+</body>
+</html>
