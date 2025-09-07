@@ -7,12 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formRegistro) {
         formRegistro.addEventListener("submit", (e) => {
             e.preventDefault();
-            const nombre = document.getElementById("reg-nombre").value;
-            const contrasena = document.getElementById("reg-contrasena").value;
-            const correo = document.getElementById("reg-correo").value;
+            const nombre = document.getElementById("reg-name").value;
+            const contrasena = document.getElementById("reg-password").value;
+            const correo = document.getElementById("reg-mail").value;
         
             if (nombre && contrasena && correo) {
-                fetch("/Registrarse.php", {
+                fetch("/register.php", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formLogin) {
         formLogin.addEventListener("submit", (e) => {
             e.preventDefault();
-            const nombre = document.getElementById("login-nombre").value;
-            const contrasena = document.getElementById("login-contrasena").value;
+            const nombre = document.getElementById("login-name").value;
+            const contrasena = document.getElementById("login-password").value;
 
             if (nombre && contrasena) {
-                fetch("InicioSesion.php", {
+                fetch("lonIn.php", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         mensajeDiv.style.color = "green";
                         mensajeDiv.textContent = res.msj;
                         setTimeout(() => {
-                            window.location.href = 'myfoods/visual/publicar_receta.html';
+                            window.location.href = 'myfoods/visual/publishRecipe.html';
                         }, 1000);
                     }
                 });
