@@ -1,34 +1,39 @@
 <?php
-require_once "connection.php";
+session_start();
+require_once "../connection.php";
 
-if(!empty($_POST["name"]) && !empty($_POST["mail"]) && !empty($_POST["password"])) {
-    $name = $_POST["name"];
-    $mail = $_POST["mail"];
-    $password = $_POST["password"];
+if (isset($_POST["userName"], $_POST["userPassword"], $_POST["userEmail"])) {
+    $userName = $_POST["userName"];
+    $userPassword = $_POST["userPassword"];
+    $userEmail = $_POST["userEmail"];
 
+    // Verifica si el usuario o correo ya existen
+    $sql = "SELECT * FROM user WHERE userName = ? OR userEmail = ?";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "ss", $userName, $userEmail);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
 
-    $sql_check = "SELECT * FROM user WHERE name = ? OR email = ?";
-    $stmt_check = mysqli_prepare($con, $sql_check);
-    mysqli_stmt_bind_param($stmt_check, "ss", $name, $mail);
-    mysqli_stmt_execute($stmt_check);
-    $res_check = mysqli_stmt_get_result($stmt_check);
-
-    if (mysqli_num_rows($res_check) > 0) {
-        echo json_encode(["error" => "existente", "msj" => "El usuario o correo electrónico ya están registrados."]);
+    if (mysqli_num_rows($res) > 0) {
+        echo json_encode(["error" => true, "msj" => "El usuario o correo ya existe."]);
         exit();
     }
 
-  
-    $sql_insert = "INSERT INTO user (name, password, email) VALUES (?, ?, ?)";
-    $stmt_insert = mysqli_prepare($con, $sql_insert);
-    mysqli_stmt_bind_param($stmt_insert, "sss", $name, $password, $mail);
+    // Inserta el nuevo usuario
+    $sql = "INSERT INTO user (userName, userPassword, userEmail) VALUES (?, ?, ?)";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, "sss", $userName, $userPassword, $userEmail);
+    if (mysqli_stmt_execute($stmt)) {
+        // Iniciar sesión automáticamente después de registrar
+        $userId = mysqli_insert_id($con);
+        $_SESSION['userLogged'] = $userName;
+        $_SESSION['userId'] = $userId;
 
-    if(mysqli_stmt_execute($stmt_insert)) {
-        echo json_encode(["msj" => "¡Registro exitoso! Ya puedes iniciar sesión."]);
+        echo json_encode(["success" => true, "msj" => "Registro exitoso."]);
     } else {
-        echo json_encode(["error" => "db_error", "msj" => "Ocurrió un error al registrarse."]);
+        echo json_encode(["error" => true, "msj" => "Error al registrar usuario."]);
     }
 } else {
-    echo json_encode(["error" => "parametros_faltantes", "msj" => "Por favor, completa todos los campos."]);
+    echo json_encode(["error" => true, "msj" => "Faltan datos."]);
 }
 ?>

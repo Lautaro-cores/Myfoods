@@ -7,9 +7,9 @@
 </head>
 <body>
     <h2>Iniciar Sesión</h2>
-    <form id="form-login">
-        <input type="text" name="name" id="login-Name" placeholder="Nombre de usuario" required>
-        <input type="password" name="password" id="login-Password" placeholder="Contraseña" required>
+    <form id="formLogin">
+        <input type="text" name="userName" id="loginUserName" placeholder="Nombre de usuario" required autocomplete="username">
+        <input type="password" name="userPassword" id="loginUserPassword" placeholder="Contraseña" required autocomplete="current-password">
         <button type="submit" id="Login">Ingresar</button>
     </form>
     <div id="mensaje"></div>
@@ -17,6 +17,6 @@
     <p>¿No tienes una cuenta? <a href="register.html">Regístrate aquí</a></p>
     <br>
     <a href="index.html">Volver a la página principal</a>
-    <script src="script.js"></script>
+    <script src="login.js"></script>
 </body>
 </html>

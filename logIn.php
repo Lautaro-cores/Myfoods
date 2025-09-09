@@ -1,23 +1,23 @@
 <?php
 session_start();
-require_once "conection.php";
+require_once "../connection.php";
 
-if (isset($_POST["name"]) && isset($_POST["password"])) {
-    $nombre = $_POST["name"];
-    $contrasena = $_POST["password"];
+if (isset($_POST["userName"]) && isset($_POST["userPassword"])) {
+    $userName = $_POST["userName"];
+    $userPassword = $_POST["userPassword"];
 
-    $sql = "SELECT userid, nombre, contraseña FROM usuario WHERE nombre = ?";
+    $sql = "SELECT userId, userName, userPassword FROM user WHERE userName = ?";
     $stmt = mysqli_prepare($con, $sql);
-    mysqli_stmt_bind_param($stmt, "s", $nombre);
+    mysqli_stmt_bind_param($stmt, "s", $userName);
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
 
     if (mysqli_num_rows($res) > 0) {
-        $fila = mysqli_fetch_assoc($res);
-        
-        if ($contraseña === $fila["password"]) {
-            $_SESSION['userLogged'] = $fila['name'];
-            $_SESSION['idUser'] = $fila['idUser'];
+        $row = mysqli_fetch_assoc($res);
+
+        if ($userPassword === $row["userPassword"]) { // Considera usar password_hash en producción
+            $_SESSION['userLogged'] = $row['userName'];
+            $_SESSION['userId'] = $row['userId'];
 
             echo json_encode(["success" => true, "msj" => "Login exitoso."]);
         } else {
