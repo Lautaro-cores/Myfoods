@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS myfoods;
 USE myfoods;
 
-CREATE TABLE user (
+CREATE TABLE `user` (
   userId INT(11) NOT NULL AUTO_INCREMENT,
   userName VARCHAR(255) NOT NULL,
   userPassword VARCHAR(255) NOT NULL,
@@ -33,13 +33,13 @@ CREATE TABLE comment (
   CONSTRAINT fk_comment_userId FOREIGN KEY (userId) REFERENCES user (userId)
 );
 
-CREATE TABLE ingredient (
+CREATE TABLE ingredientRecipe (
   ingredientId INT(11) NOT NULL AUTO_INCREMENT,
   postId INT(11) NOT NULL,
   ingredient VARCHAR(255) NOT NULL,
   PRIMARY KEY (ingredientId),
-  KEY fk_ingredient_postId (postId),
-  CONSTRAINT fk_ingredient_postId FOREIGN KEY (postId) REFERENCES post (postId)
+  KEY fk_ingredientRecipe_postId (postId),
+  CONSTRAINT fk_ingredientRecipe_postId FOREIGN KEY (postId) REFERENCES post (postId)
 );
 
 CREATE TABLE likes (
