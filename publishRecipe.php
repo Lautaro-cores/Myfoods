@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "../connection.php";
+require_once "includes/config.php";
 
 if (!isset($_SESSION['userId'])) {
     echo json_encode(["success" => false, "msj" => "Debes iniciar sesión para publicar."]);

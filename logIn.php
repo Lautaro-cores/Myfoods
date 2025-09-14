@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "../connection.php";
+require_once "includes/config.php";
 
 if (isset($_POST["userName"]) && isset($_POST["userPassword"])) {
     $userName = $_POST["userName"];
