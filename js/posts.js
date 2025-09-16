@@ -9,7 +9,7 @@ function timeAgo(dateString) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetch("getPosts.php")
+    fetch("../getPosts.php")
         .then(res => res.json())
         .then(posts => {
             const postsDiv = document.getElementById("posts");

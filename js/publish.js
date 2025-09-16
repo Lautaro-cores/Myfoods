@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formPublish.addEventListener("submit", (e) => {
             e.preventDefault();
             const title = document.getElementById("recipeTitle").value;
-            fetch("publishRecipe.php", {
+            fetch("../publishRecipe.php", { 
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"

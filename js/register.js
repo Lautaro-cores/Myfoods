@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const userPassword = document.getElementById("regUserPassword").value;
             const userEmail = document.getElementById("regUserEmail").value;
             if (userName && userPassword && userEmail) {
-                fetch("register.php", {
+                fetch("../register.php", { 
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"

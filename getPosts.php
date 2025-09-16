@@ -1,6 +1,6 @@
 <?php
 
-require_once "../connection.php";
+require_once "includes/config.php";
 
 $sql = "SELECT post.title, post.postDate, users.userName 
         FROM post 
