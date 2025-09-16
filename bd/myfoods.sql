@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-09-2025 a las 04:56:45
+-- Tiempo de generación: 16-09-2025 a las 14:01:13
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -80,7 +80,7 @@ CREATE TABLE `post` (
   `postId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `description` text(255) NOT NULL,
+  `description` text NOT NULL,
   `postDate` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -107,10 +107,13 @@ CREATE TABLE `users` (
   `userName` varchar(255) NOT NULL,
   `userPassword` varchar(255) NOT NULL,
   `userEmail` varchar(255) NOT NULL,
+  `userType` varchar(255) NOT NULL DEFAULT 'user',
   `userImage` longblob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
+--
+-- Índices para tablas volcadas
+--
 
 --
 -- Indices de la tabla `comment`
