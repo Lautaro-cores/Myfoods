@@ -2,9 +2,9 @@
 
 require_once "includes/config.php";
 
-$sql = "SELECT post.title, post.postDate, users.userName 
+$sql = "SELECT post.postId, post.title, post.description, post.postDate, users.userName 
         FROM post 
-        JOIN users ON post.userId = user.userId
+        JOIN users ON post.userId = users.userId
         ORDER BY post.postDate DESC";
 $res = mysqli_query($con, $sql);
 

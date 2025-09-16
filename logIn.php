@@ -2,7 +2,6 @@
 session_start();
 require_once "includes/config.php";
 
-
 if (isset($_POST["userName"]) && isset($_POST["userPassword"])) {
     $userName = $_POST["userName"];
     $userPassword = $_POST["userPassword"];
@@ -16,7 +15,7 @@ if (isset($_POST["userName"]) && isset($_POST["userPassword"])) {
     if (mysqli_num_rows($res) > 0) {
         $row = mysqli_fetch_assoc($res);
 
-        if ($userPassword === $row["userPassword"]) { // Considera usar password_hash en producción
+        if ($userPassword === $row["userPassword"]) {
             $_SESSION['userLogged'] = $row['userName'];
             $_SESSION['userId'] = $row['userId'];
 

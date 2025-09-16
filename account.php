@@ -1,18 +1,14 @@
 <?php
 session_start();
-
-// Si el usuario no ha iniciado sesión, redirigirlo a la página de inicio de sesión
 if (!isset($_SESSION['userLogged'])) {
-    header("Location: logIn.html");
+    header("Location: visual/logIn.php");
     exit();
 }
 
-// Incluir el archivo de conexión a la base de datos
-require_once "../connection.php";
+require_once "includes/config.php";
 
 $userName = $_SESSION['userLogged'];
 
-// Obtener el correo electrónico y la imagen del usuario desde la base de datos
 $sql = "SELECT userEmail, userImage FROM users WHERE userName = ?";
 $stmt = mysqli_prepare($con, $sql);
 mysqli_stmt_bind_param($stmt, "s", $userName);
@@ -21,15 +17,10 @@ $res = mysqli_stmt_get_result($stmt);
 $user = mysqli_fetch_assoc($res);
 $userEmail = $user['userEmail'];
 
-// Manejar la imagen del usuario
 $userImage = '';
-// Si el campo userImage de la base de datos está vacío
 if (empty($user['userImage'])) {
-    // Usar la ruta a tu imagen predeterminada
-    // Asegúrate de que la ruta sea correcta
-    $userImage = '../icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg'; 
+    $userImage = 'img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg';
 } else {
-    // Si la base de datos tiene una imagen, la usamos
     $userImage = 'data:image/jpeg;base64,' . base64_encode($user['userImage']);
 }
 ?>
@@ -51,9 +42,9 @@ if (empty($user['userImage'])) {
         <input type="file" name="userImage" id="userImageInput">
         <button type="submit">Subir Imagen</button>
     </form>
-    <a href="index.html">Volver a la página principal</a>
+    <a href="visual/index.php">Volver a la página principal</a>
     <a href="logout.php">Cerrar sesión</a>
 
-    <script src="account.js"></script>
+    <script src="js/account.js"></script>
 </body>
 </html>

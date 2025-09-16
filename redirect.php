@@ -2,10 +2,10 @@
 session_start();
 
 if (isset($_SESSION['userLogged'])) {
-    header("Location:/myfoods/visual/publishRecipe.html");
+    header("Location: visual/publishRecipe.php");
     exit();
 } else {
-    header("Location:/myfoods/visual/register.html");
+    header("Location: visual/register.php");
     exit();
 }
 ?>

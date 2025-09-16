@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         mensajeDiv.style.color = "green";
                         mensajeDiv.textContent = res.msj;
                         setTimeout(() => {
-                            window.location.href = "publishRecipe.html";
+                            window.location.href = "publishRecipe.php";
                         }, 1000);
                     } else {
                         mensajeDiv.style.color = "red";

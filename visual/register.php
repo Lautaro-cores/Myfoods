@@ -15,9 +15,9 @@
     </form>
     <div id="mensaje"></div>
     <br>
-    <p>¿Ya tienes una cuenta? <a href="logIn.html">Inicia sesión aquí</a></p>
+    <p>¿Ya tienes una cuenta? <a href="logIn.php">Inicia sesión aquí</a></p>
     <br>
-    <a href="index.html">Volver a la página principal</a>
+    <a href="index.php">Volver a la página principal</a>
     <script src="../js/register.js"></script>
 </body>
 </html>

@@ -7,13 +7,14 @@ if (!isset($_SESSION['userId'])) {
     exit();
 }
 
-if (isset($_POST["title"])) {
+if (isset($_POST["title"]) && isset($_POST["description"])) {
     $title = $_POST["title"];
+    $description = $_POST["description"];
     $userId = $_SESSION["userId"];
 
-    $sql = "INSERT INTO post (userId, title) VALUES (?, ?)";
+    $sql = "INSERT INTO post (userId, title, description) VALUES (?, ?, ?)";
     $stmt = mysqli_prepare($con, $sql);
-    mysqli_stmt_bind_param($stmt, "is", $userId, $title);
+    mysqli_stmt_bind_param($stmt, "iss", $userId, $title, $description);
 
     if (mysqli_stmt_execute($stmt)) {
         echo json_encode(["success" => true, "msj" => "Receta publicada con éxito."]);

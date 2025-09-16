@@ -14,9 +14,9 @@
     </form>
     <div id="mensaje"></div>
     <br>
-    <p>¿No tienes una cuenta? <a href="register.html">Regístrate aquí</a></p>
+    <p>¿No tienes una cuenta? <a href="register.php">Regístrate aquí</a></p>
     <br>
-    <a href="index.html">Volver a la página principal</a>
+    <a href="index.php">Volver a la página principal</a>
     <script src="../js/logIn.js"></script>
 </body>
 </html>

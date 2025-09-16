@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(res => res.json())
         .then(posts => {
             const postsDiv = document.getElementById("posts");
-            if (posts.length === 0) {
+            if (!posts || posts.length === 0) {
                 postsDiv.innerHTML = "<p>No hay recetas publicadas aún.</p>";
                 return;
             }
             postsDiv.innerHTML = posts.map(post => `
-                <div style="border:1px solid #ccc; margin:10px 0; padding:10px;">
+                <div onclick="location.href='../viewRecipe.php?id=${post.postId}'" style="border:1px solid #ccc; margin:10px 0; padding:10px; cursor:pointer;">
                     <strong>${post.title}</strong><br>
                     <small>Por ${post.userName} - ${timeAgo(post.postDate)}</small>
                 </div>

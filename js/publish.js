@@ -6,12 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
         formPublish.addEventListener("submit", (e) => {
             e.preventDefault();
             const title = document.getElementById("recipeTitle").value;
+            const description = document.getElementById("recipeDescription").value;
             fetch("../publishRecipe.php", { 
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded"
                 },
-                body: "title=" + encodeURIComponent(title)
+                body: "title=" + encodeURIComponent(title) + "&description=" + encodeURIComponent(description)
             })
             .then(res => res.json())
             .then(res => {

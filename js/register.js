@@ -5,16 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (formRegister) {
         formRegister.addEventListener("submit", (e) => {
             e.preventDefault();
-            const userName = document.getElementById("regUserName").value;
-            const userPassword = document.getElementById("regUserPassword").value;
-            const userEmail = document.getElementById("regUserEmail").value;
-            if (userName && userPassword && userEmail) {
+            const formData = new FormData(formRegister);
+            if (formData.get("userName") && formData.get("userPassword") && formData.get("userEmail")) {
                 fetch("../register.php", { 
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: "userName=" + encodeURIComponent(userName) + "&userPassword=" + encodeURIComponent(userPassword) + "&userEmail=" + encodeURIComponent(userEmail)
+                    body: "userName=" + encodeURIComponent(formData.get("userName")) + "&userPassword=" + encodeURIComponent(formData.get("userPassword")) + "&userEmail=" + encodeURIComponent(formData.get("userEmail"))
                 }) 
                 .then(res => res.json())
                 .then(res => {
@@ -22,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         mensajeDiv.style.color = "green";
                         mensajeDiv.textContent = res.msj;
                         setTimeout(() => {
-                            window.location.href = "publishRecipe.html";
+                            window.location.href = "publishRecipe.php";
                         }, 1000);
                     } else {
                         mensajeDiv.style.color = "red";
