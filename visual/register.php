@@ -8,7 +8,7 @@ if (isset($_POST["userName"], $_POST["userPassword"], $_POST["userEmail"])) {
     $userEmail = $_POST["userEmail"];
 
     // Verifica si el usuario o correo ya existen
-    $sql = "SELECT * FROM user WHERE userName = ? OR userEmail = ?";
+    $sql = "SELECT * FROM users WHERE userName = ? OR userEmail = ?";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, "ss", $userName, $userEmail);
     mysqli_stmt_execute($stmt);
@@ -20,7 +20,7 @@ if (isset($_POST["userName"], $_POST["userPassword"], $_POST["userEmail"])) {
     }
 
     // Inserta el nuevo usuario
-    $sql = "INSERT INTO user (userName, userPassword, userEmail) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO users (userName, userPassword, userEmail) VALUES (?, ?, ?)";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, "sss", $userName, $userPassword, $userEmail);
     if (mysqli_stmt_execute($stmt)) {

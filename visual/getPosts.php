@@ -2,9 +2,9 @@
 
 require_once "../connection.php";
 
-$sql = "SELECT post.title, post.postDate, user.userName 
+$sql = "SELECT post.title, post.postDate, users.userName 
         FROM post 
-        JOIN user ON post.userId = user.userId
+        JOIN users ON post.userId = user.userId
         ORDER BY post.postDate DESC";
 $res = mysqli_query($con, $sql);
 

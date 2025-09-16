@@ -2,11 +2,12 @@
 session_start();
 require_once "../connection.php";
 
+
 if (isset($_POST["userName"]) && isset($_POST["userPassword"])) {
     $userName = $_POST["userName"];
     $userPassword = $_POST["userPassword"];
 
-    $sql = "SELECT userId, userName, userPassword FROM user WHERE userName = ?";
+    $sql = "SELECT userId, userName, userPassword FROM users WHERE userName = ?";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, "s", $userName);
     mysqli_stmt_execute($stmt);
