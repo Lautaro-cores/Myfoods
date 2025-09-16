@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const result = await response.json();
 
         if (result.success) {
-            profileImage.src = result.imageUrl + '?' + new Date().getTime();
+            profileImage.src = 'getUserImage.php?' + new Date().getTime();
             alert(result.msj);
         } else {
             alert(result.msj);
