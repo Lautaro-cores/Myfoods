@@ -4,16 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Publicar Receta</title>
+    <link rel="icon" type="image/x-icon" href="img/gorromostacho 3 (1).png"> <!--icono de la pagina  -->
+    <link rel="stylesheet" href="../css/stylesV.css"> 
 </head>
 <body>
-    <h1>Publicar Receta</h1>
+    <div id="botones">
+            <button type="submit" class="publicar">Publicar</button>
+            <button type="submit" class="eliminar">eliminar</button>
     <form id="formPublish">
-        <fieldset>
+      <fieldset id="divGrande">
+        <div id="imagenRece">
+           <input type="file" class="imageInput" accept="image/*"/> </div>
+
+        <div id="campos">
             <input type="text" name="title" id="recipeTitle" placeholder="Título de la receta" required>
-            <br><br>
-            <input type="text" name="description" id="recipeDescription" placeholder="Descripción breve" required>
-            <br><br>
-            <button type="submit">Publicar</button>
+            <input type="text" name="description" id="recipeDescription" placeholder="Cuentanos mas acerca de este plato" required>
+        </div>
+    </div>
+
         </fieldset>
     </form>
     <div id="mensaje"></div>
