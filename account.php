@@ -31,7 +31,9 @@ if (empty($user['userImage'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil de Usuario</title>
-</head>
+    <link rel="stylesheet" href="./css/styleP.css">
+
+</head> 
 <body>
     <h2>Mi Perfil</h2>
     <img src="getUserImage.php" alt="Imagen de perfil" style="width:150px; height:150px; border-radius:50%;">
@@ -39,9 +41,14 @@ if (empty($user['userImage'])) {
     <p>Correo electrónico: <?php echo htmlspecialchars($userEmail); ?></p>
     <br>
     <form id="formImage" enctype="multipart/form-data">
-        <input type="file" name="userImage" id="userImageInput">
-        <button type="submit">Subir Imagen</button>
-    </form>
+    <input type="file" name="userImage" id="subirArchivo" class="input-oculto">
+    
+    <label for="subirArchivo" class="boton-personalizado">
+        Seleccionar archivo
+    </label>
+    
+    <button type="submit">Subir Imagen</button>
+</form>
     <a href="visual/index.php">Volver a la página principal</a>
     <a href="logout.php">Cerrar sesión</a>
 
