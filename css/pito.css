@@ -1,0 +1,118 @@
+body{ 
+   background-color: #fae1da;
+  margin-top: 10px;
+         }
+
+.cajaReceta{
+display: grid;
+grid-template-columns: 10fr 1fr;
+grid-template-rows: auto auto;
+gap: 20px;
+
+}
+#recipeTitle{
+  float: right;
+  padding: 20px;             /* Espacio interno */
+  font-size: 21px;           /* Tamaño de letra */
+  border: 0.2px solid #1b1b1b; /* Borde negro */
+  border-radius: 25px;        /* Bordes redondeados */
+  background-color: #fff6f3; /* Fondo azul claro */  
+  width: 500px;
+  height: 20px;
+
+}
+#recipeDescription{
+  float: right;
+  background-color: #fff6f3;
+  border-radius: 5px;        /* Bordes redondeados */
+  border: 0.5px solid #1b1b1b; /* Borde negro */          /* Espacio interno */
+  height: 200px;
+  width: 500px;
+  border-radius: 30px;    
+  border: 0.2px solid #030303; 
+  text-align: justify;
+  top: -20px;
+
+
+}
+#botones{
+  float: right;
+  justify-content: right;
+  margin-top: 10px;
+  gap: 10px;
+}
+.eliminar{
+  background-color:#fff6f3 ;
+  border-radius: 10px;
+  border: 0.5px solid #fff6f3;
+  width: 100px;  
+  height: 40px;
+  float: right;
+}
+.publicar{
+  background-color:#fda087 ;
+  width: 100px;  
+  height: 40px;
+  border-radius: 10px;
+  border: 0.5px solid#fda087;
+  float: right;
+}
+
+#divGrande {
+ margin-top: 60px;
+height: 785px;
+border: none;
+background-color:#fae1da ;
+
+}
+#formPublish{
+  background-color:#fae1da;
+  
+
+}
+.file-container{
+
+
+}
+.file-upload{
+  /* Estilos de forma y apariencia */
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px; /* **Da la forma redondeada**/
+  background-color:#fff6f3;
+  height: 200px;
+  width: 500px;
+}
+.pito{
+  display: flex;
+}
+.file-upload{
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0; /* Lo hace invisible */
+  overflow: hidden;
+  position: absolute;
+  z-index: -1; /* Asegura que no estorbe */
+  background-color:#fff6f3;
+}
+.ingredienteInput{
+  background-color:#fff6f3 ;
+  border-radius: 10px;
+  border: 0.5px solid #fff6f3;
+}
+.pasoInput{
+ background-color:#fff6f3 ;
+  border-radius: 10px;
+  border: 0.5px solid #fff6f3;
+}
+#addIngrediente{
+  background-color: #fae1da;
+  border: none;
+
+}
+#addPaso{
+  background-color: #fae1da;
+  border: none;
+
+}

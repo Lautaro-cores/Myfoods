@@ -1,5 +1,5 @@
 /* Importación de otros archivos CSS */
-@import url('styleP.css');
+
 @import url('stylesV.css');
 
 /* Estilos comunes para todas las páginas */
@@ -7,12 +7,12 @@ body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     min-height: 100vh;
+    background-color:#fdd4c8;
+
+  
 }
 
-.wrapper {
-    display: flex;
-    min-height: 100vh;
-}
+
 
 .sidebar {
     width: 280px;
