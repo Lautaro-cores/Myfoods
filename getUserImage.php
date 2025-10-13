@@ -2,28 +2,40 @@
 session_start();
 require_once "includes/config.php";
 
-// Si el usuario no ha iniciado sesión, no hay imagen que mostrar
-if (!isset($_SESSION['userLogged'])) {
-    header("Location: visual/logIn.php");
+// Mostrar imagen del usuario autenticado (por userId), si existe en DB
+if (!isset($_SESSION['userId'])) {
+    // Si no está autenticado devolvemos la imagen por defecto
+    $defaultImage = __DIR__ . '/img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg';
+    if (is_file($defaultImage)) {
+        header('Content-Type: image/jpeg');
+        readfile($defaultImage);
+        exit();
+    }
+    http_response_code(404);
     exit();
 }
 
-$userName = $_SESSION['userLogged'];
-
-$sql = "SELECT userImage FROM users WHERE userName = ?";
+$userId = intval($_SESSION['userId']);
+$sql = "SELECT userImage FROM users WHERE userId = ? LIMIT 1";
 $stmt = mysqli_prepare($con, $sql);
-mysqli_stmt_bind_param($stmt, "s", $userName);
+mysqli_stmt_bind_param($stmt, "i", $userId);
 mysqli_stmt_execute($stmt);
 $res = mysqli_stmt_get_result($stmt);
 $user = mysqli_fetch_assoc($res);
 
 if ($user && !empty($user['userImage'])) {
-    header("Content-type: image/jpeg");
-    echo $user['userImage'];
-} else {
-    $defaultImage = 'img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg';
+    // userImage guardado como blob binario
     header('Content-Type: image/jpeg');
-    readfile($defaultImage);
+    echo $user['userImage'];
+    exit();
+} else {
+    // fallback a archivo por defecto en el directorio del proyecto
+    $defaultImage = __DIR__ . '/img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg';
+    if (is_file($defaultImage)) {
+        header('Content-Type: image/jpeg');
+        readfile($defaultImage);
+        exit();
+    }
+    http_response_code(404);
+    exit();
 }
-exit();
-?>

@@ -28,6 +28,7 @@ if (isset($_POST["userName"], $_POST["userPassword"], $_POST["userEmail"])) {
         $userId = mysqli_insert_id($con);
         $_SESSION['userLogged'] = $userName;
         $_SESSION['userId'] = $userId;
+        $_SESSION['userType'] = 'user'; 
 
         echo json_encode(["success" => true, "msj" => "Registro exitoso."]);
     } else {
@@ -36,4 +37,3 @@ if (isset($_POST["userName"], $_POST["userPassword"], $_POST["userEmail"])) {
 } else {
     echo json_encode(["error" => true, "msj" => "Faltan datos."]);
 }
-?>

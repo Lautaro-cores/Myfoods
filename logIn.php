@@ -6,7 +6,7 @@ if (isset($_POST["userName"]) && isset($_POST["userPassword"])) {
     $userName = $_POST["userName"];
     $userPassword = $_POST["userPassword"];
 
-    $sql = "SELECT userId, userName, userPassword FROM users WHERE userName = ?";
+    $sql = "SELECT userId, userName, userPassword, userType FROM users WHERE userName = ?";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, "s", $userName);
     mysqli_stmt_execute($stmt);
@@ -18,6 +18,7 @@ if (isset($_POST["userName"]) && isset($_POST["userPassword"])) {
         if ($userPassword === $row["userPassword"]) {
             $_SESSION['userLogged'] = $row['userName'];
             $_SESSION['userId'] = $row['userId'];
+            $_SESSION['userType'] = $row['userType'] ?? 'user'; 
 
             echo json_encode(["success" => true, "msj" => "Login exitoso."]);
         } else {
@@ -29,4 +30,3 @@ if (isset($_POST["userName"]) && isset($_POST["userPassword"])) {
 } else {
     echo json_encode(["error" => "faltan_datos", "msj" => "Por favor, completa todos los campos."]);
 }
-?>

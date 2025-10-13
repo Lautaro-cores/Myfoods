@@ -52,8 +52,34 @@ if ($stmt === false) {
 mysqli_stmt_bind_param($stmt, "iis", $userId, $postId, $content);
 
 if (mysqli_stmt_execute($stmt)) {
-    $response['success'] = true;
-    $response['msj'] = 'Comentario publicado con éxito.';
+    $commentId = mysqli_insert_id($con);
+    // Obtener el comentario insertado con datos de usuario
+    $sql2 = "SELECT c.commentId, c.userId, c.postId, c.content, u.userName, u.userImage
+             FROM comment c
+             JOIN users u ON c.userId = u.userId
+             WHERE c.commentId = ? LIMIT 1";
+    $stmt2 = mysqli_prepare($con, $sql2);
+    if ($stmt2) {
+        mysqli_stmt_bind_param($stmt2, 'i', $commentId);
+        mysqli_stmt_execute($stmt2);
+        $res2 = mysqli_stmt_get_result($stmt2);
+        $newComment = mysqli_fetch_assoc($res2);
+        if ($newComment) {
+            if (!empty($newComment['userImage'])) {
+                $newComment['userImage'] = base64_encode($newComment['userImage']);
+            }
+            $response['success'] = true;
+            $response['msj'] = 'Comentario publicado con éxito.';
+            $response['comment'] = $newComment;
+        } else {
+            $response['success'] = true;
+            $response['msj'] = 'Comentario publicado (no se pudo recuperar).';
+        }
+        mysqli_stmt_close($stmt2);
+    } else {
+        $response['success'] = true;
+        $response['msj'] = 'Comentario publicado (recuperación no disponible).';
+    }
 } else {
     $response['msj'] = 'Error al publicar el comentario: ' . mysqli_error($con);
 }
@@ -61,4 +87,3 @@ if (mysqli_stmt_execute($stmt)) {
 mysqli_stmt_close($stmt);
 
 echo json_encode($response);
-?>

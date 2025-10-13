@@ -1,6 +1,5 @@
 <?php
 session_start();
 session_destroy();
-header("Location: visual/logIn.php");
+header("Location: visual/index.php");
 exit;
-?>
