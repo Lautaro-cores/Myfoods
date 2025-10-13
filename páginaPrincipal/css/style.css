@@ -30,6 +30,7 @@ button{ /*aumenta el tamaño de los botones*/
     padding: 12px 20px;
     font-size: 16px;
     cursor: pointer;
+    border-radius: 30px;
   }
 
   div { /*centra el buscador y el logo*/
@@ -96,9 +97,14 @@ width: 500px;
 text-align: center;
 
 }
-.topbuttons /*botones de inicio de sesion y de publicar receta*/{
+#buttonGroup button/*botones de inicio de sesion y de publicar receta*/{
+background-color: rgb(253, 168, 144);
 
-  color: rgb(253, 168, 144);
+  
+}
+#buttonGroup #login{
+
+  background-color: rgb(250, 225, 217);
 }
 .publicaciones{
 
