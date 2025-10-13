@@ -31,21 +31,24 @@ if (isset($_POST["title"]) && isset($_POST["description"])) {
         exit();
     }
 
-    // Preparar contenido de imagen si existe
-    $imageData = '';
-    if (isset($_FILES['image']) && isset($_FILES['image']['tmp_name']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
-        $imageData = file_get_contents($_FILES['image']['tmp_name']);
+    
+
+    // Validar que haya al menos una imagen
+    if (!isset($_FILES['image']) || !isset($_FILES['image']['tmp_name']) || count($_FILES['image']['tmp_name']) == 0) {
+        $response['msj'] = 'Debes subir al menos una imagen para la receta.';
+        echo json_encode($response);
+        exit();
     }
 
-    // Insertar receta principal
-    $sql = "INSERT INTO post (userId, title, description, recipeImage) VALUES (?, ?, ?, ?)";
+    // Insertar receta principal (sin recipeImage)
+    $sql = "INSERT INTO post (userId, title, description) VALUES (?, ?, ?)";
     $stmt = mysqli_prepare($con, $sql);
     if ($stmt === false) {
         $response['msj'] = 'Error en la preparación de la consulta: ' . mysqli_error($con);
         echo json_encode($response);
         exit();
     }
-    mysqli_stmt_bind_param($stmt, "isss", $userId, $title, $description, $imageData);
+    mysqli_stmt_bind_param($stmt, "iss", $userId, $title, $description);
     if (!mysqli_stmt_execute($stmt)) {
         $response['msj'] = 'Error al publicar receta: ' . mysqli_error($con);
         echo json_encode($response);
@@ -54,6 +57,36 @@ if (isset($_POST["title"]) && isset($_POST["description"])) {
     }
     $postId = mysqli_insert_id($con);
     mysqli_stmt_close($stmt);
+
+    // Guardar todas las imágenes en recipeImage
+    if (is_array($_FILES['image']['tmp_name'])) {
+        foreach ($_FILES['image']['tmp_name'] as $imgTmp) {
+            if (is_uploaded_file($imgTmp)) {
+                $imgData = file_get_contents($imgTmp);
+                $sqlImg = "INSERT INTO recipe_image (postId, imageData) VALUES (?, ?)";
+                $stmtImg = mysqli_prepare($con, $sqlImg);
+                if ($stmtImg) {
+                    mysqli_stmt_bind_param($stmtImg, "ib", $postId, $imgData);
+                    mysqli_stmt_send_long_data($stmtImg, 1, $imgData);
+                    mysqli_stmt_execute($stmtImg);
+                    mysqli_stmt_close($stmtImg);
+                }
+            }
+        }
+    } else {
+        // Solo una imagen
+        if (is_uploaded_file($_FILES['image']['tmp_name'])) {
+            $imgData = file_get_contents($_FILES['image']['tmp_name']);
+            $sqlImg = "INSERT INTO recipe_image (postId, imageData) VALUES (?, ?)";
+            $stmtImg = mysqli_prepare($con, $sqlImg);
+            if ($stmtImg) {
+                mysqli_stmt_bind_param($stmtImg, "ib", $postId, $imgData);
+                mysqli_stmt_send_long_data($stmtImg, 1, $imgData);
+                mysqli_stmt_execute($stmtImg);
+                mysqli_stmt_close($stmtImg);
+            }
+        }
+    }
 
     // Insertar ingredientes
     $sqlIng = "INSERT INTO ingredientrecipe (postId, ingredient) VALUES (?, ?)";

@@ -22,26 +22,65 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Mapear cada post a su HTML y colocarlo en el contenedor
-      postsDiv.innerHTML = posts
-        .map((post) => {
-          const imageUrl = post.userImage ? `data:image/jpeg;base64,${post.userImage}` : "../img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg";
-          const likesCount = post.likesCount ? post.likesCount : 0;
-
-          return `
-                <div class="post-item" onclick="location.href='../visual/viewRecipe.php?id=${post.postId}'" style="border:1px solid #ccc; margin:10px 0; padding:10px; cursor:pointer; display:flex; align-items:center; gap: 10px;">
-                    <img src="${imageUrl}" alt="Imagen de perfil de ${post.userName}" style="width: 50px; height: 50px; border-radius: 50%;">
-                    <div style="flex:1;">
-                        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
-                            <strong>${post.title}</strong>
-                            <small style="color:#666;">❤ ${likesCount}</small>
-                        </div>
-                        <small>Por ${post.userName} - ${timeAgo(post.postDate)}</small>
-                    </div>
+      // construir grid de publicaciones
+      postsDiv.innerHTML = '<div class="posts-grid">' +
+        posts
+          .map((post) => {
+            const avatarUrl = post.userImage ? `data:image/jpeg;base64,${post.userImage}` : "../img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg";
+            // Carrousel de imágenes
+            let carouselHtml = '';
+            if (post.images && post.images.length > 0) {
+              const carouselId = `carouselPost${post.postId}`;
+              carouselHtml = `
+                <div id="${carouselId}" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-inner">
+                    ${post.images.map((img, idx) => `
+                      <div class="carousel-item${idx === 0 ? ' active' : ''}">
+                        <img src="data:image/jpeg;base64,${img}" class="d-block w-100" alt="Imagen ${idx+1} de ${post.title}">
+                      </div>
+                    `).join('')}
+                  </div>
+                  ${post.images.length > 1 ? `
+                  <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                  </button>
+                  ` : ''}
                 </div>
-                `;
-        })
-        .join("");
+              `;
+            } else {
+              carouselHtml = `<img src="../img/default-recipe.jpg" class="d-block w-100" alt="Imagen por defecto">`;
+            }
+            const likesCount = post.likesCount ? post.likesCount : 0;
+
+            return `
+              <article class="post-card" onclick="location.href='../visual/viewRecipe.php?id=${post.postId}'">
+                <div class="post-image">
+                  ${carouselHtml}
+                </div>
+                <div class="post-content">
+                  <div class="post-header">
+                    <div class="post-left">
+                      <img class="post-avatar" src="${avatarUrl}" alt="Avatar ${post.userName}">
+                      <div class="post-meta">
+                        <div class="post-author">${post.userName}</div>
+                        <div class="post-time">${timeAgo(post.postDate)}</div>
+                      </div>
+                    </div>
+                    <div class="post-likes">❤ <span class="likes-count">${likesCount}</span></div>
+                  </div>
+                  <h3 class="post-title">${post.title}</h3>
+                  <p class="post-desc">${post.description ? post.description : ''}</p>
+                </div>
+              </article>
+            `;
+          })
+          .join('') +
+        '</div>';
     })
     .catch((err) => console.error('Error cargando posts:', err));
 });

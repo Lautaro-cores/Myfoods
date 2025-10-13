@@ -12,13 +12,28 @@ $postId = intval($_GET["id"]);
 // Determinar si el usuario ha iniciado sesión
 $isUserLogged = isset($_SESSION['userId']);
 
-$sql = "SELECT title, description, recipeImage FROM post WHERE postId = ?";
+
+$sql = "SELECT title, description FROM post WHERE postId = ?";
 $stmt = mysqli_prepare($con, $sql);
 mysqli_stmt_bind_param($stmt, "i", $postId);
 mysqli_stmt_execute($stmt);
-mysqli_stmt_bind_result($stmt, $title, $description, $imageBlob);
+mysqli_stmt_bind_result($stmt, $title, $description);
 mysqli_stmt_fetch($stmt);
 mysqli_stmt_close($stmt);
+
+// Obtener todas las imágenes de la receta
+$images = [];
+$imgSql = "SELECT imageData FROM recipe_image WHERE postId = ?";
+$imgStmt = mysqli_prepare($con, $imgSql);
+if ($imgStmt) {
+    mysqli_stmt_bind_param($imgStmt, "i", $postId);
+    mysqli_stmt_execute($imgStmt);
+    mysqli_stmt_bind_result($imgStmt, $imgData);
+    while (mysqli_stmt_fetch($imgStmt)) {
+        $images[] = base64_encode($imgData);
+    }
+    mysqli_stmt_close($imgStmt);
+}
 
 if ($title) {
 
@@ -67,9 +82,26 @@ if ($title) {
 
     <body>
         <h1 id="titulodelacomida"><?php echo htmlspecialchars($title); ?></h1>
-        <?php if (!empty($imageBlob)) : ?>
-            <?php $imgBase64 = base64_encode($imageBlob); ?>
-            <div><img src="data:image/jpeg;base64,<?php echo $imgBase64; ?>" alt="Imagen de la receta" style="max-width:100%; height:auto; border-radius:6px;"></div>
+        <?php if (!empty($images)) : ?>
+            <div id="carouselRecipe" class="carousel slide mb-3" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <?php foreach ($images as $idx => $imgBase64): ?>
+                        <div class="carousel-item<?php if ($idx === 0) echo ' active'; ?>">
+                            <img src="data:image/jpeg;base64,<?php echo $imgBase64; ?>" class="d-block w-100" alt="Imagen <?php echo $idx+1; ?> de la receta" style="max-height:400px; object-fit:contain; border-radius:6px;">
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php if (count($images) > 1): ?>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselRecipe" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselRecipe" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+                <?php endif; ?>
+            </div>
         <?php endif; ?>
         <p><?php echo nl2br(htmlspecialchars($description)); ?></p>
 

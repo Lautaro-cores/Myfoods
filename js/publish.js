@@ -51,6 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Validar que exista al menos una imagen (obligatoria)
+        if (!imageInput || !imageInput.files || imageInput.files.length === 0) {
+            mensajeDiv.style.color = 'red';
+            mensajeDiv.textContent = 'Debes seleccionar al menos una imagen para la receta.';
+            return;
+        }
+
         // Obtener ingredientes y pasos
         const ingredientes = Array.from(document.querySelectorAll('.ingredienteInput')).map(i => i.value.trim()).filter(Boolean);
         const pasos = Array.from(document.querySelectorAll('.pasoInput')).map(i => i.value.trim()).filter(Boolean);
@@ -61,14 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Construir FormData para envío, incl. archivo si existe
+        // Construir FormData para envío, incl. todas las imágenes
         const formData = new FormData();
         formData.append('title', title);
         formData.append('description', description);
         ingredientes.forEach(ing => formData.append('ingredientes[]', ing));
         pasos.forEach(paso => formData.append('pasos[]', paso));
-        if (imageInput && imageInput.files && imageInput.files[0]) {
-            formData.append('image', imageInput.files[0]);
+        // Agregar todas las imágenes seleccionadas
+        if (imageInput && imageInput.files && imageInput.files.length > 0) {
+            for (let i = 0; i < imageInput.files.length; i++) {
+                formData.append('image[]', imageInput.files[i]);
+            }
         }
 
         fetch("../publishRecipe.php", { method: 'POST', body: formData })

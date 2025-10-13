@@ -18,7 +18,9 @@ if (!isset($_SESSION['userId'])) {
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- CSS principal -->
-    <link rel="stylesheet" href="../css/main.css">
+ 
+  <!-- Estilos de publicaciones -->
+  <link rel="stylesheet" href="../css/styleT.css">
     <!-- Bootstrap JS y Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
         
@@ -65,8 +67,23 @@ if (!isset($_SESSION['userId'])) {
   }
 </style>
 
-    <h1>¡Bienvenido a myfoods!</h1>
-    <p>La comunidad donde puedes compartir y descubrir recetas.</p>
+        <div id="topBar">
+    <img src="../img/gorromostacho 3 (1).png" alt="" id="leftLogo">
+    
+    </div>
+
+    <div id="content">
+
+    <div>
+    <img src="../img/gorromostacho 3.png" alt="" id="logo">
+    </div>
+
+    <br>
+
+    <div id="buscador">
+    <input type="text" placeholder="buscar recetas" id="searchInput">
+    <button id="searchButton">Buscar</button>
+    </div>
 
     <a href="publishRecipe.php"><button>Publicar receta</button></a>
 

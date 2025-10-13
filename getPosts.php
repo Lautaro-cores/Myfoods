@@ -8,12 +8,12 @@ $posts = [];
 
 if (isset($_SESSION['userId'])) {
     $userId = intval($_SESSION['userId']);
-    $sql = "SELECT p.postId, p.title, p.description, p.postDate, u.userName, u.userImage,
-                   (SELECT COUNT(*) FROM likes l WHERE l.postId = p.postId) AS likesCount,
-                   (SELECT COUNT(*) FROM likes l2 WHERE l2.postId = p.postId AND l2.userId = ?) AS userLikedCount
-            FROM post p
-            JOIN users u ON p.userId = u.userId
-            ORDER BY p.postDate DESC";
+    $sql = "SELECT p.postId, p.title, p.description, p.postDate, p.recipeImage, u.userName, u.userImage,
+             (SELECT COUNT(*) FROM likes l WHERE l.postId = p.postId) AS likesCount,
+             (SELECT COUNT(*) FROM likes l2 WHERE l2.postId = p.postId AND l2.userId = ?) AS userLikedCount
+         FROM post p
+         JOIN users u ON p.userId = u.userId
+         ORDER BY p.postDate DESC";
 
     $stmt = mysqli_prepare($con, $sql);
     if ($stmt === false) {
@@ -28,10 +28,25 @@ if (isset($_SESSION['userId'])) {
         if (!empty($row['userImage'])) {
             $row['userImage'] = base64_encode($row['userImage']);
         }
+        // Obtener todas las imágenes de la receta
+        $images = [];
+        $imgSql = "SELECT imageData FROM recipe_image WHERE postId = ?";
+        $imgStmt = mysqli_prepare($con, $imgSql);
+        if ($imgStmt) {
+            mysqli_stmt_bind_param($imgStmt, 'i', $row['postId']);
+            mysqli_stmt_execute($imgStmt);
+            $imgRes = mysqli_stmt_get_result($imgStmt);
+            while ($imgRow = mysqli_fetch_assoc($imgRes)) {
+                $images[] = base64_encode($imgRow['imageData']);
+            }
+            mysqli_stmt_close($imgStmt);
+        }
+        $row['images'] = $images;
         // normalize userLiked as boolean
         $row['likesCount'] = isset($row['likesCount']) ? intval($row['likesCount']) : 0;
         $row['userLiked'] = (isset($row['userLikedCount']) && intval($row['userLikedCount']) > 0) ? true : false;
         unset($row['userLikedCount']);
+        unset($row['recipeImage']); // ya no se usa
         $posts[] = $row;
     }
     mysqli_stmt_close($stmt);

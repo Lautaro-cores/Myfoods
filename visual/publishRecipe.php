@@ -30,7 +30,8 @@ if (!isset($_SESSION['userId'])) {
 
             <fieldset id="divGrande">
                 <div id="imagenRece">
-                    <input type="file" name="image" id="imageInput" class="imageInput" accept="image/*" />
+                    <label for="imageInput">Imágenes (puedes subir varias)</label>
+                    <input type="file" name="image[]" id="imageInput" class="imageInput" accept="image/*" required multiple />
                 </div>
 
                 <div id="campos">
