@@ -90,34 +90,7 @@ if (empty($user['userImage'])) {
       </head>
 
       <body class="accountP">
-          <nav id="myfoods-sidebar" class="d-flex flex-column p-3 bg-light border-end" style="width: 250px; height: 100vh; position: fixed; top:0; left:0; z-index: 1040; overflow-y:auto;">
-        <a href="/visual/index.php" class="d-flex align-items-center mb-3 text-dark text-decoration-none">
-          <span class="fs-4 fw-bold">MyFoods</span>
-        </a>
-
-        <hr>
-
-        <ul class="nav nav-pills flex-column mb-auto">
-          <li class="nav-item">
-            <a href="/visual/index.php" class="nav-link">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a href="/publishRecipe.php" class="nav-link">Publicar receta</a>
-          </li>
-          <li class="nav-item">
-            <a href="/perfil.php" class="nav-link">Perfil</a>
-          </li>
-          <li class="nav-item">
-            <a href="/favoritos.php" class="nav-link">Favoritos</a>
-          </li>
-        </ul>
-
-        <hr>
-        <div class="mt-auto">
-          <a href="/logout.php" class="btn btn-outline-secondary w-100">Cerrar sesión</a>
-        </div>
-  
-      </nav>
+<?php include '../nawbar.php'; ?>
       <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-sign-turn-left" viewBox="0 0 30 30">
         <path d="M11 8.5A2.5 2.5 0 0 0 8.5 6H7V4.534a.25.25 0 0 0-.41-.192L4.23 6.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 7 8.466V7h1.5A1.5 1.5 0 0 1 10 8.5V11h1z"/>
         <path fill-rule="evenodd" d="M6.95.435c.58-.58 1.52-.58 2.1 0l6.515 6.516c.58.58.58 1.519 0 2.098L9.05 15.565c-.58.58-1.519.58-2.098 0L.435 9.05a1.48 1.48 0 0 1 0-2.098zm1.4.7a.495.495 0 0 0-.7 0L1.134 7.65a.495.495 0 0 0 0 .7l6.516 6.516a.495.495 0 0 0 .7 0l6.516-6.516a.495.495 0 0 0 0-.7L8.35 1.134Z"/>
