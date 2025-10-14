@@ -1,9 +1,9 @@
 <?php
 session_start();
-require_once __DIR__ . "/../includes/config.php";
+require_once "../includes/config.php";
 
 if (!isset($_SESSION['userId'])) {
-    header('Location: logIn.php');
+    header('Location: ../visual/logIn.php');
     exit();
 }
 
@@ -15,8 +15,8 @@ mysqli_stmt_bind_param($stmt, "i", $userId);
 mysqli_stmt_execute($stmt);
 $res = mysqli_stmt_get_result($stmt);
 $user = mysqli_fetch_assoc($res);
-$userName = $user['userName'] ?? '';
-$userEmail = $user['userEmail'] ?? '';
+$userName = $user['userName'];
+$userEmail = $user['userEmail'];
 
 $userImage = '';
 if (empty($user['userImage'])) {
@@ -37,57 +37,9 @@ if (empty($user['userImage'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- CSS principal -->
     <link rel="stylesheet" href="../css/main.css">
-    <!-- Bootstrap JS bundle -->
+    <!-- Bootstrap JS y Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
-
-    <style>
-      /* Layout base */
-      body { padding-left: 80px !important; background: #FDE7E4; }
-
-      /* Sidebar (left narrow icons) */
-      .sidebar-custom {
-        position: fixed;
-        left: 10px;
-        top: 20px;
-        bottom: 20px;
-        width: 60px;
-        background: #f9a89b;
-        border-radius: 12px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 24px;
-        padding: 16px 8px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      }
-      .sidebar-custom .sb-item, .sidebar-custom .sb-logo { display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:8px; color:#000; text-decoration:none; }
-
-      /* Main banner / profile area */
-      main.container { max-width: 920px; margin-left: 120px; }
-      .perfil-container img { width:120px; height:120px; object-fit:cover; border-radius:50%; background:#fff; display:block; }
-      .perfil-container { align-items:center; }
-
-      /* Big edit button full-width */
-      form#formImage { display:flex; align-items:center; gap:12px; }
-      form#formImage label.boton-personalizado {
-        flex: 1 1 auto; text-align:center; background:#fff4f3; padding:14px 16px; border-radius:18px; border:1px solid rgba(0,0,0,0.25); cursor:pointer; font-size:20px;
-      }
-      </style>
-    
-      <!DOCTYPE html>
-      <html lang="es">
-
-      <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Perfil de Usuario</title>
-          <!-- Bootstrap CSS -->
-          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-          <!-- CSS principal -->
-          <link rel="stylesheet" href="../css/main.css">
-          <!-- Bootstrap JS y Popper -->
-          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
-      </head>
+</head>
 
       <body class="accountP">
 <?php include '../nawbar.php'; ?>
@@ -119,15 +71,73 @@ if (empty($user['userImage'])) {
         /* Important: usa padding-left en body o en un .content wrapper */
         body { padding-left: 250px !important; }
 
-        /* Para pantallas pequeñas convertir el sidebar en un menú superior ocultable */
-        @media (max-width: 768px) {
-          #myfoods-sidebar { position: relative; width: 100%; height: auto; padding-bottom: 0; }
-          body { padding-left: 0 !important; }
-        }
-      </style>
+  /* Para pantallas pequeñas convertir el sidebar en un menú superior ocultable */
+  @media (max-width: 768px) {
+    #myfoods-sidebar { position: relative; width: 100%; height: auto; padding-bottom: 0; }
+    body { padding-left: 0 !important; }
+  }
+</style>
 
+    <h2>Mi Perfil</h2>
+    <img src="<?php echo htmlspecialchars($userImage); ?>" alt="Imagen de perfil" style="width:150px; height:150px; border-radius:50%;">
+    <p>Nombre de usuario: <?php echo htmlspecialchars($userName); ?></p>
+    <p>Correo electrónico: <?php echo htmlspecialchars($userEmail); ?></p>
+    <br>
+  <form id="formImage" enctype="multipart/form-data" method="post" action="../uploadImage.php">
+    <input type="file" name="userImage" id="subirArchivo" class="input-oculto">
 
-          <script src="../js/account.js"></script>
-      </body>
+    <label for="subirArchivo" class="boton-personalizado">
+      Seleccionar archivo
+    </label>
 
-      </html>
+    <button type="submit">Subir Imagen</button>
+  </form>
+  <div id="uploadMessage" role="alert" style="margin-top:8px"></div>
+    <a href="index.php">Volver a la página principal</a>
+    <a href="../logout.php">Cerrar sesión</a>
+
+    <script>
+      // Intercept form submit and send via fetch to uploadImage.php
+      document.addEventListener('DOMContentLoaded', function(){
+        const form = document.getElementById('formImage');
+        const fileInput = document.getElementById('subirArchivo');
+        const msg = document.getElementById('uploadMessage');
+        const profileImg = document.querySelector('img[alt="Imagen de perfil"]');
+
+        form.addEventListener('submit', function(e){
+          e.preventDefault();
+          msg.textContent = '';
+          if (!fileInput.files || fileInput.files.length === 0) {
+            msg.style.color = 'red'; msg.textContent = 'Selecciona un archivo primero.'; return;
+          }
+          const fd = new FormData();
+          fd.append('userImage', fileInput.files[0]);
+
+          fetch('../uploadImage.php', { method: 'POST', body: fd })
+            .then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                msg.style.color = 'green';
+                msg.textContent = data.msj || 'Imagen actualizada';
+                if (data.imageUrl) {
+                  profileImg.src = data.imageUrl;
+                } else {
+                  // fallback: reload page
+                  location.reload();
+                }
+              } else {
+                msg.style.color = 'red';
+                msg.textContent = data.msj || 'Error al subir imagen';
+              }
+            })
+            .catch(err => {
+              console.error('Error al subir imagen:', err);
+              msg.style.color = 'red';
+              msg.textContent = 'Error de red al subir imagen';
+            });
+        });
+      });
+    </script>
+</body>
+
+</html>

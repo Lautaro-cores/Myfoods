@@ -1,16 +1,17 @@
-
-.accountP {
-  margin: 30px;
+body {
+  margin: 0;
   font-family: "Poppins", sans-serif;
   background-color: #fde0d9;
   color: #000;
-  flex-direction: column; 
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: start;
-  min-height: 10vh;
+  min-height: 100vh;
 }
 
-.h2P {
-  text-align: center;
+h2 {
   margin-top: 2rem;
   font-size: 1.8rem;
   color: #000;
@@ -25,7 +26,7 @@ img {
   border: 3px solid #ffffff; 
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
-.pP {
+p {
   font-size: 20px;
   margin: 8px;
   color: #000000;
@@ -39,14 +40,14 @@ form {
   display: inline-block;
 }
 
-.inputlP[type="file"] {
+input[type="file"] {
   display: block;
   margin: 15px auto;
   font-family: inherit;
   cursor: pointer;
 }
 
-.buttonP {
+button {
   background-color: #f9a68b;
   color: #000;
   border: 1px solid #000;
@@ -56,20 +57,21 @@ form {
   font-weight: 600;
 }
 
-.buttonP:hover {
+button:hover {
   background-color: #ffb79c;
   color: #000000 ;
 }
 
-.aP {
-  margin: 5cm 10cm;
+a {
+  display: inline-block;
+  margin: 5px 3px;
   text-decoration: none;
   color: #000;
   font-weight: 500;
   border: 1px solid #000;
-  padding: 4px 40px;
-  border-radius: 18px;
-  background-color: #fcfcfc;
+  padding: 4px 5px;
+  border-radius: 8px;
+  background-color: #fff4ef;
 
 }
 
@@ -79,7 +81,7 @@ a:hover{
 }
 .input-oculto {
   opacity: 0;
-  width:100px; 
+  width: 0.1px;
   height: 0.1px;
   position: absolute;
   overflow: hidden;

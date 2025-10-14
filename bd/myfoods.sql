@@ -27,7 +27,6 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `comment`
 --
 
-
 CREATE TABLE `comment` (
   `commentId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,

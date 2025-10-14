@@ -4,8 +4,16 @@
 /*achica el logo*/
 width: 100px;
 
-
 }
+
+#logo{
+  text-align: center;
+  justify-content: center;
+  margin: auto;
+  padding: center;
+  width: 300px;
+}
+
 
 #topBar { /*hace que los botones esten separados del logo*/
     display: flex;
@@ -34,7 +42,7 @@ button{ /*aumenta el tamaño de los botones*/
 
   div { /*centra el buscador y el logo*/
 
-text-align: center;
+  text-align: center;
 
   }
 

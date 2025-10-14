@@ -29,15 +29,17 @@ if (!isset($_SESSION['userId'])) {
 <body>
 <?php include '../nawbar.php'; ?>
 
-        <div id="topBar">
-    <img src="../img/gorromostacho 3 (1).png" alt="" id="leftLogo">
+      <div id="topBar">
     
+    <div id="buttonGroup"><button id="post">Publica tu receta</button><button id="login">Iniciar Sesión</button></div>
+
     </div>
 
     <div id="content">
 
     <div>
     <img src="../img/logo.png" alt="" id="logo">
+    <h1 id="titulo">MyFoods</h1>
     </div>
 
     <br>
