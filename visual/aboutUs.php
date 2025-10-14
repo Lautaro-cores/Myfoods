@@ -3,37 +3,37 @@ $team = [
     [
         'img' => '../img/yea.jpg',
         'name' => 'Mateo',
-        'desc' => 'Programador PHP de 17 años, vive en Almagro, Yapeyu 263.'
+        'desc' => 'Programador PHP, trabaja viernes sabados y domingos, la semana la utiliza para tareas de teoria. juega muchos videojuegos.'
     ],
     [
         'img' => '../img/tlabaja.jpg',
         'name' => 'Cores',
-        'desc' => 'Programador PHP, 16 años, vive en Lanús Oeste, Liniers 1940.'
+        'desc' => 'Programador PHP, skrum master, se encarga de organizar a todos los trabajadores. duerme poco.'
     ],
     [
         'img' => '../img/agustina.jpg',
         'name' => 'Agustina',
-        'desc' => 'Administradora de base de datos, 16 años, ubicación desconocida.'
+        'desc' => 'Administradora de base de datos, que tambien hace css si es necesario, se complico mucho con la base de datos y la cambio varias veces.'
     ],
     [
         'img' => '../img/Thomas.webp',
         'name' => 'Thomas',
-        'desc' => 'Encargado de visuales (CSS), vive en Estados Unidos y Pichincha, 17 años.'
+        'desc' => 'Encargado de visuales (CSS), trabaja bien, escucha musica mientras trabaja , tiene anteojos, es el mayor del equipo.'
     ],
     [
         'img' => '../img/chopper.webp',
         'name' => 'Victoria',
-        'desc' => 'Encargada de visuales (CSS), vive en Boedo e Yrigoyen, 17 años.'
+        'desc' => 'Encargada de visuales (CSS), le gusta el anime, en especial one piece, le gusta mucho hacer los visuales por el toque artistico.'
     ],
     [
         'img' => '../img/perroShh.png',
         'name' => 'Pietro',
-        'desc' => 'Programador HTML de 17 años que vive en su casa.'
+        'desc' => 'Programador HTML, juega videojuegos, habla con mujeres, es carismatico y soltero, llamar al +54 911 2285-3094 para mas informacion.'
     ],
     [
         'img' => '../img/martin.png',
         'name' => 'Martin',
-        'desc' => 'Martin es Martin.'
+        'desc' => 'Programador de html que tambien hace css para complementar su trabajo, escucha musica chilena, le cuesta concentrarse'
     ],
 ];
 ?>
@@ -66,11 +66,11 @@ $team = [
         <section class="about-section">
             <div class="about-card">
                 <h2>¿Por qué hacemos esto?</h2>
-                <p>Queremos darle a las personas un medio para compartir sus recetas con el mundo y obtener otras de diferentes personas, creando un ambiente saludable y colaborativo.</p>
+                <p>Queremos darle a las personas un medio para compartir sus recetas con el mundo y obtener otras de diferentes personas, creando un ambiente saludable y colaborativo. En nuestra pagina, queremos darle libertad a la gente de poder subir la receta que quieran, con los ingredientes que quieran, y que el resto de usuarios opine y la critique, tanto para bien, como para mal. </p>
             </div>
             <div class="about-card">
                 <h2>¿Cómo lo hacemos?</h2>
-                <p>Esta página está programada mayormente en PHP, con funciones principales divididas entre otros archivos PHP y JavaScript. Usamos Apache como servidor y la base de datos está creada en MySQL.</p>
+                <p>Esta página está programada mayormente en PHP, con funciones principales divididas entre otros archivos PHP y JavaScript. Usamos Apache como servidor y la base de datos está creada en MySQL. Nos organizamos mayormente en 3 divisiones, los 2 de php, que son Cores y Medina, los css, que son Victoria y Thomas, y el html que son Pietro y Martin, de esta forma, nos organizamos para trabajar en diferentes dias sobre diferentes cosas, para despues organizarnos y subir todo</p>
             </div>
         </section>
     </main>
