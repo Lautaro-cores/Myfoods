@@ -13,26 +13,19 @@ $postId = intval($_GET["id"]);
 $isUserLogged = isset($_SESSION['userId']);
 
 
-$sql = "SELECT title, description FROM post WHERE postId = ?";
+// Obtener título, descripción e imagen principal desde post
+$sql = "SELECT title, description, recipeImage FROM post WHERE postId = ?";
 $stmt = mysqli_prepare($con, $sql);
 mysqli_stmt_bind_param($stmt, "i", $postId);
 mysqli_stmt_execute($stmt);
-mysqli_stmt_bind_result($stmt, $title, $description);
+mysqli_stmt_bind_result($stmt, $title, $description, $recipeImage);
 mysqli_stmt_fetch($stmt);
 mysqli_stmt_close($stmt);
 
 // Obtener todas las imágenes de la receta
 $images = [];
-$imgSql = "SELECT imageData FROM recipe_image WHERE postId = ?";
-$imgStmt = mysqli_prepare($con, $imgSql);
-if ($imgStmt) {
-    mysqli_stmt_bind_param($imgStmt, "i", $postId);
-    mysqli_stmt_execute($imgStmt);
-    mysqli_stmt_bind_result($imgStmt, $imgData);
-    while (mysqli_stmt_fetch($imgStmt)) {
-        $images[] = base64_encode($imgData);
-    }
-    mysqli_stmt_close($imgStmt);
+if (!empty($recipeImage)) {
+    $images[] = base64_encode($recipeImage);
 }
 
 if ($title) {

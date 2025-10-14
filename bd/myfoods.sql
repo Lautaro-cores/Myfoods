@@ -26,12 +26,7 @@ SET time_zone = "+00:00";
 --
 -- Estructura de tabla para la tabla `comment`
 --
-CREATE TABLE recipeImage (
-    imageId INT AUTO_INCREMENT PRIMARY KEY,
-    postId INT NOT NULL,
-    imageData LONGBLOB NOT NULL,
-    FOREIGN KEY (postId) REFERENCES post(postId) ON DELETE CASCADE
-);
+
 
 CREATE TABLE `comment` (
   `commentId` int(11) NOT NULL,

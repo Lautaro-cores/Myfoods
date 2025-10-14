@@ -28,25 +28,17 @@ if (isset($_SESSION['userId'])) {
         if (!empty($row['userImage'])) {
             $row['userImage'] = base64_encode($row['userImage']);
         }
-        // Obtener todas las imágenes de la receta
-        $images = [];
-        $imgSql = "SELECT imageData FROM recipe_image WHERE postId = ?";
-        $imgStmt = mysqli_prepare($con, $imgSql);
-        if ($imgStmt) {
-            mysqli_stmt_bind_param($imgStmt, 'i', $row['postId']);
-            mysqli_stmt_execute($imgStmt);
-            $imgRes = mysqli_stmt_get_result($imgStmt);
-            while ($imgRow = mysqli_fetch_assoc($imgRes)) {
-                $images[] = base64_encode($imgRow['imageData']);
-            }
-            mysqli_stmt_close($imgStmt);
+        // Usar la imagen principal almacenada en post.recipeImage (si existe)
+        $row['images'] = [];
+        if (!empty($row['recipeImage'])) {
+            $row['images'][] = base64_encode($row['recipeImage']);
         }
-        $row['images'] = $images;
         // normalize userLiked as boolean
         $row['likesCount'] = isset($row['likesCount']) ? intval($row['likesCount']) : 0;
         $row['userLiked'] = (isset($row['userLikedCount']) && intval($row['userLikedCount']) > 0) ? true : false;
         unset($row['userLikedCount']);
-        unset($row['recipeImage']); // ya no se usa
+
+    unset($row['recipeImage']);
         $posts[] = $row;
     }
     mysqli_stmt_close($stmt);

@@ -75,7 +75,7 @@ if (!isset($_SESSION['userId'])) {
     <div id="content">
 
     <div>
-    <img src="../img/gorromostacho 3.png" alt="" id="logo">
+    <img src="../img/logo.png" alt="" id="logo">
     </div>
 
     <br>

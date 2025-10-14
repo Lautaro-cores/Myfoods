@@ -72,34 +72,8 @@ if (empty($user['userImage'])) {
       form#formImage label.boton-personalizado {
         flex: 1 1 auto; text-align:center; background:#fff4f3; padding:14px 16px; border-radius:18px; border:1px solid rgba(0,0,0,0.25); cursor:pointer; font-size:20px;
       }
-      <?php
-      session_start();
-      require_once "../includes/config.php";
-
-      if (!isset($_SESSION['userId'])) {
-          header('Location: ../visual/logIn.php');
-          exit();
-      }
-
-      $userId = intval($_SESSION['userId']);
-
-      $sql = "SELECT userName, userEmail, userImage FROM users WHERE userId = ?";
-      $stmt = mysqli_prepare($con, $sql);
-      mysqli_stmt_bind_param($stmt, "i", $userId);
-      mysqli_stmt_execute($stmt);
-      $res = mysqli_stmt_get_result($stmt);
-      $user = mysqli_fetch_assoc($res);
-      $userName = $user['userName'];
-      $userEmail = $user['userEmail'];
-
-      $userImage = '';
-      if (empty($user['userImage'])) {
-          $userImage = '../img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg';
-      } else {
-          $userImage = 'data:image/jpeg;base64,' . base64_encode($user['userImage']);
-      }
-      ?>
-
+      </style>
+    
       <!DOCTYPE html>
       <html lang="es">
 

@@ -13,10 +13,15 @@ function timeAgo(dateString) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const postsDiv = document.getElementById("posts");
+  if (!postsDiv) {
+    console.error('No se encontró el contenedor #posts en la página');
+    return;
+  }
+
   fetch("../getPosts.php")
     .then((res) => res.json())
     .then((posts) => {
-      const postsDiv = document.getElementById("posts");
       if (!posts || posts.length === 0) {
         postsDiv.innerHTML = "<p>No hay recetas publicadas aún.</p>";
         return;
@@ -40,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
                       </div>
                     `).join('')}
                   </div>
-                  ${post.images.length > 1 ? `
+                  ${post.images.length > 0 ? `
                   <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Anterior</span>

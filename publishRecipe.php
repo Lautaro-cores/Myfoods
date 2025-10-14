@@ -58,33 +58,31 @@ if (isset($_POST["title"]) && isset($_POST["description"])) {
     $postId = mysqli_insert_id($con);
     mysqli_stmt_close($stmt);
 
-    // Guardar todas las imágenes en recipeImage
-    if (is_array($_FILES['image']['tmp_name'])) {
-        foreach ($_FILES['image']['tmp_name'] as $imgTmp) {
-            if (is_uploaded_file($imgTmp)) {
-                $imgData = file_get_contents($imgTmp);
-                $sqlImg = "INSERT INTO recipe_image (postId, imageData) VALUES (?, ?)";
-                $stmtImg = mysqli_prepare($con, $sqlImg);
-                if ($stmtImg) {
-                    mysqli_stmt_bind_param($stmtImg, "ib", $postId, $imgData);
-                    mysqli_stmt_send_long_data($stmtImg, 1, $imgData);
-                    mysqli_stmt_execute($stmtImg);
-                    mysqli_stmt_close($stmtImg);
-                }
+    // Guardar la primera imagen subida en la columna post.recipeImage
+    $firstImageData = null;
+    if (isset($_FILES['image'])) {
+        if (is_array($_FILES['image']['tmp_name'])) {
+            // image[] input
+            foreach ($_FILES['image']['tmp_name'] as $tmp) {
+                if (is_uploaded_file($tmp)) { $firstImageData = file_get_contents($tmp); break; }
+            }
+        } else {
+            if (is_uploaded_file($_FILES['image']['tmp_name'])) {
+                $firstImageData = file_get_contents($_FILES['image']['tmp_name']);
             }
         }
-    } else {
-        // Solo una imagen
-        if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-            $imgData = file_get_contents($_FILES['image']['tmp_name']);
-            $sqlImg = "INSERT INTO recipe_image (postId, imageData) VALUES (?, ?)";
-            $stmtImg = mysqli_prepare($con, $sqlImg);
-            if ($stmtImg) {
-                mysqli_stmt_bind_param($stmtImg, "ib", $postId, $imgData);
-                mysqli_stmt_send_long_data($stmtImg, 1, $imgData);
-                mysqli_stmt_execute($stmtImg);
-                mysqli_stmt_close($stmtImg);
-            }
+    }
+
+    if ($firstImageData !== null) {
+        $sqlUpd = "UPDATE post SET recipeImage = ? WHERE postId = ?";
+        $stmtUpd = mysqli_prepare($con, $sqlUpd);
+        if ($stmtUpd) {
+            // bind as blob: use 'b' in parameter type and send long data
+            mysqli_stmt_bind_param($stmtUpd, 'bi', $null, $postId);
+            // send blob data for param index 0
+            mysqli_stmt_send_long_data($stmtUpd, 0, $firstImageData);
+            mysqli_stmt_execute($stmtUpd);
+            mysqli_stmt_close($stmtUpd);
         }
     }
 
