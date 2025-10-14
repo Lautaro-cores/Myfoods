@@ -66,6 +66,9 @@ if (!isset($_SESSION['userId'])) {
   }
 </style>
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       <div id="topBar">
     
