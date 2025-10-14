@@ -3,40 +3,6 @@
 @import url('stylesV.css');
 
 /* Estilos comunes para todas las páginas */
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    min-height: 100vh;
-}
 
-.wrapper {
-    display: flex;
-    min-height: 100vh;
-}
-
-.sidebar {
-    width: 280px;
-    background: #343a40;
-    min-height: 100vh;
-    position: fixed;
-    left: 0;
-}
-
-.content {
-    margin-left: 280px;
-    flex: 1;
-    padding: 20px;
-    min-height: 100vh;
-}
-
-.carousel-item img {
-    height: 400px;
-    object-fit: cover;
-}
-
-.recipe-card img {
-    height: 200px;
-    object-fit: cover;
-}
 
 /* Puedes agregar más estilos comunes aquí */
