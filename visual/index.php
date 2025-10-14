@@ -29,6 +29,44 @@ if (!isset($_SESSION['userId'])) {
 <body>
 <?php include '../nawbar.php'; ?>
 
+<<<<<<< Updated upstream
+=======
+  <hr>
+
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item">
+      <a href="/visual/index.php" class="nav-link">Inicio</a>
+    </li>
+    <li class="nav-item">
+      <a href="/publishRecipe.php" class="nav-link">Publicar receta</a>
+    </li>
+    <li class="nav-item">
+      <a href="/perfil.php" class="nav-link">Perfil</a>
+    </li>
+    <li class="nav-item">
+      <a href="/favoritos.php" class="nav-link">Favoritos</a>
+    </li>
+  </ul>
+
+  <hr>
+  <div class="mt-auto">
+    <a href="/logout.php" class="btn btn-outline-secondary w-100">Cerrar sesión</a>
+  </div>
+</nav>
+
+<!-- Ajuste para que el contenido no quede debajo del sidebar -->
+<style>
+  /* Important: usa padding-left en body o en un .content wrapper */
+  body { padding-left: 250px !important; }
+
+  /* Para pantallas pequeñas convertir el sidebar en un menú superior ocultable */
+  @media (max-width: 768px) {
+    #myfoods-sidebar { position: relative; width: 100%; height: auto; padding-bottom: 0; }
+    body { padding-left: 0 !important; }
+  }
+</style>
+
+>>>>>>> Stashed changes
       <div id="topBar">
     
     <div id="buttonGroup"><button id="post">Publica tu receta</button><button id="login">Iniciar Sesión</button></div>
