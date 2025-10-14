@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/../includes/config.php';
 if (!isset($_SESSION['userType']) || $_SESSION['userType'] !== 'admin') {
 
