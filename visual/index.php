@@ -96,9 +96,10 @@ if (!isset($_SESSION['userId'])) {
         <button>Ir a tu perfil</button>
     </a>
 
-    <h2>Recetas recientes</h2>
-    <div id="posts"></div>
-    <script src="../js/posts.js"></script>
+  <h2>Recetas recientes</h2>
+  <div id="posts"></div>
+  <script src="../js/posts.js"></script>
+  <script src="../js/search.js"></script>
 </body>
 
 </html>
