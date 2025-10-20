@@ -21,23 +21,29 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch("../logIn.php", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: "userName=" + encodeURIComponent(userName) + "&userPassword=" + encodeURIComponent(userPassword),
+      body:
+        "userName=" +
+        encodeURIComponent(userName) +
+        "&userPassword=" +
+        encodeURIComponent(userPassword),
     })
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
           mensajeDiv.style.color = "green";
           mensajeDiv.textContent = res.msj;
-          setTimeout(() => { window.location.href = "index.php"; }, 1000);
+          setTimeout(() => {
+            window.location.href = "index.php";
+          }, 1000);
         } else {
           mensajeDiv.style.color = "red";
           mensajeDiv.textContent = res.msj;
         }
       })
       .catch((err) => {
-        console.error('Error en login fetch:', err);
-        mensajeDiv.style.color = 'red';
-        mensajeDiv.textContent = 'Error de red al iniciar sesión.';
+        console.error("Error en login fetch:", err);
+        mensajeDiv.style.color = "red";
+        mensajeDiv.textContent = "Error de red al iniciar sesión.";
       });
   });
 });

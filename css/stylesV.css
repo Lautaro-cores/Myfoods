@@ -1,149 +1,87 @@
-/* Changing the background color of the main fieldset container */
-#divGrande {
-   width: auto;
-   height: auto; /* Choose your color. You can use color names, hex codes, or RGB values. */
-    background-color:#fae1da ; /* Example: A very light grey */
-     /* Optional: Add some padding for visual spacing */
-    border-radius: 8px; /* Optional: Rounded corners */
-}
-         
-#recipe-form-grid {
-    /* ... (other properties) ... */
+.publish-form {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    /* CHANGE HERE: Set the first row to 'auto' (height of content)
-       and the second row to '1fr' (takes up all remaining space). */
-    grid-template-rows: auto 1fr;
-    gap: 20px;
-    max-width: 1000px;
-    margin: 0 auto;
-    /* Optional: Ensure the grid container itself has a minimum height 
-       if you want the 1fr to stretch to a certain size */
-    min-height: 1000px; 
-}
-/* ... (rest of your CSS) ... */
 
-/* Positioning the elements within the grid */
-#image-area {
-    /* Top Left: Row 1, Column 1 */
-    grid-area: 1 / 1; 
+    width: 95%;
+    margin: auto;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+
 }
 
-#header-area {
-    /* Top Right: Row 1, Column 2 */
-    grid-area: 1 / 2;
-}
-
-#ingredients-area {
-    /* Bottom Left: Row 2, Column 1 */
-    grid-area: 2 / 1;
-}
-
-#steps-area {
-    /* Bottom Right: Row 2, Column 2 */
-    grid-area: 2 / 2;
-}
-
-
-/* Additional style adjustments for content within the areas */
-
-/* Make the buttons display nicely in the header-area */
-#botones {
+.publish-info {
     display: flex;
-    justify-content: flex-end; /* Push buttons to the right */
-    gap: 10px; /* Space between buttons */
-    margin-bottom: 10px;
-}
-.eliminar{
-  background-color:#fff6f3 ;
-  border-radius: 10px;
-  border: 0.5px solid #fff6f3;
-  width: 100px;  
-  height: 40px;
-  float: right;
-}
-.publicar{
-  background-color:#fda087 ;
-  width: 100px;  
-  height: 40px;
-  border-radius: 10px;
-  border: 0.5px solid#fda087;
-  float: right;
-  
+    flex-direction: column;
+    align-self: center;
+    gap: 10px;
+    
 }
 
-/* Style the inputs in the header-area to take up full width */
-#campos input {
-    width: 100%; 
-    box-sizing: border-box; /* Include padding/border in width calculation */
-    margin-bottom: 10px;
-    font-family: "Merriweather Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight:300;
-  font-style: normal;
-
-}
-
-/* Ensure the image input area is clearly visible (you'd need more custom styles for a nice file input) */
-#imageInput {
-    /* Basic styling for the image input */
+.publish-info input {
+    width: auto;
     padding: 10px;
-    border: 1px solid #ccc;
+    margin-left: 20px;
+    margin-right: 20px;
+    border: 1px solid #333;
+    font-size: 16px;
+}
+
+.publish-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color:white ;
+    border: 2px dashed #ccc;
+    border-radius: 20px;
+}
+
+.publish-image label {
     display: block;
+    cursor: pointer;
     width: 100%;
-    box-sizing: border-box;
-}
-#recipeTitle{
-  float: right;
-  padding: 20px;             /* Espacio interno */
-  font-size: 21px;           /* Tamaño de letra */
-  border: 0.2px solid #1b1b1b; /* Borde negro */
-  border-radius: 25px;        /* Bordes redondeados */
-  background-color: #fff6f3; /* Fondo azul claro */  
-  width: 500px;
-  height: 20px;
-
-}
-#recipeDescription{
-  float: right;
-  background-color: #fff6f3;
-  border-radius: 5px;        /* Bordes redondeados */
-  border: 0.5px solid #1b1b1b; /* Borde negro */ 
-  height: 200px;
-  width: 500px;
-  border-radius: 30px;    
-  border: 0.2px solid #030303; 
-  text-align: justify;
-  top: -20px;
-}
-/* Ensure the ingredient and step input lists take up full width */
-#ingredientesSection, #pasosSection {
-    padding: 10px;
-    border: 1px solid #eee; /* Light border for visual separation */
+    height: 100%;
 }
 
-#ingredientesList input, #pasosList input {
+.publish-ingredients {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+
+.publish-steps {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.input-container .input {
     width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 5px;
+    margin: auto;
 }
-.ingredienteInput{
-  background-color:#fff6f3 ;
-  border-radius: 10px;
-  border: 0.5px solid #fff6f3;
-}
-.pasoInput{
- background-color:#fff6f3 ;
-  border-radius: 10px;
-  border: 0.5px solid #fff6f3;
-}
-#addIngrediente{
-  background-color: #fae1da;
-  border: none;
 
-}
-#addPaso{
-  background-color: #fae1da;
-  border: none;
-
+.delete-item {
+    padding: 5px 10px !important;
+    font-size: 18px !important;
+    line-height: 1;
+    min-width: 36px;
+    height: 36px;
+    border-radius: 50% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

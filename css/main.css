@@ -1,42 +1,117 @@
 /* Importación de otros archivos CSS */
 @import url('styleP.css');
 @import url('stylesV.css');
+@import url('styleVA.css');
+@import url('styleA.css');
+@import url('styleT.css');
+@import url('styleAG.css');
+@import url('styleM.css');
+@import url('styleMar.css');
+@import url('imagePreview.css');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-/* Estilos comunes para todas las páginas */
 body {
-    font-family: Arial, sans-serif;
+
+
+    background-color: #fae1da;
+    font-family: 'Montserrat';
     line-height: 1.6;
-    min-height: 100vh;
-    background-color:#fdd4c8;
+    margin: 10px;
+    color: #333;
+}
 
-  
+.buttono {
+    background-color: #ff6f61;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.buttonw{
+    background-color: white;
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.input{
+    background-color: white;
+    color: #333;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+}
+
+.logo {
+  text-align: center;
+  justify-content: center;
+  margin: auto;
+  padding: center;
+  width: 250px;
+}
+
+.hide {
+
+    display: none;
 }
 
 
-
-.sidebar {
-    width: 280px;
-    background: #343a40;
-    min-height: 100vh;
+.scroll-top {
     position: fixed;
-    left: 0;
+    right: 18px;
+    bottom: 18px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #ff6f61;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    cursor: pointer;
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.28s ease, transform 0.28s ease, visibility 0.28s;
 }
 
-.content {
-    margin-left: 280px;
-    flex: 1;
-    padding: 20px;
-    min-height: 100vh;
+.scroll-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
-.carousel-item img {
-    height: 400px;
-    object-fit: cover;
+.back-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: transform 0.2s, background-color 0.3s;
 }
 
-.recipe-card img {
-    height: 200px;
-    object-fit: cover;
+.back-button:hover {
+    background-color: #ff8577;
+    transform: scale(1.1);
 }
-
-/* Puedes agregar más estilos comunes aquí */

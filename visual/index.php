@@ -15,86 +15,36 @@ if (!isset($_SESSION['userId'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>myfoods - Inicio</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- CSS principal -->
- 
-  <!-- Estilos de publicaciones -->
-  <link rel="stylesheet" href="../css/styleT.css">
-    <!-- Bootstrap JS y Popper -->
+    <link rel="stylesheet" href="../css/main.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
-        
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 
 <body>
-<?php include '../nawbar.php'; ?>
+    <?php include '../nawbar.php'; ?>
+        <a href="publishRecipe.php">
+            <button class="buttono">Publicar receta</button>
+        </a>
 
-<<<<<<< Updated upstream
-=======
-  <hr>
+        <a href="account.php?username=<?php echo urlencode($_SESSION['userName']); ?>">
+            <button class="buttonw">Ir a tu perfil</button>
+        </a>
 
-  <ul class="nav nav-pills flex-column mb-auto">
-    <li class="nav-item">
-      <a href="/visual/index.php" class="nav-link">Inicio</a>
-    </li>
-    <li class="nav-item">
-      <a href="/publishRecipe.php" class="nav-link">Publicar receta</a>
-    </li>
-    <li class="nav-item">
-      <a href="/perfil.php" class="nav-link">Perfil</a>
-    </li>
-    <li class="nav-item">
-      <a href="/favoritos.php" class="nav-link">Favoritos</a>
-    </li>
-  </ul>
+    <div class="header-container">
+        <div class="logo-container">
+            <img src="../img/logo.png" alt="" id="logo" class="logo">
+            <h1>MyFoods</h1>
+        </div>
 
-  <hr>
-  <div class="mt-auto">
-    <a href="/logout.php" class="btn btn-outline-secondary w-100">Cerrar sesión</a>
-  </div>
-</nav>
+        <br>
 
-<!-- Ajuste para que el contenido no quede debajo del sidebar -->
-<style>
-  /* Important: usa padding-left en body o en un .content wrapper */
-  body { padding-left: 250px !important; }
-
-  /* Para pantallas pequeñas convertir el sidebar en un menú superior ocultable */
-  @media (max-width: 768px) {
-    #myfoods-sidebar { position: relative; width: 100%; height: auto; padding-bottom: 0; }
-    body { padding-left: 0 !important; }
-  }
-</style>
-
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-      <div id="topBar">
-    
-    <div id="buttonGroup"><button id="post">Publica tu receta</button><button id="login">Iniciar Sesión</button></div>
-
+        <div class="search-container">
+            <input type="text" placeholder="buscar recetas" id="searchInput" class="input">
+            <button id="searchButton" class="buttono">Buscar</button>
+        </div>
+ 
     </div>
-
-    <div id="content">
-
-    <div>
-    <img src="../img/logo.png" alt="" id="logo">
-    <h1 id="titulo">MyFoods</h1>
-    </div>
-
-    <br>
-
-    <div id="buscador">
-    <input type="text" placeholder="buscar recetas" id="searchInput">
-    <button id="searchButton">Buscar</button>
-    </div>
-
-    <a href="publishRecipe.php"><button>Publicar receta</button></a>
-
-    <a href="account.php">
-        <button>Ir a tu perfil</button>
-    </a>
 
   <h2>Recetas recientes</h2>
   <div id="posts"></div>

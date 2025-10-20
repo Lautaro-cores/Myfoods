@@ -4,21 +4,18 @@ if (!isset($_SESSION['userId'])) {
     header('Location: logIn.php');
     exit();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Publicar Receta</title>
     <!--icono de la pagina  -->
-    <link rel="icon" type="image/x-icon" href="img/gorromostacho 3 (1).png"> 
-    <link rel="stylesheet" href="../css/stylesV.css">
-     <!-- Bootstrap CSS -->
+    <link rel="icon" type="image/x-icon" href="img/gorromostacho 3 (1).png">
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- CSS principal -->
     <link rel="stylesheet" href="../css/main.css">
@@ -27,54 +24,63 @@ if (!isset($_SESSION['userId'])) {
 </head>
 
 <body>
-<form id="formPublish" enctype="multipart/form-data" method="post" action="../publishRecipe.php">
-    <fieldset id="divGrande">
-        <div id="recipe-form-grid">
+    <?php include '../nawbar.php'; ?>
+    <?php include '../backButton.php'; ?>
+    <form id="formPublish" enctype="multipart/form-data" method="post">
+        <button type="submit" class="buttono">Publicar</button>
+        <button type="button" class="buttonw" id="btnEliminar">Eliminar</button>
 
-            <div id="image-area">
-                <div id="imagenRece">
-                    <div class="file-upload-">
-                        <input type="file" name="image" id="imageInput" class="imageInput, imageInput2" accept="image/*" />
+        <div class="publish-form">
+            <div class="publish-info">
+                <input type="text" name="title" id="recipeTitle" class="input" placeholder="Título de la receta" required>
+                <input type="text" name="description" id="recipeDescription" class="input" placeholder="Cuentanos mas acerca de este plato" required>
+            </div>
+
+
+
+            <div class="publish-image">
+                <div class="image-upload">
+                    <input type="file" name="recipeImages[]" id="imageInput" class="hide" accept="image/*" multiple />
+                    <label for="imageInput">Subir imágenes (máximo 3)</label>
+                </div>
+                <div id="imagePreview" class="image-preview"></div>
+            </div>
+
+
+            <div class="publish-ingredients">
+                <label>Ingredientes:</label>
+                <div id="ingredients-list">
+                    <div class="input-container">
+                        <div class="input-wrapper">
+                            <input type="text" name="ingredientes[]" class="input-ingredient input" placeholder="Ingrediente 1" required>
+                        </div>
+                        <div class="button-wrapper">
+                        </div>
                     </div>
                 </div>
+                <button type="button" id="addIngrediente" class="buttonw">Agregar ingrediente</button>
+
             </div>
 
-            <div id="header-area">
-                <div id="botones">
-                    <button type="submit" class="publicar">Publicar</button>
-                    <button type="button" class="eliminar" id="btnEliminar">Eliminar</button>
-                </div>
-                <div id="campos">
-                    <input type="text" name="title" id="recipeTitle" placeholder="Título de la receta" required>
-                    <input type="text" name="description" id="recipeDescription" placeholder="Cuentanos mas acerca de este plato" required>
-                </div>
-            </div>
+            <div class="publish-steps">
 
-            <div id="ingredients-area">
-                <div id="ingredientesSection">
-                    <label>Ingredientes:</label>
-                    <div id="ingredientesList">
-                        <input type="text" name="ingredientes[]" class="ingredienteInput" placeholder="Ingrediente 1" required>
+                <label>Pasos de la receta:</label>
+                <div id="steps-list">
+                    <div class="input-container">
+                        <div class="input-wrapper">
+                            <input type="text" name="pasos[]" class="input-step input" placeholder="Paso 1" required>
+                        </div>
+                        <div class="button-wrapper">
+                        </div>
                     </div>
-                    <button type="button" id="addIngrediente">Agregar ingrediente</button>
                 </div>
-            </div>
+                <button type="button" id="addPaso" class="buttonw">Agregar paso</button>
 
-            <div id="steps-area">
-                <div id="pasosSection">
-                    <label>Pasos de la receta:</label>
-                    <div id="pasosList">
-                        <input type="text" name="pasos[]" class="pasoInput" placeholder="Paso 1" required>
-                    </div>
-                    <button type="button" id="addPaso">Agregar paso</button>
-                </div>
-            </div>
 
-        </div> </fieldset>
-</form>
+            </div>
+    </form>
     <div id="mensaje"></div>
-    <br>
-    <a href="index.php">Volver al inicio</a>
+
 
 
     <script src="../js/publish.js"></script>

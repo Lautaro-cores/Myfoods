@@ -1,0 +1,155 @@
+.recipe-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    gap: 20px;
+    padding: 20px;
+}
+
+
+.recipe-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-recipe {
+
+    border-radius: 15px;
+}
+
+.recipe-info {
+    margin: 20px;
+
+    padding: 10px;
+    word-break: break-all;
+}
+
+.recipe-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+a.author-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.author-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.recipe-info h1 {
+    margin-bottom: 20px; 
+}
+
+.recipe-ingredients {
+
+    padding: 10px;
+    word-break: break-all;
+}
+
+.recipe-ingredients ul {
+    padding-left: 20px;
+}
+
+
+.recipe-steps {
+
+    padding: 10px;
+    word-break: break-all;
+}
+
+.recipe-steps ol {
+    padding-left: 20px;
+}
+
+.recipe-comments {
+    margin-top: 30px;
+
+    gap: 10px;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 20px;
+
+}
+
+.comment-form input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    
+}
+
+.comment-form button {
+    padding: 10px 15px;
+}
+
+.comment {
+    display: flex;
+    align-items: flex-start;
+    word-break: break-all;
+    gap: 10px;
+    margin: 15px;
+    background-color: white;
+    padding: 10px;
+    border: 2px solid #eee;
+    border-radius: 10px;
+}
+
+/* Estilos para los likes */
+.like-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 15px 0;
+}
+
+.like-button {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.like-button:hover {
+    transform: scale(1.1);
+}
+
+.like-button i {
+    font-size: 1.5rem;
+    color: #6c757d;
+    
+}
+
+.like-button.liked i {
+    color: #dc3545;
+    animation: likeAnimation 0.3s ease;
+}
+
+.like-count {
+    font-size: 1rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+
+
+.comment img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}

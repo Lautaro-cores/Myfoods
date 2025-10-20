@@ -16,9 +16,9 @@ if (isset($_POST["userName"]) && isset($_POST["userPassword"])) {
         $row = mysqli_fetch_assoc($res);
 
         if ($userPassword === $row["userPassword"]) {
-            $_SESSION['userLogged'] = $row['userName'];
+            $_SESSION['userName'] = $row['userName'];
             $_SESSION['userId'] = $row['userId'];
-            $_SESSION['userType'] = $row['userType'] ?? 'user'; 
+            $_SESSION['userType'] = $row['userType'] ?? 'user';
 
             echo json_encode(["success" => true, "msj" => "Login exitoso."]);
         } else {

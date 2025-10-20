@@ -12,10 +12,8 @@ function createCommentHtml(comment, defaultImageUrl) {
     : defaultImageUrl;
 
   return `
-        <div class="comment-item">
-            <img src="${imageUrl}" alt="Perfil de ${comment.userName}" 
-                 class="comment-user-image" 
-                 style="width: 40px; height: 40px;"> 
+        <div class="comment">
+            <img src="${imageUrl}" alt="Perfil de ${comment.userName}">
             <div class="comment-body">
                 <strong class="comment-username">${comment.userName}</strong>
                 <p class="comment-content">${comment.content}</p>
@@ -28,7 +26,8 @@ function createCommentHtml(comment, defaultImageUrl) {
 // Maneja errores de red y respuestas vacías.
 function loadComments(postId, defaultImageUrl) {
   const commentsContainer = document.getElementById("commentsContainer");
-  commentsContainer.innerHTML = '<p class="loading-message">Cargando comentarios...</p>';
+  commentsContainer.innerHTML =
+    '<p class="loading-message">Cargando comentarios...</p>';
 
   fetch(`../getComment.php?postId=${postId}`)
     .then((response) => {
@@ -44,21 +43,29 @@ function loadComments(postId, defaultImageUrl) {
       }
 
       if (!comments || comments.length === 0) {
-        commentsContainer.innerHTML = '<p class="no-comments-message">Sé el primero en comentar esta receta.</p>';
+        commentsContainer.innerHTML =
+          '<p class="no-comments-message">Sé el primero en comentar esta receta.</p>';
       } else {
-        commentsContainer.innerHTML = comments.map((comment) => createCommentHtml(comment, defaultImageUrl)).join("");
+        commentsContainer.innerHTML = comments
+          .map((comment) => createCommentHtml(comment, defaultImageUrl))
+          .join("");
       }
     })
     .catch((error) => {
       console.error("Error al cargar los comentarios:", error);
-      commentsContainer.innerHTML = '<p class="error-message">No se pudieron cargar los comentarios. Asegúrate de que "getComment.php" esté funcionando.</p>';
+      commentsContainer.innerHTML =
+        '<p class="error-message">No se pudieron cargar los comentarios. Asegúrate de que "getComment.php" esté funcionando.</p>';
     });
 }
 
 // Inicialización: obtiene postId desde la URL, carga comentarios y likes, y configura handlers.
 document.addEventListener("DOMContentLoaded", () => {
-  const scriptTag = Array.from(document.getElementsByTagName("script")).find((s) => s.src && s.src.includes("viewRecipe.js"));
-  const defaultImageUrl = scriptTag ? scriptTag.getAttribute("data-default-image-url") : "img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg";
+  const scriptTag = Array.from(document.getElementsByTagName("script")).find(
+    (s) => s.src && s.src.includes("viewRecipe.js")
+  );
+  const defaultImageUrl = scriptTag
+    ? scriptTag.getAttribute("data-default-image-url")
+    : "img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg";
 
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get("id");
@@ -80,10 +87,10 @@ document.addEventListener("DOMContentLoaded", () => {
         likesCountEl.textContent = data.likesCount || 0;
         if (data.userLiked) {
           likeBtn.classList.add("liked");
-          likeBtn.textContent = "💔 Quitar like";
+          likeBtn.innerHTML = '<i class="bi bi-heart-fill"></i>';
         } else {
           likeBtn.classList.remove("liked");
-          likeBtn.textContent = "❤ Me gusta";
+          likeBtn.innerHTML = '<i class="bi bi-heart"></i>';
         }
       })
       .catch((err) => console.error("Error cargando likes:", err));
@@ -140,7 +147,9 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((response) => response.json())
         .then((result) => {
           commentMessage.textContent = result.msj;
-          commentMessage.className = result.success ? "success-message" : "error-message";
+          commentMessage.className = result.success
+            ? "success-message"
+            : "error-message";
 
           if (result.success) {
             commentContent.value = "";
@@ -149,7 +158,8 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch((error) => {
           console.error("Error al enviar el comentario:", error);
-          commentMessage.textContent = "Error de conexión al enviar el comentario.";
+          commentMessage.textContent =
+            "Error de conexión al enviar el comentario.";
           commentMessage.className = "error-message";
         });
     });

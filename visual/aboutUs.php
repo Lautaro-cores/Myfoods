@@ -39,12 +39,14 @@ $team = [
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/styleM.css">
     <title>Myfoods - Sobre Nosotros</title>
 </head>
+
 <body>
     <header class="about-header">
         <h1>¡Sobre nosotros!</h1>
@@ -54,7 +56,8 @@ $team = [
             <div class="team-cards">
                 <?php foreach ($team as $member): ?>
                     <div class="card">
-                        <img src="<?= htmlspecialchars($member['img']) ?>" alt="Foto de <?= htmlspecialchars($member['name']) ?>">
+                        <img src="<?= htmlspecialchars($member['img']) ?>"
+                            alt="Foto de <?= htmlspecialchars($member['name']) ?>">
                         <div class="card-body">
                             <h3><?= htmlspecialchars($member['name']) ?></h3>
                             <p><?= htmlspecialchars($member['desc']) ?></p>
@@ -66,15 +69,24 @@ $team = [
         <section class="about-section">
             <div class="about-card">
                 <h2>¿Por qué hacemos esto?</h2>
-                <p>Queremos darle a las personas un medio para compartir sus recetas con el mundo y obtener otras de diferentes personas, creando un ambiente saludable y colaborativo. En nuestra pagina, queremos darle libertad a la gente de poder subir la receta que quieran, con los ingredientes que quieran, y que el resto de usuarios opine y la critique, tanto para bien, como para mal. </p>
+                <p>Queremos darle a las personas un medio para compartir sus recetas con el mundo y obtener otras de
+                    diferentes personas, creando un ambiente saludable y colaborativo. En nuestra pagina, queremos darle
+                    libertad a la gente de poder subir la receta que quieran, con los ingredientes que quieran, y que el
+                    resto de usuarios opine y la critique, tanto para bien, como para mal. </p>
             </div>
             <div class="about-card">
                 <h2>¿Cómo lo hacemos?</h2>
-                <p>Esta página está programada mayormente en PHP, con funciones principales divididas entre otros archivos PHP y JavaScript. Usamos Apache como servidor y la base de datos está creada en MySQL. Nos organizamos mayormente en 3 divisiones, los 2 de php, que son Cores y Medina, los css, que son Victoria y Thomas, y el html que son Pietro y Martin, de esta forma, nos organizamos para trabajar en diferentes dias sobre diferentes cosas, para despues organizarnos y subir todo</p>
+                <p>Esta página está programada mayormente en PHP, con funciones principales divididas entre otros
+                    archivos PHP y JavaScript. Usamos Apache como servidor y la base de datos está creada en MySQL. Nos
+                    organizamos mayormente en 3 divisiones, los 2 de php, que son Cores y Medina, los css, que son
+                    Victoria y Thomas, y el html que son Pietro y Martin, de esta forma, nos organizamos para trabajar
+                    en diferentes dias sobre diferentes cosas, para despues organizarnos y subir todo</p>
             </div>
         </section>
     </main>
 </body>
+
 </html>
 </body>
+
 </html>

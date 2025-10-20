@@ -31,112 +31,103 @@ if (isset($_POST["title"]) && isset($_POST["description"])) {
         exit();
     }
 
-    
-
     // Validar que haya al menos una imagen
-    if (!isset($_FILES['image']) || !isset($_FILES['image']['tmp_name']) || count($_FILES['image']['tmp_name']) == 0) {
-        $response['msj'] = 'Debes subir al menos una imagen para la receta.';
+    if (!isset($_FILES['recipeImages']) || empty($_FILES['recipeImages']['name'][0])) {
+        $response = ["success" => false, "msj" => "Debes subir al menos una imagen."];
         echo json_encode($response);
         exit();
     }
 
-    // Insertar receta principal (sin recipeImage)
-    $sql = "INSERT INTO post (userId, title, description) VALUES (?, ?, ?)";
-    $stmt = mysqli_prepare($con, $sql);
-    if ($stmt === false) {
-        $response['msj'] = 'Error en la preparación de la consulta: ' . mysqli_error($con);
+    // Validar que no haya más de 3 imágenes
+    if (count($_FILES['recipeImages']['name']) > 3) {
+        $response = ["success" => false, "msj" => "Máximo 3 imágenes permitidas."];
         echo json_encode($response);
         exit();
     }
-    mysqli_stmt_bind_param($stmt, "iss", $userId, $title, $description);
-    if (!mysqli_stmt_execute($stmt)) {
-        $response['msj'] = 'Error al publicar receta: ' . mysqli_error($con);
-        echo json_encode($response);
+
+    // Iniciar transacción
+    mysqli_begin_transaction($con);
+    try {
+        // Insertar la receta
+        $sql = "INSERT INTO post (userId, title, description) VALUES (?, ?, ?)";
+        $stmt = mysqli_prepare($con, $sql);
+        if ($stmt === false) {
+            throw new Exception("Error en la preparación de la consulta: " . mysqli_error($con));
+        }
+        mysqli_stmt_bind_param($stmt, "iss", $userId, $title, $description);
+        if (!mysqli_stmt_execute($stmt)) {
+            throw new Exception("Error al publicar receta: " . mysqli_error($con));
+        }
+        $postId = mysqli_insert_id($con);
         mysqli_stmt_close($stmt);
-        exit();
-    }
-    $postId = mysqli_insert_id($con);
-    mysqli_stmt_close($stmt);
 
-    // Guardar la primera imagen subida en la columna post.recipeImage
-    $firstImageData = null;
-    if (isset($_FILES['image'])) {
-        if (is_array($_FILES['image']['tmp_name'])) {
-            // image[] input
-            foreach ($_FILES['image']['tmp_name'] as $tmp) {
-                if (is_uploaded_file($tmp)) { $firstImageData = file_get_contents($tmp); break; }
-            }
-        } else {
-            if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-                $firstImageData = file_get_contents($_FILES['image']['tmp_name']);
-            }
-        }
-    }
-
-    if ($firstImageData !== null) {
-        $sqlUpd = "UPDATE post SET recipeImage = ? WHERE postId = ?";
-        $stmtUpd = mysqli_prepare($con, $sqlUpd);
-        if ($stmtUpd) {
-            // bind as blob: use 'b' in parameter type and send long data
-            mysqli_stmt_bind_param($stmtUpd, 'bi', $null, $postId);
-            // send blob data for param index 0
-            mysqli_stmt_send_long_data($stmtUpd, 0, $firstImageData);
-            mysqli_stmt_execute($stmtUpd);
-            mysqli_stmt_close($stmtUpd);
-        }
-    }
-
-    // Insertar ingredientes
-    $sqlIng = "INSERT INTO ingredientrecipe (postId, ingredient) VALUES (?, ?)";
-    $stmtIng = mysqli_prepare($con, $sqlIng);
-    if ($stmtIng === false) {
-        $response['msj'] = 'Error al preparar la consulta de ingredientes: ' . mysqli_error($con);
-        echo json_encode($response);
-        exit();
-    }
-    
-    foreach ($ingredientes as $ing) {
-        $ing = trim($ing);
-        if ($ing !== '') {
-            mysqli_stmt_bind_param($stmtIng, "is", $postId, $ing);
-            if (!mysqli_stmt_execute($stmtIng)) {
-                $response['msj'] = 'Error al insertar ingrediente: ' . mysqli_error($con);
-                echo json_encode($response);
-                mysqli_stmt_close($stmtIng);
-                exit();
+        // Procesar cada imagen
+        for ($i = 0; $i < count($_FILES['recipeImages']['name']); $i++) {
+            if ($_FILES['recipeImages']['error'][$i] === UPLOAD_ERR_OK) {
+                $imageContent = file_get_contents($_FILES['recipeImages']['tmp_name'][$i]);
+                
+                $sql = "INSERT INTO recipeImages (postId, imageData, imageOrder) VALUES (?, ?, ?)";
+                $stmt = mysqli_prepare($con, $sql);
+                if ($stmt === false) {
+                    throw new Exception("Error al preparar la consulta de imágenes: " . mysqli_error($con));
+                }
+                $null = NULL;
+                mysqli_stmt_bind_param($stmt, "ibi", $postId, $null, $i);
+                mysqli_stmt_send_long_data($stmt, 1, $imageContent);
+                
+                if (!mysqli_stmt_execute($stmt)) {
+                    throw new Exception("Error al guardar la imagen " . ($i + 1));
+                }
+                mysqli_stmt_close($stmt);
             }
         }
-    }
-    mysqli_stmt_close($stmtIng);
 
-    // Insertar pasos
-    $sqlPaso = "INSERT INTO recipestep (postId, step) VALUES (?, ?)";
-    $stmtPaso = mysqli_prepare($con, $sqlPaso);
-    if ($stmtPaso === false) {
-        $response['msj'] = 'Error al preparar la consulta de pasos: ' . mysqli_error($con);
-        echo json_encode($response);
-        exit();
-    }
+        // Insertar ingredientes
+        $sqlIng = "INSERT INTO ingredientrecipe (postId, ingredient) VALUES (?, ?)";
+        $stmtIng = mysqli_prepare($con, $sqlIng);
+        if ($stmtIng === false) {
+            throw new Exception("Error al preparar la consulta de ingredientes: " . mysqli_error($con));
+        }
 
-    foreach ($pasos as $paso) {
-        $paso = trim($paso);
-        if ($paso !== '') {
-            mysqli_stmt_bind_param($stmtPaso, "is", $postId, $paso);
-            if (!mysqli_stmt_execute($stmtPaso)) {
-                $response['msj'] = 'Error al insertar paso: ' . mysqli_error($con);
-                echo json_encode($response);
-                mysqli_stmt_close($stmtPaso);
-                exit();
+        foreach ($ingredientes as $ing) {
+            $ing = trim($ing);
+            if ($ing !== '') {
+                mysqli_stmt_bind_param($stmtIng, "is", $postId, $ing);
+                if (!mysqli_stmt_execute($stmtIng)) {
+                    throw new Exception("Error al insertar ingrediente: " . mysqli_error($con));
+                }
             }
         }
-    }
-    mysqli_stmt_close($stmtPaso);
+        mysqli_stmt_close($stmtIng);
 
-    $response['success'] = true;
-    $response['msj'] = 'Receta publicada con éxito.';
-    $response['postId'] = $postId;
-    echo json_encode($response);
-    exit();
+        // Insertar pasos
+        $sqlPaso = "INSERT INTO recipestep (postId, step) VALUES (?, ?)";
+        $stmtPaso = mysqli_prepare($con, $sqlPaso);
+        if ($stmtPaso === false) {
+            throw new Exception("Error al preparar la consulta de pasos: " . mysqli_error($con));
+        }
+
+        foreach ($pasos as $paso) {
+            $paso = trim($paso);
+            if ($paso !== '') {
+                mysqli_stmt_bind_param($stmtPaso, "is", $postId, $paso);
+                if (!mysqli_stmt_execute($stmtPaso)) {
+                    throw new Exception("Error al insertar paso: " . mysqli_error($con));
+                }
+            }
+        }
+        mysqli_stmt_close($stmtPaso);
+
+        mysqli_commit($con);
+        $response = [
+            "success" => true,
+            "msj" => "Receta publicada exitosamente.",
+            "postId" => $postId
+        ];
+    } catch (Exception $e) {
+        mysqli_rollback($con);
+        $response = ["success" => false, "msj" => $e->getMessage()];
+    }
 }
 
 echo json_encode($response);
