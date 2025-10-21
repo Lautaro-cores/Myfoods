@@ -3,37 +3,37 @@ $team = [
     [
         'img' => '../img/yea.jpg',
         'name' => 'Mateo',
-        'desc' => 'Programador PHP, trabaja viernes sabados y domingos, la semana la utiliza para tareas de teoria. juega muchos videojuegos.'
+        'desc' => 'Programador PHP, trabaja viernes sabados y domingos, fue el encargado de hacer las primeras versiones del buscador, hacer la seccion de comentarios, realizar la logica del perfil, conectar la base de datos, el sistema de inicio de sesion y registro, y esta misma pagina'
     ],
     [
         'img' => '../img/tlabaja.jpg',
         'name' => 'Cores',
-        'desc' => 'Programador PHP, skrum master, se encarga de organizar a todos los trabajadores. duerme poco.'
+        'desc' => 'Programador PHP, scrum master, se encarga de organizar a todos los trabajadores, se encarga de perfeccionar los trabajos a su gusto, segun como lo quiera, se encargo de hacer la version actual de lo que hizo mateo, ademas de agregarle el boton de retroceder, ver las recetas de cada uno y la cuenta de otro.'
     ],
     [
         'img' => '../img/agustina.jpg',
         'name' => 'Agustina',
-        'desc' => 'Administradora de base de datos, que tambien hace css si es necesario, se complico mucho con la base de datos y la cambio varias veces.'
+        'desc' => 'Administradora de base de datos, que tambien hace css si es necesario, se encargo de hacer la base de datos y de mantenerla, traduciendola cuando era necesario, agregando cada parte, y tambien colaborando con el equipo haciendo css cuando ya la base de datos no necesitaba cambios.'
     ],
     [
         'img' => '../img/Thomas.webp',
         'name' => 'Thomas',
-        'desc' => 'Encargado de visuales (CSS), trabaja bien, escucha musica mientras trabaja , tiene anteojos, es el mayor del equipo.'
+        'desc' => 'Encargado de visuales (CSS), trabaja bien, escucha musica mientras trabaja , le gustan los beatles, se encarga en su mayoria de arreglos en js e hizo visuales cuando se necesitaba.'
     ],
     [
         'img' => '../img/chopper.webp',
         'name' => 'Victoria',
-        'desc' => 'Encargada de visuales (CSS), le gusta el anime, en especial one piece, le gusta mucho hacer los visuales por el toque artistico.'
+        'desc' => 'Encargada de visuales (CSS), le gusta el anime, en especial one piece, le gusta mucho hacer los visuales por el toque artistico, fue la que controlo mayormente del diseño visual, eligiendo el estilo, la imagen del equipo, los colores, y toda la organizacion de la pagina.'
     ],
     [
         'img' => '../img/perroShh.png',
         'name' => 'Pietro',
-        'desc' => 'Programador HTML, juega videojuegos, habla con mujeres, es carismatico y soltero, llamar al +54 911 2285-3094 para mas informacion.'
+        'desc' => 'Programador HTML, se encargo de hacer la estructura basica de la pagina, entre estos siendo el perfil, la pagina principal y el resto de cosas basicas, luego, hizo el css de las mismas, segun la organizacion de los visuales ya establecidos.'
     ],
     [
         'img' => '../img/martin.png',
         'name' => 'Martin',
-        'desc' => 'Programador de html que tambien hace css para complementar su trabajo, escucha musica chilena, le cuesta concentrarse'
+        'desc' => 'Programador de html que tambien hace css para complementar su trabajo, hizo parte de la estructura basica, y actualmente va de trabajo en trabajo viendo en que puede ayudar, ya sea de html, css o php'
     ],
 ];
 ?>
@@ -69,18 +69,15 @@ $team = [
         <section class="about-section">
             <div class="about-card">
                 <h2>¿Por qué hacemos esto?</h2>
-                <p>Queremos darle a las personas un medio para compartir sus recetas con el mundo y obtener otras de
-                    diferentes personas, creando un ambiente saludable y colaborativo. En nuestra pagina, queremos darle
-                    libertad a la gente de poder subir la receta que quieran, con los ingredientes que quieran, y que el
-                    resto de usuarios opine y la critique, tanto para bien, como para mal. </p>
+                <p>Porque la comida une. Porque detrás de cada receta hay una historia, una tradición o simplemente el deseo de compartir algo rico con los demás. Creamos esta página para abrir una mesa virtual donde todos puedan traer su plato, su experiencia, sus secretos de cocina y su forma única de preparar lo que ama.
+
+                    No se trata solo de recetas, sino de comunidad. De aprender unos de otros, de inspirarnos, de equivocarnos y volver a intentar. Acá no importa si sos chef profesional o si estás haciendo tus primeros intentos en la cocina: lo que importa es tener ganas de compartir.
+
+                    Hacemos esto porque creemos que cocinar no tiene que ser solitario, y que los mejores sabores surgen cuando se comparten. </p>
             </div>
             <div class="about-card">
-                <h2>¿Cómo lo hacemos?</h2>
-                <p>Esta página está programada mayormente en PHP, con funciones principales divididas entre otros
-                    archivos PHP y JavaScript. Usamos Apache como servidor y la base de datos está creada en MySQL. Nos
-                    organizamos mayormente en 3 divisiones, los 2 de php, que son Cores y Medina, los css, que son
-                    Victoria y Thomas, y el html que son Pietro y Martin, de esta forma, nos organizamos para trabajar
-                    en diferentes dias sobre diferentes cosas, para despues organizarnos y subir todo</p>
+                <h2>¿Quíenes somos?</h2>
+                <p>Somos un grupo de entusiastas de la cocina que creemos en el poder de compartir recetas y experiencias culinarias. Cada uno de nosotros aporta su propia perspectiva y habilidades, y juntos formamos una comunidad diversa y creativa. Nos apasiona la comida y queremos inspirar a otros a explorar su amor por la cocina, por eso, en nuestra pagina nuestro principal objetivo es el buen trato entre los usuarios y la capacidad de mostrar tus recetas al resto, esperando por que la prueben y la critiquen, para ir mejorando constantemente.</p>
             </div>
         </section>
     </main>
