@@ -6,76 +6,77 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("formImage");
   const userImageInput = document.getElementById("subirArchivo");
   const profileImage = document.querySelector('img[alt="Imagen de perfil"]');
-  const editProfileModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+  const editProfileModalEl = document.getElementById('editProfileModal');
+  const editProfileModal = new bootstrap.Modal(editProfileModalEl);
   const imagePreview = document.getElementById('imagePreview');
-
+  const descriptionField = document.getElementById('description');
   if (!form) return;
 
+  // Preview handler (outside submit) - immediate preview when file selected
+  if (userImageInput && imagePreview) {
+    userImageInput.addEventListener('change', () => {
+      imagePreview.innerHTML = '';
+      const file = userImageInput.files && userImageInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.alt = 'Vista previa';
+        img.style.maxWidth = '200px';
+        img.style.borderRadius = '8px';
+        imagePreview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // When modal is hidden, clear preview & file input
+  editProfileModalEl.addEventListener('hidden.bs.modal', () => {
+    if (imagePreview) imagePreview.innerHTML = '';
+    if (userImageInput) userImageInput.value = '';
+  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    if (
-      !userImageInput ||
-      !userImageInput.files ||
-      userImageInput.files.length === 0
-    ) {
-      alert("Selecciona un archivo primero.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("userImage", userImageInput.files[0]);
+    const formData = new FormData(form);
+    // Ensure description is appended even if empty string
+    formData.set('description', descriptionField ? descriptionField.value.trim() : '');
 
     try {
-      const response = await fetch("../uploadImage.php", {
+      const response = await fetch("../upload.php", {
         method: "POST",
         body: formData,
       });
       const result = await response.json();
 
       if (result.success) {
-        // Si el servidor devuelve una URL directa, usarla; si no, forzar recarga desde getUserImage.php
-        if (result.imageUrl) profileImage.src = result.imageUrl;
-        else profileImage.src = "../getUserImage.php?" + new Date().getTime();
+        // Actualizar imagen si viene imageUrl o forzar recarga del endpoint que da la imagen
+        if (result.imageUrl) {
+          profileImage.src = result.imageUrl;
+        } else {
+          // add cache-busting
+          profileImage.src = "../getUserImage.php?ts=" + new Date().getTime();
+        }
 
-        editProfileModal.hide(); // Cerrar el modal después de subir la imagen
-        alert(result.msj);
+        // Actualizar descripción sin recargar
+        const descriptionElement = document.querySelector(".user-description");
+        const newDescription = descriptionField ? descriptionField.value.trim() : '';
+        if (descriptionElement) {
+          descriptionElement.textContent = newDescription !== "" ? newDescription : "Sin descripción";
+        }
+
+        editProfileModal.hide();
+        // Mostrar mensaje de éxito (puedes reemplazar por un toast)
+        alert(result.msj || 'Perfil actualizado');
       } else {
-        alert(result.msj || "Error al subir imagen");
+        alert(result.msj || 'Error al actualizar perfil');
       }
     } catch (err) {
-      console.error("Error subiendo imagen:", err);
-      alert("Error de red al subir la imagen.");
+      console.error('Error en fetch upload:', err);
+      alert('Error al comunicarse con el servidor.');
     }
-  });
-
-  // Preview logic: show selected file(s) as preview(s)
-  if (userImageInput && imagePreview) {
-    userImageInput.addEventListener('change', () => {
-      // Clear previous preview
-      imagePreview.innerHTML = '';
-      const file = userImageInput.files && userImageInput.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      const container = document.createElement('div');
-      container.className = 'preview-image';
-
-      reader.onload = (e) => {
-        container.innerHTML = `<img src="${e.target.result}" alt="Vista previa">`;
-        imagePreview.appendChild(container);
-      };
-
-      reader.readAsDataURL(file);
-    });
-  }
-
-  // When modal is hidden, clear preview & file input
-  const modalEl = document.getElementById('editProfileModal');
-  modalEl.addEventListener('hidden.bs.modal', () => {
-    if (imagePreview) imagePreview.innerHTML = '';
-    if (userImageInput) userImageInput.value = '';
   });
 
   // --- Cargar y mostrar recetas del usuario ---

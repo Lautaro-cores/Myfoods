@@ -7,16 +7,23 @@ if (!isset($_SESSION['userId'])) {
   exit();
 }
 
+if (!isset($_GET['username']) || empty($_GET['username'])) {
+  die("Error: no se especificó el nombre de usuario en la URL.");
+}
+
 $username = $_GET['username'];
 
-$sql = "SELECT userName, userEmail, userImage FROM users WHERE userName = ?";
+$sql = "SELECT userName, userEmail, userImage, description FROM users WHERE userName = ?";
 $stmt = mysqli_prepare($con, $sql);
 mysqli_stmt_bind_param($stmt, "s", $username);
 mysqli_stmt_execute($stmt);
 $res = mysqli_stmt_get_result($stmt);
 $user = mysqli_fetch_assoc($res);
+
+
 $userName = $user['userName'];
 $userEmail = $user['userEmail'];
+$userDescription = $user['description'];
 
 $userImage = '';
 if (empty($user['userImage'])) {
@@ -50,6 +57,11 @@ if (empty($user['userImage'])) {
 
     <div class="profile-details">
       <h3><?php echo htmlspecialchars($userName); ?></h3>
+      <p class="user-description">
+  <?php echo !empty($userDescription) 
+    ? htmlspecialchars($userDescription) 
+    : '<em>Sin descripción</em>'; ?>
+</p>
     </div>
   </div>
 
@@ -69,9 +81,13 @@ if (empty($user['userImage'])) {
         </div>
         <div class="modal-body">
           <form id="formImage" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="description" class="form-label">Descripción</label>
+              <textarea id="description" name="description" class="form-control" rows="3" placeholder="Escribe una breve descripción..."><?php echo htmlspecialchars($userDescription); ?></textarea>
+            </div>
             <div class="form-group mb-3">
-              <label for="subirArchivo" class="form-label">Seleccionar nueva foto de perfil:</label>
-              <input type="file" id="subirArchivo" name="userImage" accept="image/*" required class="form-control">
+              <label for="subirArchivo" class="form-label">Seleccionar nueva foto de perfil (opcional):</label>
+              <input type="file" id="subirArchivo" name="userImage" accept="image/*" class="form-control">
               <!-- Preview container -->
               <div id="imagePreview" class="m-3"></div>
             </div>
