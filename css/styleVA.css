@@ -25,10 +25,13 @@ margin-right: 100px;
 }
 
 .image-recipe {
+
     border-radius: 15px; 
     max-width: 100%; 
     max-height: 400px; 
+
     min-height: 400px;
+    
     height: auto; 
     object-fit: cover; 
     border-radius: 15px;
@@ -68,6 +71,11 @@ a.author-link {
     margin-bottom: 20px; 
 }
 
+.title{
+    margin-left: 54px;
+    margin-bottom: 30px;
+}
+
 .recipe-ingredients {
 
     padding: 10px;
@@ -76,11 +84,17 @@ a.author-link {
 }
 
 .recipe-ingredients ul {
+    
     padding-left: 20px;
 }
 
-.ingredients-input {
-    margin-bottom: 10px;
+.ingredient-input{
+        border-radius: 15px ;
+    margin-bottom: 20px; 
+    background-color: #fdf5f3;
+    padding: 12px;
+    list-style-position: outside;
+    border: 1px  solid#ccc;
 }
 
 
@@ -95,10 +109,18 @@ a.author-link {
  padding-left: 25px; 
     /* El contador de lista se reinicia para que el número aparezca en el li */
     list-style-type: decimal;
-   
+    background-color: #fae1da;;
 }
 
+.step-input {
+    border-radius: 15px ;
+    margin-bottom: 20px; 
+    background-color: #fdf5f3;
+    padding: 13px;
+    list-style-position: outside;
+    border: 1px  solid#ccc;
 
+}
 
 .interaction-container {
     margin-top: 20px;

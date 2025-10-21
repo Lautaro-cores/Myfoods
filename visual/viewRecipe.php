@@ -177,7 +177,7 @@ if ($title) {
     <div class="recipe-content">                
         <div class="recipe-ingredients">
             <h2>Ingredientes</h2>
-            <ul class="input">
+            <ul >
                 <?php foreach ($ingredientes as $ing): ?>
                     <li class="ingredient-input"><?php echo htmlspecialchars($ing); ?></li>
                 <?php endforeach; ?>
@@ -185,7 +185,7 @@ if ($title) {
         </div>
         <div class="recipe-steps">
             <h2>Pasos</h2>
-            <ol class="input">
+            <ol>
                 <?php foreach ($pasos as $paso): ?>
                     <li class="step-input">
                         <?php echo htmlspecialchars($paso); ?>
