@@ -30,7 +30,7 @@
         </div>
 
 
-        <div class="nav-bottom mt-auto mb-3 text-center w-100 dropup">
+        <div class="nav-bottom mt-auto mb-3 text-center w 100 dropup">
             <button class="nav-link p-2 d-flex justify-content-center align-items-center mx-auto" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-three-dots fs-4"></i>
             </button>
@@ -45,6 +45,8 @@
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+
 
 <!-- Estilos específicos para el navbar -->
 <style>

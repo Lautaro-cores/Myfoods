@@ -11,6 +11,7 @@
 @import url('imagePreview.css');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
+
 body {
     background-color: #fae1da;
     font-family: 'Montserrat';
@@ -36,6 +37,7 @@ body {
     padding: 10px 20px;
     border: none;
     border-radius: 20px;
+    
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
