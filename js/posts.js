@@ -96,3 +96,20 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((err) => console.error("Error cargando posts:", err));
 });
+ const btn = document.getElementById('searchButton');
+  const input = document.getElementById('searchInput');
+
+
+                function goSearch() {
+                    const search = input.value.trim();
+                    if (search === '') {
+                        window.location.href = 'searchPage.php';
+                    } else {
+                        window.location.href = 'searchPage.php?search=' + encodeURIComponent(search);
+                    }
+                    input.value = '';
+                }
+                btn.addEventListener('click', goSearch);
+                input.addEventListener('keydown', function(e){
+                    if (e.key === 'Enter') goSearch();
+                });

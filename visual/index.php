@@ -16,20 +16,20 @@ if (!isset($_SESSION['userId'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>myfoods - Inicio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/main.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 
 <body>
     <?php include '../nawbar.php'; ?>
-        <a href="publishRecipe.php">
-            <button class="buttono">Publicar receta</button>
-        </a>
+    <a href="publishRecipe.php">
+        <button class="buttono">Publicar receta</button>
+    </a>
 
-        <a href="account.php?username=<?php echo urlencode($_SESSION['userName']); ?>">
-            <button class="buttonw">Ir a tu perfil</button>
-        </a>
+    <a href="account.php?username=<?php echo urlencode($_SESSION['userName']); ?>">
+        <button class="buttonw">Ir a tu perfil</button>
+    </a>
 
     <div class="header-container">
         <div class="logo-container">
@@ -40,16 +40,19 @@ if (!isset($_SESSION['userId'])) {
         <br>
 
         <div class="search-container">
+           
             <input type="text" placeholder="buscar recetas" id="searchInput" class="input">
-            <button id="searchButton" class="buttono">Buscar</button>
+            <button id="searchButton" class="buttono" type="button">Buscar</button>
+            <script>
+
+            </script>
         </div>
- 
+
     </div>
 
-  <h2>Recetas recientes</h2>
-  <div id="posts"></div>
-  <script src="../js/posts.js"></script>
-  <script src="../js/search.js"></script>
+    <h2>Recetas recientes</h2>
+    <div id="posts"></div>
+    <script src="../js/posts.js"></script>
 </body>
 
 </html>

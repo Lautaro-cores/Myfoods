@@ -102,12 +102,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function doSearch() {
     const contenido = input.value.trim();
-    if (!contenido) {
-      postsDiv.innerHTML = "<p>Escribe algo para buscar.</p>";
+    // Allow empty text search if tags are selected
+    if (!contenido && selectedTags.size === 0) {
+      postsDiv.innerHTML = "<p>Escribe algo para buscar o selecciona etiquetas.</p>";
       return;
     }
 
-    fetch(`../searchRecipes.php?contenido=${encodeURIComponent(contenido)}`)
+    // Construir query params
+    const params = new URLSearchParams();
+    if (contenido) params.set('contenido', contenido);
+    if (selectedTags.size > 0) params.set('tags', Array.from(selectedTags).join(','));
+
+    fetch(`../searchRecipes.php?${params.toString()}`)
       .then((res) => {
         if (!res.ok) throw new Error("Error de red");
         return res.json();
@@ -122,5 +128,38 @@ document.addEventListener("DOMContentLoaded", () => {
   btn.addEventListener("click", doSearch);
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") doSearch();
+  });
+});
+
+// Tag selection handling (global)
+document.addEventListener('DOMContentLoaded', () => {
+  const tagButtons = Array.from(document.querySelectorAll('.tag-filter'));
+  window.selectedTags = new Set();
+
+  function updateTagButtonState(btn) {
+    const tagId = btn.dataset.tag;
+    if (window.selectedTags.has(tagId)) {
+      btn.classList.remove('btn-outline-primary');
+      btn.classList.add('btn-primary');
+    } else {
+      btn.classList.remove('btn-primary');
+      btn.classList.add('btn-outline-primary');
+    }
+  }
+
+  tagButtons.forEach(btn => updateTagButtonState(btn));
+
+  tagButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tagId = btn.dataset.tag;
+      if (window.selectedTags.has(tagId)) {
+        window.selectedTags.delete(tagId);
+      } else {
+        window.selectedTags.add(tagId);
+      }
+      updateTagButtonState(btn);
+      // ejecutar búsqueda automática cuando cambian tags
+      document.getElementById('searchButton').click();
+    });
   });
 });

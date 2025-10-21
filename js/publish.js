@@ -178,6 +178,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!formPublish) return;
 
+  // --- Selección de tags: desmarcar la anterior en la misma categoría (excepto 'other') ---
+  const getAllTagCheckboxes = () => Array.from(document.querySelectorAll('input[name="tags[]"]'));
+
+  document.addEventListener('change', (evt) => {
+    const target = evt.target;
+    if (!target || !target.matches || !target.matches('input[name="tags[]"]')) return;
+
+    const currentCheckbox = target;
+    const categoryId = currentCheckbox.dataset.category || 'other';
+
+    // Si marcó una etiqueta y no pertenece a 'other', desmarcamos cualquier otra en la misma categoría
+    if (currentCheckbox.checked && categoryId !== 'other') {
+      getAllTagCheckboxes().forEach(cb => {
+        const cbCategory = cb.dataset.category || 'other';
+        if (cb !== currentCheckbox && cbCategory === categoryId && cb.checked) {
+          cb.checked = false; // desmarcar la anterior
+        }
+      });
+    }
+  });
+
   formPublish.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -225,6 +246,9 @@ document.addEventListener("DOMContentLoaded", () => {
     formData.append("description", description);
     ingredientes.forEach((ing) => formData.append("ingredientes[]", ing));
     pasos.forEach((paso) => formData.append("pasos[]", paso));
+  // Agregar tags seleccionadas (si las hay)
+  const selectedTags = Array.from(document.querySelectorAll('input[name="tags[]"]:checked')).map(i => i.value);
+  selectedTags.forEach(tid => formData.append('tags[]', tid));
     
     // Agregar todas las imágenes seleccionadas
     Array.from(imageInput.files).forEach((file) => {

@@ -6,7 +6,7 @@ if (isset($_POST["userName"]) && isset($_POST["userPassword"])) {
     $userName = $_POST["userName"];
     $userPassword = $_POST["userPassword"];
 
-    $sql = "SELECT userId, userName, userPassword, userType FROM users WHERE userName = ?";
+    $sql = "SELECT userId, userName, userPassword, userType, userImage FROM users WHERE userName = ?";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, "s", $userName);
     mysqli_stmt_execute($stmt);
@@ -19,6 +19,7 @@ if (isset($_POST["userName"]) && isset($_POST["userPassword"])) {
             $_SESSION['userName'] = $row['userName'];
             $_SESSION['userId'] = $row['userId'];
             $_SESSION['userType'] = $row['userType'] ?? 'user';
+            $_SESSION['userImage'] = base64_encode($row['userImage']) ?? 'img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg';
 
             echo json_encode(["success" => true, "msj" => "Login exitoso."]);
         } else {

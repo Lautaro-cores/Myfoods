@@ -42,7 +42,12 @@ if (!$user) { header('Location: index.php'); exit; }
 <form method="post">
     <label>Nombre<br><input name="userName" value="<?= htmlspecialchars($user['userName']) ?>"></label><br>
     <label>Email<br><input name="userEmail" value="<?= htmlspecialchars($user['userEmail']) ?>"></label><br>
-    <label>Tipo<br><input name="userType" value="<?= htmlspecialchars($user['userType']) ?>"></label><br>
+    <label>Tipo<br>
+        <select name="userType">
+            <option value="user" <?= $user['userType'] === 'user' ? 'selected' : '' ?>>Usuario</option>
+            <option value="admin" <?= $user['userType'] === 'admin' ? 'selected' : '' ?>>Administrador</option>
+        </select>
+    </label><br>
     <button type="submit">Guardar</button>
     <a href="index.php">Cancelar</a>
 </form>

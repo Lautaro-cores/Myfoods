@@ -1,9 +1,17 @@
-.recipe-container {
+.recipe-header {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto;
     gap: 20px;
     padding: 20px;
+}
+
+.recipe-content {
+display: grid;
+grid-template-columns: 1fr 3fr;
+grid-template-rows: auto;
+gap: 20px;
+padding: 20px;
 }
 
 
@@ -33,6 +41,10 @@
     margin-bottom: 15px;
 }
 
+.author-info {
+    margin-left: 20px;
+}
+
 a.author-link {
     text-decoration: none;
     color: inherit;
@@ -59,6 +71,10 @@ a.author-link {
     padding-left: 20px;
 }
 
+.ingredients-input {
+    margin-bottom: 10px;
+}
+
 
 .recipe-steps {
 
@@ -68,6 +84,17 @@ a.author-link {
 
 .recipe-steps ol {
     padding-left: 20px;
+}
+
+.steps-input {
+    margin-bottom: 10px;
+}
+
+.interaction-container {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
 }
 
 .recipe-comments {
@@ -143,6 +170,26 @@ a.author-link {
     font-size: 1rem;
     color: #6c757d;
     font-weight: 500;
+}
+
+.fav-button {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.fav-button:hover {
+    transform: scale(1.1);
+}
+.fav-button i {
+    font-size: 1.5rem;
+    color: #6c757d;
+}
+.fav-button.favorited i {
+    color: #ffc107;
+    animation: favAnimation 0.3s ease;
 }
 
 

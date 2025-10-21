@@ -68,6 +68,20 @@ if ($title) {
         }
         mysqli_stmt_close($stmtPaso);
     }
+    
+        // Obtener tags asociados a la receta
+        $tags = [];
+    $sqlTags = "SELECT t.tagId, t.tagName, c.categoryName FROM tags t LEFT JOIN tagCategories c ON t.categoryId = c.categoryId JOIN postTags pt ON t.tagId = pt.tagId WHERE pt.postId = ? ORDER BY t.tagId ASC";
+        $stmtTags = mysqli_prepare($con, $sqlTags);
+        if ($stmtTags) {
+            mysqli_stmt_bind_param($stmtTags, "i", $postId);
+            mysqli_stmt_execute($stmtTags);
+            mysqli_stmt_bind_result($stmtTags, $tagId, $tagName, $catName);
+            while (mysqli_stmt_fetch($stmtTags)) {
+                $tags[] = ['tagId' => $tagId, 'tagName' => $tagName, 'categoryName' => $catName];
+            }
+            mysqli_stmt_close($stmtTags);
+        }
     ?>
     <!DOCTYPE html>
     <html lang="es">
@@ -90,7 +104,7 @@ if ($title) {
         <?php include '../nawbar.php'; ?>
         <?php include '../backButton.php'; ?>
 
-        <div class="recipe-container">
+        <div class="recipe-header">
 
           
           
@@ -133,7 +147,9 @@ if ($title) {
 
 
         <div class="recipe-info">
+
         <h1 class="input"><?php echo ($title); ?></h1>
+
           <div class="recipe-author">
                  <a href="account.php?username=<?php echo urlencode($authorName); ?>" class="author-link">
                     <img src="<?php echo !empty($authorImage) ? 'data:image/jpeg;base64,' . base64_encode($authorImage) : '../img/default-profile.jpg'; ?>" 
@@ -144,13 +160,26 @@ if ($title) {
                     <span class="author-name">Publicado por: <?php echo htmlspecialchars($authorName); ?></span>
                 </a>
             </div>            
-        <p class="input"><?php echo ($description); ?></p>
+     
+        <?php if (!empty($tags)): ?>
+            <div class="recipe-tags">
+                <strong>Etiquetas: </strong>
+                <?php foreach ($tags as $t): ?>
+                    <a href="searchPage.php?activateTag=<?php echo intval($t['tagId']); ?>" class="tag-badge input"><?php echo htmlspecialchars($t['tagName']); ?></a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+            <br>
+           <p class="input"><?php echo ($description); ?></p>
         </div>
+
+    </div>
+    <div class="recipe-content">                
         <div class="recipe-ingredients">
             <h2>Ingredientes</h2>
             <ul class="input">
                 <?php foreach ($ingredientes as $ing): ?>
-                    <li><?php echo htmlspecialchars($ing); ?></li>
+                    <li class="ingredient-input"><?php echo htmlspecialchars($ing); ?></li>
                 <?php endforeach; ?>
             </ul>
         </div>
@@ -158,7 +187,7 @@ if ($title) {
             <h2>Pasos</h2>
             <ol class="input">
                 <?php foreach ($pasos as $paso): ?>
-                    <li><?php echo htmlspecialchars($paso); ?></li>
+                    <li class="step-input"><?php echo htmlspecialchars($paso); ?></li>
                 <?php endforeach; ?>
             </ol>
         </div>
@@ -170,6 +199,11 @@ if ($title) {
                     <i class="bi bi-heart"></i>
                 </button>
                 <span id="likesCount" class="like-count">0</span>
+            </div>
+            <div class="favorite-section">
+                <button id="favBtn" class="fav-button" type="button" title="Guardar receta">
+                    <i class="bi bi-bookmark"></i>
+                </button>
             </div>
         </div>
 

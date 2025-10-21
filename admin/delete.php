@@ -12,6 +12,20 @@ $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if (!$type || !$id) { header('Location: index.php'); exit; }
 
 if ($type === 'user') {
+    // Check if the user is an admin
+    $sql = "SELECT userType FROM users WHERE userId=?";
+    if ($stmt = mysqli_prepare($con, $sql)) {
+        mysqli_stmt_bind_param($stmt, 'i', $id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_result($stmt, $userType);
+        mysqli_stmt_fetch($stmt);
+        mysqli_stmt_close($stmt);
+        
+        if ($userType === 'admin') {
+            header('Location: index.php?error=No se pueden eliminar usuarios administradores');
+            exit;
+        }
+    }
 
     $sql = "DELETE FROM comment WHERE userId=?";
     if ($stmt = mysqli_prepare($con, $sql)) { mysqli_stmt_bind_param($stmt, 'i', $id); mysqli_stmt_execute($stmt); mysqli_stmt_close($stmt); }

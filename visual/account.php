@@ -85,6 +85,11 @@ if (empty($user['userImage'])) {
     </div>
   </div>
 
+  <div class="user-recipes">
+    <h2>Recetas de <?php echo htmlspecialchars($userName); ?></h2>
+    <div id="userPosts"></div>
+  </div>
+
   <script src="../js/account.js"></script>
 </body>
 

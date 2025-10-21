@@ -5,14 +5,12 @@
 @import url('styleA.css');
 @import url('styleT.css');
 @import url('styleAG.css');
-@import url('styleM.css');
+
 @import url('styleMar.css');
 @import url('imagePreview.css');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 body {
-
-
     background-color: #fae1da;
     font-family: 'Montserrat';
     line-height: 1.6;
@@ -32,7 +30,7 @@ body {
 }
 
 .buttonw{
-    background-color: white;
+    background-color: #fffafa;
     color: #333;
     padding: 10px 20px;
     border: none;
@@ -43,7 +41,7 @@ body {
 }
 
 .input{
-    background-color: white;
+    background-color:  #fffafa;
     color: #333;
     padding: 10px;
     border: 1px solid #ccc;

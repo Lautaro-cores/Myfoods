@@ -118,6 +118,47 @@ if (isset($_POST["title"]) && isset($_POST["description"])) {
         }
         mysqli_stmt_close($stmtPaso);
 
+        // Insertar relaciones post-tags si se enviaron
+        if (isset($_POST['tags']) && is_array($_POST['tags']) && count($_POST['tags']) > 0) {
+            // Usar INSERT IGNORE para evitar errores si ya existe la relación (si se creó UNIQUE index)
+            $sqlPostTag = "INSERT IGNORE INTO postTags (postId, tagId) VALUES (?, ?)";
+            $stmtPT = mysqli_prepare($con, $sqlPostTag);
+            if ($stmtPT === false) {
+                // Si el servidor MySQL no permite INSERT IGNORE en prepared statements por alguna razón,
+                // caemos a la inserción segura por comprobación previa.
+                foreach ($_POST['tags'] as $tagId) {
+                    $tagId = intval($tagId);
+                    if ($tagId > 0) {
+                        $checkSql = "SELECT 1 FROM postTags WHERE postId = ? AND tagId = ? LIMIT 1";
+                        $chk = mysqli_prepare($con, $checkSql);
+                        mysqli_stmt_bind_param($chk, "ii", $postId, $tagId);
+                        mysqli_stmt_execute($chk);
+                        mysqli_stmt_store_result($chk);
+                        if (mysqli_stmt_num_rows($chk) === 0) {
+                            $ins = mysqli_prepare($con, "INSERT INTO postTags (postId, tagId) VALUES (?, ?)");
+                            mysqli_stmt_bind_param($ins, "ii", $postId, $tagId);
+                            if (!mysqli_stmt_execute($ins)) {
+                                throw new Exception("Error al insertar post-tag: " . mysqli_error($con));
+                            }
+                            mysqli_stmt_close($ins);
+                        }
+                        mysqli_stmt_close($chk);
+                    }
+                }
+            } else {
+                foreach ($_POST['tags'] as $tagId) {
+                    $tagId = intval($tagId);
+                    if ($tagId > 0) {
+                        mysqli_stmt_bind_param($stmtPT, "ii", $postId, $tagId);
+                        if (!mysqli_stmt_execute($stmtPT)) {
+                            throw new Exception("Error al insertar post-tag: " . mysqli_error($con));
+                        }
+                    }
+                }
+                mysqli_stmt_close($stmtPT);
+            }
+        }
+
         mysqli_commit($con);
         $response = [
             "success" => true,

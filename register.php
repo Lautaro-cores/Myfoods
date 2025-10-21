@@ -26,9 +26,10 @@ if (isset($_POST["userName"], $_POST["userPassword"], $_POST["userEmail"])) {
     if (mysqli_stmt_execute($stmt)) {
         // Iniciar sesión automáticamente después de registrar
         $userId = mysqli_insert_id($con);
-        $_SESSION['userLogged'] = $userName;
+        $_SESSION['userName'] = $userName;
         $_SESSION['userId'] = $userId;
         $_SESSION['userType'] = 'user';
+        $_SESSION['userImage'] = 'img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg';
 
         echo json_encode(["success" => true, "msj" => "Registro exitoso."]);
     } else {
