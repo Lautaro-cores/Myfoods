@@ -1,0 +1,190 @@
+/* === RESPONSIVE PARA VISTA DE RECETA === */
+
+/* ----- Celulares ----- */
+@media (max-width: 1024px) {
+  .recipe-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .recipe-content {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .recipe-info {
+    margin: 0;
+    padding: 10px;
+  }
+
+  .recipe-image img,
+  .image-recipe {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+
+  .recipe-ingredients,
+  .recipe-steps {
+    width: 100%;
+  }
+
+  .recipe-tags {
+    text-align: center;
+  }
+}
+
+/* ----- Celulares (pantallas chicas) ----- */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .recipe-header {
+    grid-template-columns: 1fr !important;
+    padding: 10px;
+  }
+
+  .recipe-info h1 {
+    font-size: 1.4rem;
+  }
+
+  .recipe-author {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    text-align: center;
+  }
+
+  .author-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .recipe-content {
+    grid-template-columns: 1fr !important;
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .recipe-ingredients h2,
+  .recipe-steps h2 {
+    font-size: 1.2rem;
+  }
+
+  .input {
+    font-size: 0.95rem;
+    padding: 8px;
+  }
+
+  .comment-form {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .comment-form input,
+  .comment-form button {
+    width: 100%;
+  }
+
+  .interaction-container {
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .like-button i,
+  .fav-button i {
+    font-size: 1.3rem;
+  }
+}
+
+
+    /* === RESPONSIVE NAVBAR === */
+
+/* --- Modo celular --- */
+@media (max-width: 768px) {
+  /* La barra pasa abajo */
+  .navbar {
+    position: fixed !important;
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 70px !important;
+    width: 100% !important;
+    border-radius: 15px 15px 0 0 !important;
+    flex-direction: row !important;
+  }
+
+  /* El contenedor interior cambia a fila */
+  .navbar .container-fluid {
+    flex-direction: row !important;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 0 10px !important;
+  }
+
+  /* Ocultamos el logo grande */
+  .navbar a img {
+    display: none;
+  }
+
+  /* Los links se ponen en fila centrados */
+  .nav-links {
+    flex-direction: row !important;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .nav-link {
+    padding: 0.5rem !important;
+  }
+
+  /* Ajuste de iconos */
+  .bi {
+    font-size: 1.7rem !important;
+  }
+
+  /* Menú inferior dropup (se mueve a la derecha) */
+  .nav-bottom {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    margin: 0;
+  }
+
+  /* El contenido principal ya no necesita padding lateral */
+  body {
+    padding-left: 0 !important;
+    padding-bottom: 80px !important; /* espacio para la barra inferior */
+  }
+}
+
+/* --- Modo pantallas medianas --- */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .navbar {
+    width: 90px !important;
+  }
+
+  body {
+    padding-left: 90px !important;
+  }
+
+  .bi {
+    font-size: 1.4rem;
+  }
+
+  .navbar a img {
+    width: 90px;
+  }
+}
