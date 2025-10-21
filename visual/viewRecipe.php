@@ -187,7 +187,9 @@ if ($title) {
             <h2>Pasos</h2>
             <ol class="input">
                 <?php foreach ($pasos as $paso): ?>
-                    <li class="step-input"><?php echo htmlspecialchars($paso); ?></li>
+                    <li class="step-input">
+                        <?php echo htmlspecialchars($paso); ?>
+                    </li>
                 <?php endforeach; ?>
             </ol>
         </div>
