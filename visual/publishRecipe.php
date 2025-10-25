@@ -38,6 +38,7 @@ if ($resTags) {
     <link rel="stylesheet" href="../css/main.css">
     <!-- Bootstrap JS y Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
@@ -45,7 +46,7 @@ if ($resTags) {
     <?php include '../backButton.php'; ?>
     <form id="formPublish" enctype="multipart/form-data" method="post">
         <button type="submit" class="buttono">Publicar</button>
-        <button type="button" class="buttonw" id="btnEliminar">Eliminar</button>
+        <button type="reset" class="buttonw">Eliminar</button>
 
         <div class="publish-header">
 

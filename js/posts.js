@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <div class="post-time">${timeAgo(post.postDate)}</div>
                       </div>
                     </div>
-                    <div class="post-likes"><i class="bi bi-heart"></i> <span class="likes-count">${likesCount}</span></div>
+                    <div class="post-likes"><i class="${post.userLiked > 0 ? "bi bi-heart-fill" : "bi bi-heart"}"></i> <span class="likes-count">${likesCount}</span></div>
                   </div>
                   <h3 class="post-title">${post.title}</h3>
                   <p class="post-desc">${

@@ -3,7 +3,7 @@
     <div class="container-fluid d-flex flex-column h-100 p-0">
 
         <a class=" text-center py-3" href="../visual/index.php">
-            <img src="../img/logo.png" alt="Myfoods Logo" style="width: 120px;">
+            <img src="../img/logo.png" alt="Myfoods" >
         </a>
         <div class="nav-links d-flex flex-column align-items-center ">
 
@@ -32,7 +32,7 @@
 
         <div class="nav-bottom mt-auto mb-3 text-center w 100 dropup">
             <button class="nav-link p-2 d-flex justify-content-center align-items-center mx-auto" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots fs-4"></i>
+                <i class="bi bi-three-dots fs-2"></i>
             </button>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="../visual/aboutUs.php">Sobre Nosotros</a></li>
@@ -45,11 +45,11 @@
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-<link rel="icon" href="../img/favicon.ico" type="image/x-icon">
 
 
 <!-- Estilos específicos para el navbar -->
 <style>
+    
     .navbar {
         box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     }
@@ -67,6 +67,10 @@
     /* Ajuste para el contenido principal */
     body {
         padding-left: 120px;
+    }
+
+    .container-fluid a img {
+        width: 120px;
     }
 
     /* Estilos para los iconos */

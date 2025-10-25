@@ -186,12 +186,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!target || !target.matches || !target.matches('input[name="tags[]"]')) return;
 
     const currentCheckbox = target;
-    const categoryId = currentCheckbox.dataset.category || 'other';
+    const categoryId = currentCheckbox.dataset.category 
 
     // Si marcó una etiqueta y no pertenece a 'other', desmarcamos cualquier otra en la misma categoría
-    if (currentCheckbox.checked && categoryId !== 'other') {
+    if (currentCheckbox.checked && categoryId) {
       getAllTagCheckboxes().forEach(cb => {
-        const cbCategory = cb.dataset.category || 'other';
+        const cbCategory = cb.dataset.category 
         if (cb !== currentCheckbox && cbCategory === categoryId && cb.checked) {
           cb.checked = false; // desmarcar la anterior
         }

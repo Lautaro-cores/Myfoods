@@ -194,21 +194,3 @@
   }
 }
 
-/* --- Modo tablet o pantallas medianas --- */
-@media (max-width: 1024px) and (min-width: 769px) {
-  .navbar {
-    width: 90px !important;
-  }
-
-  body {
-    padding-left: 90px !important;
-  }
-
-  .bi {
-    font-size: 1.4rem;
-  }
-
-  .navbar a img {
-    width: 90px;
-  }
-}
