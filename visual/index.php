@@ -24,7 +24,7 @@ if (!isset($_SESSION['userId'])) {
 </head>
 
 <body>
-    <?php include '../nawbar.php'; ?>
+    <?php include '../includes/navbar.php'; ?>
     <a href="publishRecipe.php">
         <button class="buttono">Publicar receta</button>
     </a>
@@ -54,7 +54,7 @@ if (!isset($_SESSION['userId'])) {
 
     <h2>Recetas recientes</h2>
     <div id="posts"></div>
-    <script src="../js/posts.js"></script>
+    <script src="../js/indexRecipe/posts.js"></script>
 </body>
 
 </html>

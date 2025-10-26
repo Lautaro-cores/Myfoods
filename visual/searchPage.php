@@ -1,4 +1,5 @@
 <?php
+session_start();
 $busqueda = isset($_GET['search']) ? trim($_GET['search']) : '';
 $activateTag = isset($_GET['activateTag']) ? intval($_GET['activateTag']) : 0;
 require_once '../includes/config.php';
@@ -29,8 +30,8 @@ $otherTags = array_slice($allTags, 10);
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 </head>
 <body>
-    <?php include '../nawbar.php'; ?>
-    <?php include '../backButton.php'; ?>
+    <?php include '../includes/navbar.php'; ?>
+    <?php include '../includes/backButton.php'; ?>
     <div class="header-container">
         <div class="search-container">
             <input type="text" id="searchInput" class="input" placeholder="Buscar recetas" value="<?php echo htmlspecialchars($busqueda); ?>">
@@ -73,7 +74,8 @@ $otherTags = array_slice($allTags, 10);
     <h2>Resultados de búsqueda</h2>
     <div id="posts">
     </div>
-    <script src="../js/search.js"></script>
+    <script src="../js/searchRecipes/searchPost.js"></script>
+    <script src="../js/searchRecipes/searchTags.js"></script>
     <script>
 
     document.addEventListener('DOMContentLoaded', function() {

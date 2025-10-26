@@ -25,6 +25,18 @@
     font-size: 25px;
     }
 
+.follow-stats {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.follow-stats a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
 .edit-profile {
   display: flex;
   justify-content: center;

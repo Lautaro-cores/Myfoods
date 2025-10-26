@@ -101,8 +101,8 @@ if ($title) {
     </head>
 
     <body>
-        <?php include '../nawbar.php'; ?>
-        <?php include '../backButton.php'; ?>
+        <?php include '../includes/navbar.php'; ?>
+        <?php include '../includes/backButton.php'; ?>
 
         <div class="recipe-header">
 
@@ -230,7 +230,7 @@ if ($title) {
 
         
 
-        <script src="../js/viewRecipe.js"
+        <script type="module" src="../js/viewRecipes/viewRecipe.js"
             data-default-image-url="../img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg"></script>
     </body>
 

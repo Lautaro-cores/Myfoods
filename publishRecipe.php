@@ -82,6 +82,29 @@ if (isset($_POST["title"]) && isset($_POST["description"])) {
             }
         }
 
+        // Insertar imágenes de pasos
+        if (isset($_FILES['stepImages'])) {
+            for ($i = 0; $i < count($_FILES['stepImages']['name']); $i++) {
+                if ($_FILES['stepImages']['error'][$i] === UPLOAD_ERR_OK) {
+                    $stepImageContent = file_get_contents($_FILES['stepImages']['tmp_name'][$i]);
+                    
+                    $sqlStepImg = "INSERT INTO stepImages (postId, imageData, imageOrder) VALUES (?, ?, ?)";
+                    $stmtStepImg = mysqli_prepare($con, $sqlStepImg);
+                    if ($stmtStepImg === false) {
+                        throw new Exception("Error al preparar la consulta de imágenes de pasos: " . mysqli_error($con));
+                    }
+                    $nullStep = NULL;
+                    mysqli_stmt_bind_param($stmtStepImg, "ibi", $postId, $nullStep, $i);
+                    mysqli_stmt_send_long_data($stmtStepImg, 1, $stepImageContent);
+                    
+                    if (!mysqli_stmt_execute($stmtStepImg)) {
+                        throw new Exception("Error al guardar la imagen de paso " . ($i + 1));
+                    }
+                    mysqli_stmt_close($stmtStepImg);
+                }
+            }
+        }
+
         // Insertar ingredientes
         $sqlIng = "INSERT INTO ingredientrecipe (postId, ingredient) VALUES (?, ?)";
         $stmtIng = mysqli_prepare($con, $sqlIng);

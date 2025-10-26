@@ -21,14 +21,15 @@ if (!isset($_SESSION['userId'])) {
 </head>
 
 <body>
-    <?php include '../nawbar.php'; ?>
+    <?php include '../includes/navbar.php'; ?>
+    <?php include '../includes/backButton.php'; ?>
 
     <div class="container mt-4">
         <h2>Tus recetas guardadas</h2>
         <div id="savedPosts">Cargando...</div>
     </div>
 
-    <script src="../js/savedPosts.js"></script>
+    <script type="module" src="../js/savedRecipes/savedPosts.js"></script>
 </body>
 
 </html>

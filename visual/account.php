@@ -13,14 +13,14 @@ if (!isset($_GET['username']) || empty($_GET['username'])) {
 
 $username = $_GET['username'];
 
-$sql = "SELECT userName, userEmail, userImage, description FROM users WHERE userName = ?";
+$sql = "SELECT userId, userName, userEmail, userImage, description FROM users WHERE userName = ?";
 $stmt = mysqli_prepare($con, $sql);
 mysqli_stmt_bind_param($stmt, "s", $username);
 mysqli_stmt_execute($stmt);
 $res = mysqli_stmt_get_result($stmt);
 $user = mysqli_fetch_assoc($res);
 
-
+$userId = $user["userId"];
 $userName = $user['userName'];
 $userEmail = $user['userEmail'];
 $userDescription = $user['description'];
@@ -49,14 +49,21 @@ if (empty($user['userImage'])) {
 </head>
 
 <body class="accountP">
-  <?php include '../nawbar.php'; ?>
-  <?php include '../backButton.php'; ?>
+  <?php include '../includes/navbar.php'; ?>
+  <?php include '../includes/backButton.php'; ?>
 
   <div class="profile-info">
     <img src="<?php echo htmlspecialchars($userImage); ?>" alt="Imagen de perfil" class="profile-image">
-
     <div class="profile-details">
       <h3><?php echo htmlspecialchars($userName); ?></h3>
+      <div class="follow-stats" data-following-user-id="<?php echo intval($userId); ?>">
+        <a href="followers.php?username=<?php echo urlencode($userName); ?>" class="follow-stat">
+          <span class="followers-count"></span> seguidores
+        </a>
+        <a href="following.php?username=<?php echo urlencode($userName); ?>" class="follow-stat">
+          <span class="following-count"></span> seguidos
+        </a>
+      </div>
       <p class="user-description">
   <?php echo !empty($userDescription) 
     ? htmlspecialchars($userDescription) 
@@ -70,6 +77,13 @@ if (empty($user['userImage'])) {
   <div class="edit-profile">
     <button id="editProfile" class="buttonw" data-bs-toggle="modal" data-bs-target="#editProfileModal">Editar perfil</button>
   </div>
+
+  <?php elseif (isset($_SESSION['userId'])): ?>
+    <div class="edit-profile">
+      <button class="buttonw" id="followBtn">
+
+      </button>
+    </div>
   <?php endif; ?>
 
   <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
@@ -106,7 +120,9 @@ if (empty($user['userImage'])) {
     <div id="userPosts"></div>
   </div>
 
-  <script src="../js/account.js"></script>
+  <script src="../js/account/account.js"></script>
+  <script src="../js/account/userPost.js"></script>
+  <script src="../js/account/followAccount.js"></script>
 </body>
 
 </html>

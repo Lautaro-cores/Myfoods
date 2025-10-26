@@ -42,8 +42,9 @@ if ($resTags) {
 </head>
 
 <body>
-    <?php include '../nawbar.php'; ?>
-    <?php include '../backButton.php'; ?>
+    <?php include '../includes/navbar.php'; ?>
+    <?php include '../includes/backButton.php'; ?>
+    
     <form id="formPublish" enctype="multipart/form-data" method="post">
         <button type="submit" class="buttono">Publicar</button>
         <button type="reset" class="buttonw">Eliminar</button>
@@ -124,7 +125,7 @@ if ($resTags) {
                         <div class="input-wrapper">
                             <input type="text" name="pasos[]" class="input-step input" placeholder="Paso 1" required>
                         </div>
-                        <div class="button-wrapper">
+                    <div class="button-wrapper">
                         </div>
                     </div>
                 </div>
@@ -137,8 +138,9 @@ if ($resTags) {
 
 
 
-    <script src="../js/publish.js"></script>
-
+    <script type="module" src="../js/publishRecipe/publish.js"></script>
+    <script src="../js/publishRecipe/dynamicInputs.js"></script>
+    <script src="../js/publishRecipe/imagePreview.js"></script>
 </body>
 
 </html>
