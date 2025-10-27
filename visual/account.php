@@ -13,7 +13,7 @@ if (!isset($_GET['username']) || empty($_GET['username'])) {
 
 $username = $_GET['username'];
 
-$sql = "SELECT userId, userName, userEmail, userImage, description FROM users WHERE userName = ?";
+$sql = "SELECT userId, userName, displayName, userEmail, userImage, description FROM users WHERE userName = ?";
 $stmt = mysqli_prepare($con, $sql);
 mysqli_stmt_bind_param($stmt, "s", $username);
 mysqli_stmt_execute($stmt);
@@ -22,6 +22,7 @@ $user = mysqli_fetch_assoc($res);
 
 $userId = $user["userId"];
 $userName = $user['userName'];
+$displayName = $user['displayName'] ?? $user['userName'];
 $userEmail = $user['userEmail'];
 $userDescription = $user['description'];
 
@@ -55,7 +56,10 @@ if (empty($user['userImage'])) {
   <div class="profile-info">
     <img src="<?php echo htmlspecialchars($userImage); ?>" alt="Imagen de perfil" class="profile-image">
     <div class="profile-details">
-      <h3><?php echo htmlspecialchars($userName); ?></h3>
+      <h3><?php echo htmlspecialchars($displayName); ?></h3>
+      <div class="d-flex align-items-center mb-2">
+        <span class="text-muted">@<?php echo htmlspecialchars($userName); ?></span>
+      </div>
       <div class="follow-stats" data-following-user-id="<?php echo intval($userId); ?>">
         <a href="followers.php?username=<?php echo urlencode($userName); ?>" class="follow-stat">
           <span class="followers-count"></span> seguidores
@@ -95,6 +99,10 @@ if (empty($user['userImage'])) {
         </div>
         <div class="modal-body">
           <form id="formImage" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="displayName" class="form-label">Nombre a mostrar</label>
+              <input type="text" id="displayName" name="displayName" class="form-control" value="<?php echo htmlspecialchars($displayName); ?>" placeholder="Nombre que se mostrará en tu perfil">
+            </div>
             <div class="mb-3">
               <label for="description" class="form-label">Descripción</label>
               <textarea id="description" name="description" class="form-control" rows="3" placeholder="Escribe una breve descripción..."><?php echo htmlspecialchars($userDescription); ?></textarea>

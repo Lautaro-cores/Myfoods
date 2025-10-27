@@ -17,7 +17,7 @@ if ($tagsParam !== '') {
 if (!empty($tags)) {
     // construir lista segura de ids
     $safeIds = implode(',', array_map('intval', $tags));
-    $sql = "SELECT DISTINCT p.postId, p.title, p.description, p.postDate, u.userName, u.userImage,
+    $sql = "SELECT DISTINCT p.postId, p.title, p.description, p.postDate, u.displayName, u.userImage,
              (SELECT COUNT(*) FROM likes l WHERE l.postId = p.postId) AS likesCount,
              (SELECT COUNT(*) FROM likes l2 WHERE l2.postId = p.postId AND l2.userId = ?) AS userLikedCount
          FROM post p
@@ -49,7 +49,7 @@ if (!empty($tags)) {
 
 } else if ($search !== '') {
     $like = "%" . $search . "%";
-    $sql = "SELECT p.postId, p.title, p.description, p.postDate, u.userName, u.userImage,
+    $sql = "SELECT p.postId, p.title, p.description, p.postDate, u.displayName, u.userImage,
              (SELECT COUNT(*) FROM likes l WHERE l.postId = p.postId) AS likesCount,
              (SELECT COUNT(*) FROM likes l2 WHERE l2.postId = p.postId AND l2.userId = ?) AS userLikedCount
          FROM post p

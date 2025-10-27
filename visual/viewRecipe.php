@@ -14,14 +14,14 @@ $isUserLogged = isset($_SESSION['userId']);
 
 
 // Obtener datos de la receta y el usuario
-$sql = "SELECT p.title, p.description, p.userId, u.userName, u.userImage 
+$sql = "SELECT p.title, p.description, p.userId, u.userName, u.displayName, u.userImage 
         FROM post p 
         LEFT JOIN users u ON p.userId = u.userId 
         WHERE p.postId = ?";
 $stmt = mysqli_prepare($con, $sql);
 mysqli_stmt_bind_param($stmt, "i", $postId);
 mysqli_stmt_execute($stmt);
-mysqli_stmt_bind_result($stmt, $title, $description, $authorId, $authorName, $authorImage);
+mysqli_stmt_bind_result($stmt, $title, $description, $authorId, $authorName, $authorDisplayName, $authorImage);
 mysqli_stmt_fetch($stmt);
 mysqli_stmt_close($stmt);
 
@@ -157,7 +157,7 @@ if ($title) {
                          class="author-image">
                 </a>
                 <a href="account.php?username=<?php echo urlencode($authorName); ?>" class="author-link">
-                    <span class="author-name">Publicado por: <?php echo htmlspecialchars($authorName); ?></span>
+                    <span class="author-name">Publicado por: <?php echo htmlspecialchars($authorDisplayName); ?></span>
                 </a>
             </div>            
      

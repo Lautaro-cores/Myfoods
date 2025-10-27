@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const editProfileModal = editProfileModalEl ? new bootstrap.Modal(editProfileModalEl) : null;
     const imagePreview = document.getElementById('imagePreview');
     const descriptionField = document.getElementById('description');
+    const displayNameField = document.getElementById('displayName');
     
     // Si el formulario no existe (ej. usuario no logeado viendo perfil público), salimos.
     if (!form) return; 
@@ -47,18 +48,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const formData = new FormData(form);
         formData.set('description', descriptionField ? descriptionField.value.trim() : '');
+        formData.set('displayName', displayNameField ? displayNameField.value.trim() : '');
 
         try {
-            const response = await fetch("../upload.php", {
+            const response = await fetch("../uploadProfile.php", {
                 method: "POST",
                 body: formData,
             });
             
-            // Verificación explícita de la respuesta HTTP
-            if (!response.ok) {
-                throw new Error(`Error HTTP: ${response.status}`);
-            }
-            
+
             const result = await response.json();
 
             if (result.success) {
@@ -66,6 +64,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Esto es robusto, ya que siempre se refresca la imagen
                 profileImage.src = `../getUserImage.php?ts=${new Date().getTime()}`; 
                 
+                // Actualizar nombre personalizado sin recargar
+                const displayNameElement = document.querySelector(".profile-details h3");
+                const newDisplayName = displayNameField ? displayNameField.value.trim() : '';
+                if (displayNameElement && newDisplayName) {
+                    displayNameElement.textContent = newDisplayName;
+                }
+
                 // Actualizar descripción sin recargar
                 const descriptionElement = document.querySelector(".user-description");
                 const newDescription = descriptionField ? descriptionField.value.trim() : '';
@@ -74,12 +79,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 if (editProfileModal) editProfileModal.hide();
-                alert(result.msj || 'Perfil actualizado');
+                alert(result.message || 'Perfil actualizado');
             } else {
-                alert(result.msj || 'Error al actualizar perfil');
+                alert(result.message || 'Error al actualizar perfil');
             }
         } catch (err) {
             console.error('Error en fetch upload:', err);
+
             alert('Error al comunicarse con el servidor o JSON inválido.');
         }
     });

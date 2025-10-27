@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
               post.userName
             }">
                       <div class="post-meta">
-                        <div class="post-author">${post.userName}</div>
+                        <div class="post-author">${post.displayName}</div>
                         <div class="post-time">${timeAgo(post.postDate)}</div>
                       </div>
                     </div>

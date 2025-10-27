@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <div class="post-left">
                             <img class="post-avatar" src="${avatarUrl}" alt="Avatar ${post.userName}">
                             <div class="post-meta">
-                                <div class="post-author">${post.userName}</div>
+                                <div class="post-author">${post.displayName}</div>
                                 <div class="post-time">${timeAgo(post.postDate)}</div>
                             </div>
                         </div>

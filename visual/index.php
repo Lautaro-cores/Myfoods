@@ -54,7 +54,7 @@ if (!isset($_SESSION['userId'])) {
 
     <h2>Recetas recientes</h2>
     <div id="posts"></div>
-    <script src="../js/indexRecipe/posts.js"></script>
+    <script src="../js/indexRecipes/posts.js"></script>
 </body>
 
 </html>

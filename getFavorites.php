@@ -13,7 +13,7 @@ $userId = intval($_SESSION['userId']);
 
 $posts = [];
 
-$sql = "SELECT p.postId, p.title, p.description, p.postDate, u.userName, u.userImage,
+$sql = "SELECT p.postId, p.title, p.description, p.postDate, u.displayName, u.userImage,
          (SELECT COUNT(*) FROM likes l WHERE l.postId = p.postId) AS likesCount
      FROM post p
      JOIN favorites f ON f.postId = p.postId
