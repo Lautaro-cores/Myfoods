@@ -13,7 +13,8 @@
   .recipe-content {
     display: flex;
     flex-direction: column;
-    padding: 200px;
+    padding: 20px;
+   
   }
 
   .recipe-info {
@@ -31,6 +32,7 @@
   .recipe-ingredients,
   .recipe-steps {
     width: 100%;
+    margin-left: auto;
   }
 
   .recipe-tags {
@@ -68,8 +70,8 @@
 
   .recipe-content {
     grid-template-columns: 1fr !important;
-    padding: 10px;
-    gap: 15px;
+    padding: 7px;
+    gap: 5px;
   }
 
   .recipe-ingredients h2,
@@ -118,7 +120,7 @@
 
   .recipe-ingredients ul,
   .recipe-steps ol {
-    padding:115px;
+    padding:10px;
   }
 
   .comment-form button {
