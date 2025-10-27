@@ -125,6 +125,48 @@
     font-size: 0.9rem;
   }
 
+  /* Estilos responsivos para respuestas */
+  .comment.reply {
+    margin-left: 20px;
+    margin-right: 10px;
+  }
+
+  .reply-form-container {
+    padding: 8px;
+  }
+
+  .reply-textarea {
+    min-height: 50px;
+    font-size: 14px;
+  }
+
+  .reply-buttons {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .reply-submit-btn,
+  .reply-cancel-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  /* Estilos responsivos para likes de comentarios */
+  .comment-actions {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .comment-like-btn {
+    padding: 4px 6px;
+    font-size: 12px;
+  }
+
+  .comment-like-btn i {
+    font-size: 14px;
+  }
+
   .recipe-comments h2 {
     font-size: 1.1rem;
     text-align: center;

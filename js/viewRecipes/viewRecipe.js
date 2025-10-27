@@ -26,4 +26,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Favoritos
     loadFavorite(postId);
     setupFavoriteToggle(postId);
+    
+    // Recargar puntuación después de enviar comentario
+    window.addEventListener('commentPosted', () => {
+        if (typeof loadRecipeRating === 'function') {
+            loadRecipeRating();
+        }
+    });
 });

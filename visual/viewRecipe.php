@@ -212,11 +212,26 @@ if ($title) {
         <div class="recipe-comments">
             <h2>Comentarios</h2>
 
-            <form id="commentForm">
+            <form id="commentForm" enctype="multipart/form-data">
                 <div class="comment-form">
                     <input type="hidden" name="postId" value="<?php echo $postId; ?>">
                     <input name="content" id="commentContent"  placeholder="Escribe tu comentario..." class="input"
                         required></input>
+                    
+                    <!-- Campo para subir imágenes -->
+                    <div class="mt-3">
+                        <label for="commentImages" class="form-label">
+                            <i class="bi bi-image"></i> Agregar imágenes (máximo 3)
+                        </label>
+                        <input type="file" id="commentImages" name="commentImages[]" 
+                               class="form-control" multiple accept="image/*" 
+                               onchange="previewCommentImages(this)">
+                        <div id="imagePreview" class="mt-2"></div>
+                        <small class="form-text text-muted">
+                            Formatos permitidos: JPG, PNG, GIF, WebP. Máximo 5MB por imagen.
+                        </small>
+                    </div>
+                    
                     <br>
                     <button type="submit" id="submitCommentBtn" class="buttono">Publicar Comentario</button>
                 </div>
@@ -232,6 +247,41 @@ if ($title) {
 
         <script type="module" src="../js/viewRecipes/viewRecipe.js"
             data-default-image-url="../img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg"></script>
+        
+        <script>
+        // Función para vista previa de imágenes de comentarios
+        function previewCommentImages(input) {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            
+            if (input.files && input.files.length > 0) {
+                const maxFiles = Math.min(input.files.length, 3);
+                
+                for (let i = 0; i < maxFiles; i++) {
+                    const file = input.files[i];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'img-thumbnail me-2 mb-2';
+                        img.style.maxWidth = '100px';
+                        img.style.maxHeight = '100px';
+                        preview.appendChild(img);
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+                
+                if (input.files.length > 3) {
+                    const warning = document.createElement('div');
+                    warning.className = 'alert alert-warning mt-2';
+                    warning.textContent = 'Solo se mostrarán las primeras 3 imágenes.';
+                    preview.appendChild(warning);
+                }
+            }
+        }
+        </script>
     </body>
 
     </html>
