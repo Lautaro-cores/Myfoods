@@ -46,8 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = "INSERT INTO recipestep (postId, step) VALUES (?, ?)";
         $stmt = mysqli_prepare($con, $sql);
         foreach ($steps as $step) {
-            if (trim($step) !== '') {
-                mysqli_stmt_bind_param($stmt, 'is', $id, trim($step));
+            $stepText = trim($step);
+            if ($stepText !== '') {
+                mysqli_stmt_bind_param($stmt, 'is', $id, $stepText);
                 mysqli_stmt_execute($stmt);
             }
         }
@@ -59,16 +60,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_bind_param($stmt, 'i', $id);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
-
         // Insertar nuevos ingredientes
         $sql = "INSERT INTO ingredientrecipe (postId, ingredient) VALUES (?, ?)";
         $stmt = mysqli_prepare($con, $sql);
         foreach ($ingredients as $ingredient) {
-            if (trim($ingredient) !== '') {
-                mysqli_stmt_bind_param($stmt, 'is', $id, trim($ingredient));
+            $ingText = trim($ingredient);
+            if ($ingText !== '') {
+                mysqli_stmt_bind_param($stmt, 'is', $id, $ingText);
                 mysqli_stmt_execute($stmt);
             }
         }
+        mysqli_stmt_close($stmt);
         mysqli_stmt_close($stmt);
 
         // Commit la transacción
@@ -80,12 +82,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_rollback($con);
         $error = "Error al actualizar la receta: " . $e->getMessage();
     }
-}
-
 $post = null;
 // Obtener datos del post
-$sql = "SELECT p.postId, p.title, p.description, p.recipeImage 
-        FROM post p 
+$sql = "SELECT p.postId, p.title, p.description, r.imageData
+        FROM post p JOIN recipeImages r ON p.postId = r.postId
         WHERE p.postId=? LIMIT 1";
 if ($stmt = mysqli_prepare($con, $sql)) {
     mysqli_stmt_bind_param($stmt, 'i', $id);
@@ -96,10 +96,28 @@ if ($stmt = mysqli_prepare($con, $sql)) {
             'postId' => $pid,
             'title' => $ptitle,
             'description' => $pdescription,
-            'image' => $pimage
+            'imageData' => $pimage
         ];
     }
     mysqli_stmt_close($stmt);
+}
+
+$images = [];
+$sqlImg = "SELECT imageData FROM recipeImages WHERE postId = ? ORDER BY imageOrder ASC";
+$stmtImg = mysqli_prepare($con, $sqlImg);
+if ($stmtImg) {
+    mysqli_stmt_bind_param($stmtImg, "i", $id);
+    mysqli_stmt_execute($stmtImg);
+    mysqli_stmt_bind_result($stmtImg, $imageData);
+    while (mysqli_stmt_fetch($stmtImg)) {
+        // store raw image data and encode in the view to avoid double-encoding
+        $images[] = $imageData;
+    }
+    mysqli_stmt_close($stmtImg);
+}
+        $images[] = base64_encode($imageData);
+    }
+    mysqli_stmt_close($stmtImg);
 }
 
 // Obtener pasos de la receta
@@ -123,9 +141,7 @@ if ($stmt = mysqli_prepare($con, $sql)) {
     mysqli_stmt_bind_param($stmt, 'i', $id);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_bind_result($stmt, $ingredient);
-    while (mysqli_stmt_fetch($stmt)) {
-        $ingredients[] = $ingredient;
-    }
+$post['ingredients'] = implode("\n", $ingredients);
     mysqli_stmt_close($stmt);
 }
 $post['ingredients'] = implode("\n", $ingredients);
@@ -168,12 +184,12 @@ if (!$post) { header('Location: index.php'); exit; }
         
         <div class="form-group">
             <label>Imagen de la receta</label>
-            <?php if ($post['image']): ?>
                 <div class="current-image">
                     <p>Imagen actual:</p>
-                    <img src="data:image/jpeg;base64,<?= base64_encode($post['image']) ?>" alt="Imagen actual">
+                    <?php foreach ($images as $img): ?>
+                    <img src="data:image/jpeg;base64,<?= base64_encode($img) ?>" alt="Imagen actual">
+                    <?php endforeach; ?>
                 </div>
-            <?php endif; ?>
             <input type="file" name="image" accept="image/*">
             <small>(Deja en blanco para mantener la imagen actual)</small>
         </div>

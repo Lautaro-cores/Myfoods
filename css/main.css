@@ -116,3 +116,27 @@ body {
     background-color: #ff8577;
     transform: scale(1.1);
 }
+
+.btn-outline-primary {
+    background-color: #fffafa;
+    color: #333;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #ff8577;
+}
+
+.btn.active {
+    background-color: #ff6f61;
+    color: white;
+    border-color:#ff6f61 ;
+}
+.btn :checked {
+    background-color: #ff6f61;
+    color: white;
+    border-color:#ff6f61 ;
+}

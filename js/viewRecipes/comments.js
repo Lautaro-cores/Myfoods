@@ -10,7 +10,7 @@ export function createCommentHtml(comment, defaultImageUrl, isChild = false, pos
     
     // Botón para ver comentarios hijos si los tiene (todos los comentarios tienen este botón)
     const viewCommentsButton = `<a href="commentThread.php?commentId=${comment.commentId}" class="author-link   me-2">
-         <i class="bi bi-chat"></i>${comment.childCount && comment.childCount > 0 ? ` (${comment.childCount})` : ''}
+         <i class="bi bi-chat"></i>${comment.childCount && comment.childCount > 0 ? ` ${comment.childCount}` : '0'}
        </a>`;
     
     // Botón de like para cada comentario

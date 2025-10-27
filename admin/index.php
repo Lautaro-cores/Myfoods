@@ -8,7 +8,7 @@ if (!isset($_SESSION['userType']) || $_SESSION['userType'] !== 'admin') {
     exit(); 
 }
 $users = [];
-$sql = "SELECT u.userId, u.userName, u.userEmail, u.userType, u.userImage,
+$sql = "SELECT u.userId, u.userName, u.displayName, u.userEmail, u.userType, u.userImage,
        (SELECT COUNT(*) FROM post WHERE userId = u.userId) as postCount,
        (SELECT COUNT(*) FROM comment WHERE userId = u.userId) as commentCount
        FROM users u 
@@ -20,6 +20,7 @@ if ($stmt = mysqli_prepare($con, $sql)) {
         $users[] = [
             'userId' => $row['userId'],
             'userName' => $row['userName'],
+            'displayName' => $row['displayName'],
             'userEmail' => $row['userEmail'],
             'userType' => $row['userType'],
             'postCount' => $row['postCount'],
@@ -85,12 +86,13 @@ if ($stmt = mysqli_prepare($con, $sql)) {
 
 <h2>Usuarios</h2>
 <table>
-    <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Tipo</th><th>Recetas</th><th>Comentarios</th><th>Acciones</th></tr></thead>
+    <thead><tr><th>ID</th><th>Nombre</th><th>displayName</th><th>Email</th><th>Tipo</th><th>Recetas</th><th>Comentarios</th><th>Acciones</th></tr></thead>
     <tbody>
     <?php foreach ($users as $u): ?>
         <tr>
             <td><?= htmlspecialchars($u['userId']) ?></td>
             <td><?= htmlspecialchars($u['userName']) ?></td>
+            <td><?= htmlspecialchars($u['displayName']) ?></td>
             <td><?= htmlspecialchars($u['userEmail']) ?></td>
             <td><?= htmlspecialchars($u['userType']) ?></td>
             <td><?= htmlspecialchars($u['postCount']) ?></td>
