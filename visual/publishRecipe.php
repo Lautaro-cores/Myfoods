@@ -124,6 +124,8 @@ if ($resTags) {
                     <div class="input-container">
                         <div class="input-wrapper">
                             <input type="text" name="pasos[]" class="input-step input" placeholder="Paso 1" required>
+                            <input type="file" name="stepImages[0][]" accept="image/*" multiple class="form-control step-image-input">
+                            <div class="step-image-preview"></div>
                         </div>
                     <div class="button-wrapper">
                         </div>

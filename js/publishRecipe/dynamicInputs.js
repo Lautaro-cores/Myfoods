@@ -80,6 +80,16 @@ document.addEventListener("DOMContentLoaded", () => {
             input.placeholder = `Paso ${index + 1}`;
         });
         pasoCount = document.querySelectorAll('#steps-list .input-step').length;
+        // Reindexar nombres de inputs de imagen por paso para que sean stepImages[IDX][]
+        document.querySelectorAll('#steps-list .input-container').forEach((container, idx) => {
+            const fileInput = container.querySelector('.step-image-input');
+            if (fileInput) {
+                fileInput.name = `stepImages[${idx}][]`;
+                fileInput.multiple = true;
+            }
+            const preview = container.querySelector('.step-image-preview');
+            if (preview) preview.innerHTML = '';
+        });
     };
 
     const handleDeleteStep = (container) => {
@@ -115,6 +125,18 @@ document.addEventListener("DOMContentLoaded", () => {
         input.placeholder = `Paso ${currentCount}`;
         input.required = true;
 
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    // asignar nombre con índice para que PHP reciba stepImages[IDX][]
+    const newIndex = currentCount - 1;
+    fileInput.name = `stepImages[${newIndex}][]`;
+    fileInput.accept = "image/*";
+    fileInput.multiple = true;
+    fileInput.className = "form-control step-image-input mt-2";
+
+    const previewDiv = document.createElement('div');
+    previewDiv.className = 'step-image-preview mt-2';
+
         const deleteBtn = document.createElement("button");
         deleteBtn.type = "button";
         deleteBtn.className = "delete-item buttono";
@@ -123,7 +145,9 @@ document.addEventListener("DOMContentLoaded", () => {
             handleDeleteStep(container);
         };
         
-        inputWrapper.appendChild(input);
+    inputWrapper.appendChild(input);
+    inputWrapper.appendChild(fileInput);
+    inputWrapper.appendChild(previewDiv);
 
         const buttonWrapper = document.createElement("div");
         buttonWrapper.className = "button-wrapper";

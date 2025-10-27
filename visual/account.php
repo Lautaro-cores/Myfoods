@@ -109,7 +109,7 @@ if (empty($user['userImage'])) {
             </div>
             <div class="form-group mb-3">
               <label for="subirArchivo" class="form-label">Seleccionar nueva foto de perfil (opcional):</label>
-              <input type="file" id="subirArchivo" name="userImage" accept="image/*" class="form-control">
+              <input type="file" id="subirArchivo" name="userImage" accept="image/*" class="form-control"><!--aca -->
               <!-- Preview container -->
               <div id="imagePreview" class="m-3"></div>
             </div>

@@ -82,29 +82,6 @@ if (isset($_POST["title"]) && isset($_POST["description"])) {
             }
         }
 
-        // Insertar imágenes de pasos
-        if (isset($_FILES['stepImages'])) {
-            for ($i = 0; $i < count($_FILES['stepImages']['name']); $i++) {
-                if ($_FILES['stepImages']['error'][$i] === UPLOAD_ERR_OK) {
-                    $stepImageContent = file_get_contents($_FILES['stepImages']['tmp_name'][$i]);
-                    
-                    $sqlStepImg = "INSERT INTO stepImages (postId, imageData, imageOrder) VALUES (?, ?, ?)";
-                    $stmtStepImg = mysqli_prepare($con, $sqlStepImg);
-                    if ($stmtStepImg === false) {
-                        throw new Exception("Error al preparar la consulta de imágenes de pasos: " . mysqli_error($con));
-                    }
-                    $nullStep = NULL;
-                    mysqli_stmt_bind_param($stmtStepImg, "ibi", $postId, $nullStep, $i);
-                    mysqli_stmt_send_long_data($stmtStepImg, 1, $stepImageContent);
-                    
-                    if (!mysqli_stmt_execute($stmtStepImg)) {
-                        throw new Exception("Error al guardar la imagen de paso " . ($i + 1));
-                    }
-                    mysqli_stmt_close($stmtStepImg);
-                }
-            }
-        }
-
         // Insertar ingredientes
         $sqlIng = "INSERT INTO ingredientrecipe (postId, ingredient) VALUES (?, ?)";
         $stmtIng = mysqli_prepare($con, $sqlIng);
@@ -124,22 +101,65 @@ if (isset($_POST["title"]) && isset($_POST["description"])) {
         mysqli_stmt_close($stmtIng);
 
         // Insertar pasos
-        $sqlPaso = "INSERT INTO recipestep (postId, step) VALUES (?, ?)";
-        $stmtPaso = mysqli_prepare($con, $sqlPaso);
-        if ($stmtPaso === false) {
-            throw new Exception("Error al preparar la consulta de pasos: " . mysqli_error($con));
+        // Primero aseguramos que la tabla stepImages existe para guardar múltiples imágenes por paso
+        $createStepImgTbl = "CREATE TABLE IF NOT EXISTS stepImages (
+            stepImageId INT AUTO_INCREMENT PRIMARY KEY,
+            recipeStepId INT NOT NULL,
+            imageData LONGBLOB NOT NULL,
+            imageOrder INT NOT NULL DEFAULT 0
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+        if (!mysqli_query($con, $createStepImgTbl)) {
+            throw new Exception('No se pudo crear/verificar la tabla stepImages: ' . mysqli_error($con));
         }
 
-        foreach ($pasos as $paso) {
+        $sqlPaso = "INSERT INTO recipestep (postId, step) VALUES (?, ?)";
+        $sqlInsertStepImg = "INSERT INTO stepImages (recipeStepId, imageData, imageOrder) VALUES (?, ?, ?)";
+
+        foreach ($pasos as $idx => $paso) {
             $paso = trim($paso);
-            if ($paso !== '') {
-                mysqli_stmt_bind_param($stmtPaso, "is", $postId, $paso);
-                if (!mysqli_stmt_execute($stmtPaso)) {
-                    throw new Exception("Error al insertar paso: " . mysqli_error($con));
+            if ($paso === '') continue;
+
+            $stmtPaso = mysqli_prepare($con, $sqlPaso);
+            if ($stmtPaso === false) {
+                throw new Exception("Error al preparar la consulta de pasos: " . mysqli_error($con));
+            }
+            mysqli_stmt_bind_param($stmtPaso, "is", $postId, $paso);
+            if (!mysqli_stmt_execute($stmtPaso)) {
+                $err = mysqli_error($con);
+                mysqli_stmt_close($stmtPaso);
+                throw new Exception("Error al insertar paso: " . $err);
+            }
+            // Obtener el ID del paso insertado
+            $recipeStepId = mysqli_insert_id($con);
+            mysqli_stmt_close($stmtPaso);
+
+            // Si hay archivos para este paso, vienen como $_FILES['stepImages']['name'][$idx][...]
+            if (isset($_FILES['stepImages']['name'][$idx]) && is_array($_FILES['stepImages']['name'][$idx])) {
+                $countFiles = count($_FILES['stepImages']['name'][$idx]);
+                // Limitar a máximo 3 imágenes por paso
+                $maxPerStep = 3;
+                for ($j = 0; $j < $countFiles && $j < $maxPerStep; $j++) {
+                    if ($_FILES['stepImages']['error'][$idx][$j] === UPLOAD_ERR_OK) {
+                        $tmpName = $_FILES['stepImages']['tmp_name'][$idx][$j];
+                        $stepImageContent = file_get_contents($tmpName);
+
+                        $stmtImg = mysqli_prepare($con, $sqlInsertStepImg);
+                        if ($stmtImg === false) {
+                            throw new Exception('Error al preparar inserción de imagen de paso: ' . mysqli_error($con));
+                        }
+                        $null = NULL;
+                        mysqli_stmt_bind_param($stmtImg, "ibi", $recipeStepId, $null, $j);
+                        mysqli_stmt_send_long_data($stmtImg, 1, $stepImageContent);
+                        if (!mysqli_stmt_execute($stmtImg)) {
+                            $err = mysqli_error($con);
+                            mysqli_stmt_close($stmtImg);
+                            throw new Exception('Error al guardar imagen de paso: ' . $err);
+                        }
+                        mysqli_stmt_close($stmtImg);
+                    }
                 }
             }
         }
-        mysqli_stmt_close($stmtPaso);
 
         // Insertar relaciones post-tags si se enviaron
         if (isset($_POST['tags']) && is_array($_POST['tags']) && count($_POST['tags']) > 0) {

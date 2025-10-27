@@ -57,16 +57,41 @@ if ($title) {
 
     // Obtener pasos
     $pasos = [];
-    $sqlPaso = "SELECT step FROM recipestep WHERE postId = ?";
+    $sqlPaso = "SELECT recipeStepId, step FROM recipestep WHERE postId = ? ORDER BY recipeStepId ASC";
     $stmtPaso = mysqli_prepare($con, $sqlPaso);
     if ($stmtPaso) {
         mysqli_stmt_bind_param($stmtPaso, "i", $postId);
         mysqli_stmt_execute($stmtPaso);
-        mysqli_stmt_bind_result($stmtPaso, $paso);
+        mysqli_stmt_bind_result($stmtPaso, $recipeStepId, $pasoText);
         while (mysqli_stmt_fetch($stmtPaso)) {
-            $pasos[] = $paso;
+            $pasos[] = ['id' => $recipeStepId, 'step' => $pasoText, 'images' => []];
         }
         mysqli_stmt_close($stmtPaso);
+    }
+
+    // Cargar imágenes de pasos (si existen) y agruparlas por recipeStepId
+    if (!empty($pasos)) {
+        $stepIds = array_map(function($p){ return intval($p['id']); }, $pasos);
+        $in = implode(',', $stepIds);
+        $sqlStepImgs = "SELECT recipeStepId, imageData FROM stepImages WHERE recipeStepId IN ($in) ORDER BY recipeStepId ASC, imageOrder ASC";
+        $resStepImgs = mysqli_query($con, $sqlStepImgs);
+        if ($resStepImgs) {
+            $grouped = [];
+            while ($row = mysqli_fetch_assoc($resStepImgs)) {
+                $rid = intval($row['recipeStepId']);
+                $grouped[$rid][] = base64_encode($row['imageData']);
+            }
+            mysqli_free_result($resStepImgs);
+
+            // asignar imágenes a los pasos
+            foreach ($pasos as &$p) {
+                $rid = intval($p['id']);
+                if (isset($grouped[$rid])) {
+                    $p['images'] = $grouped[$rid];
+                }
+            }
+            unset($p);
+        }
     }
     
         // Obtener tags asociados a la receta
@@ -186,9 +211,16 @@ if ($title) {
         <div class="recipe-steps">
             <h2>Pasos</h2>
             <ol>
-                <?php foreach ($pasos as $paso): ?>
+                <?php foreach ($pasos as $p): ?>
                     <li class="step-input">
-                        <?php echo htmlspecialchars($paso); ?>
+                        <?php echo htmlspecialchars($p['step']); ?>
+                        <?php if (!empty($p['images'])): ?>
+                            <div class="step-image mt-2">
+                                <?php foreach ($p['images'] as $imgBase64): ?>
+                                    <img src="data:image/jpeg;base64,<?php echo $imgBase64; ?>" alt="Imagen del paso" style="max-width:300px; border-radius:8px; margin-right:8px;" />
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
                     </li>
                 <?php endforeach; ?>
             </ol>

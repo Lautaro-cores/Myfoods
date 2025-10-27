@@ -5,7 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const mensajeDiv = document.getElementById("mensaje");
     const imagePreview = document.getElementById("imagePreview");
     const imageInput = document.getElementById("imageInput");
-    const stepImagesInput = document.getElementById("imagestep");
+    // los inputs de imagen por paso tienen la clase .step-image-input
+    const stepImageInputsSelector = '.step-image-input';
 
     if (!formPublish) return;
 
@@ -85,9 +86,23 @@ document.addEventListener("DOMContentLoaded", () => {
         Array.from(imageInput.files).forEach((file) => {
             formData.append("recipeImages[]", file);
         });
-        Array.from(stepImagesInput.files).forEach((file) => {
-            formData.append("stepImages[]", file);
-        });
+
+        // Recoger imágenes de pasos en el orden DOM (coincide con el orden de los pasos)
+        const stepImageInputs = Array.from(document.querySelectorAll(stepImageInputsSelector));
+        // Validar y añadir imágenes por paso (máx. 3 por paso)
+        for (let idx = 0; idx < stepImageInputs.length; idx++) {
+            const inp = stepImageInputs[idx];
+            if (inp.files && inp.files.length > 0) {
+                if (inp.files.length > 3) {
+                    mensajeDiv.style.color = 'red';
+                    mensajeDiv.textContent = `Máximo 3 imágenes permitidas por paso (paso ${idx + 1}).`;
+                    return;
+                }
+                Array.from(inp.files).forEach((file) => {
+                    formData.append(`stepImages[${idx}][]`, file);
+                });
+            }
+        }
 
         // 3. Envío al servidor
         fetch("../publishRecipe.php", { method: "POST", body: formData })
