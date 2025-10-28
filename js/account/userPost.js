@@ -26,9 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="post-content" onclick="location.href='viewRecipe.php?id=${post.postId}'">
                     <div class="post-header">
                         <div class="post-left">
-                            <img class="post-avatar" src="${avatarUrl}" alt="Avatar ${post.userName}">
+                            <img class="post-avatar" src="${avatarUrl}" alt="Avatar ${post.displayName}">
                             <div class="post-meta">
-                                <div class="post-author">${post.userName}</div>
+                                <div class="post-author">${post.displayName}</div>
                                 <div class="post-time">${post.postDate}</div>
                             </div>
                         </div>

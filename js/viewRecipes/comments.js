@@ -27,7 +27,7 @@ export function createCommentHtml(comment, defaultImageUrl, isChild = false, pos
         <div class="comment " data-comment-id="${comment.commentId}">
             <img class="author-image" src="${imageUrl}" alt="Perfil de ${comment.userName}">
              <div class="comment-body">
-                 <strong class="comment-username">${comment.userName}</strong>
+                 <strong class="comment-username">${comment.displayName}</strong>
                  <p class="comment-content">${comment.content}</p>
                  
                  <!-- Mostrar imágenes del comentario -->

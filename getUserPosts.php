@@ -12,7 +12,7 @@ $posts = [];
 
 $userId = isset($_SESSION['userId']) ? intval($_SESSION['userId']) : 0;
 
-$sql = "SELECT p.postId, p.title, p.description, p.postDate, u.userName, u.userImage,
+$sql = "SELECT p.postId, p.title, p.description, p.postDate, u.userName, u.displayName, u.userImage,
              (SELECT COUNT(*) FROM likes l WHERE l.postId = p.postId) AS likesCount,
              (SELECT COUNT(*) FROM likes l2 WHERE l2.postId = p.postId AND l2.userId = ?) AS userLikedCount
          FROM post p

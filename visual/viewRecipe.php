@@ -182,7 +182,8 @@ if ($title) {
                          class="author-image">
                 </a>
                 <a href="account.php?username=<?php echo urlencode($authorName); ?>" class="author-link">
-                    <span class="author-name">Publicado por: <?php echo htmlspecialchars($authorDisplayName); ?></span>
+                    <span class="author-name"><?php echo htmlspecialchars($authorDisplayName); ?></span>
+                    <span class="author-name">@<?php echo htmlspecialchars($authorName); ?></span>
                 </a>
             </div>            
      
