@@ -217,6 +217,40 @@ margin-right: 20px;
     line-height: 1.4;
 }
 
+input[type="radio"] {
+    
+  display: none;
+}
+
+.comment-stars {
+    font-size: 30px;
+  color: grey;
+}
+
+.clasificacion {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+}
+
+.comment-stars:hover,
+.comment-stars:hover ~ .comment-stars {
+  color: orange;
+}
+
+input[type="radio"]:checked ~ .comment-stars {
+  color: orange;
+}
+
+.comment-rating {
+  font-size: 20px;
+  color: grey;
+}
+
+.comment-rating .star.filled {
+    color: orange; 
+}
+
+
 .comment-actions {
     display: flex;
     gap: 15px;

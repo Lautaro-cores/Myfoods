@@ -69,6 +69,9 @@ elseif ($type === 'post') {
         "DELETE FROM recipestep WHERE postId=?",
         "DELETE FROM likes WHERE postId=?",
         "DELETE FROM post WHERE postId=?",
+        "DELETE FROM recipeImages WHERE postId=?",
+        "DELETE FROM stepImages WHERE postId=?",
+        "DELETE FROM posttags WHERE postId=?"
     ];
     foreach ($sqls as $s) {
         if ($st = mysqli_prepare($con, $s)) { mysqli_stmt_bind_param($st, 'i', $pid); mysqli_stmt_execute($st); mysqli_stmt_close($st); }

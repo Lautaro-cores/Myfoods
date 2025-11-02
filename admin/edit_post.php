@@ -12,9 +12,24 @@ if (!$id) { header('Location: index.php'); exit; }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'] ?? '';
     $desc = $_POST['description'] ?? '';
-    $steps = explode("\n", $_POST['steps'] ?? '');
-    $ingredients = explode("\n", $_POST['ingredients'] ?? '');
-    
+
+    // Aceptar tanto el nuevo formato (arrays) como el antiguo (textarea con saltos de línea)
+    if (!empty($_POST['pasos']) && is_array($_POST['pasos'])) {
+        $steps = array_map('trim', $_POST['pasos']);
+    } else {
+        $steps = array_map('trim', explode("\n", $_POST['steps'] ?? ''));
+    }
+
+    if (!empty($_POST['ingredientes']) && is_array($_POST['ingredientes'])) {
+        $ingredients = array_map('trim', $_POST['ingredientes']);
+    } else {
+        $ingredients = array_map('trim', explode("\n", $_POST['ingredients'] ?? ''));
+    }
+
+    // Filtrar vacíos
+    $steps = array_values(array_filter($steps, function($s){ return $s !== ''; }));
+    $ingredients = array_values(array_filter($ingredients, function($i){ return $i !== ''; }));
+
     // Iniciamos una transacción
     mysqli_begin_transaction($con);
     try {
@@ -28,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Manejar la imagen si se subió una nueva
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $imageData = file_get_contents($_FILES['image']['tmp_name']);
-            $sql = "UPDATE post SET recipeImage=? WHERE postId=?";
+            $sql = "UPDATE recipeImages SET imageData=? WHERE postId=?";
             $stmt = mysqli_prepare($con, $sql);
             mysqli_stmt_bind_param($stmt, 'si', $imageData, $id);
             mysqli_stmt_execute($stmt);
@@ -43,16 +58,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_close($stmt);
 
         // Insertar nuevos pasos
-        $sql = "INSERT INTO recipestep (postId, step) VALUES (?, ?)";
-        $stmt = mysqli_prepare($con, $sql);
-        foreach ($steps as $step) {
-            $stepText = trim($step);
-            if ($stepText !== '') {
-                mysqli_stmt_bind_param($stmt, 'is', $id, $stepText);
-                mysqli_stmt_execute($stmt);
+        if (!empty($steps)) {
+            $sql = "INSERT INTO recipestep (postId, step) VALUES (?, ?)";
+            $stmt = mysqli_prepare($con, $sql);
+            foreach ($steps as $step) {
+                $stepText = trim($step);
+                if ($stepText !== '') {
+                    mysqli_stmt_bind_param($stmt, 'is', $id, $stepText);
+                    mysqli_stmt_execute($stmt);
+                }
             }
+            mysqli_stmt_close($stmt);
         }
-        mysqli_stmt_close($stmt);
 
         // Eliminar ingredientes anteriores
         $sql = "DELETE FROM ingredientrecipe WHERE postId=?";
@@ -60,18 +77,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_bind_param($stmt, 'i', $id);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
+
         // Insertar nuevos ingredientes
-        $sql = "INSERT INTO ingredientrecipe (postId, ingredient) VALUES (?, ?)";
-        $stmt = mysqli_prepare($con, $sql);
-        foreach ($ingredients as $ingredient) {
-            $ingText = trim($ingredient);
-            if ($ingText !== '') {
-                mysqli_stmt_bind_param($stmt, 'is', $id, $ingText);
-                mysqli_stmt_execute($stmt);
+        if (!empty($ingredients)) {
+            $sql = "INSERT INTO ingredientrecipe (postId, ingredient) VALUES (?, ?)";
+            $stmt = mysqli_prepare($con, $sql);
+            foreach ($ingredients as $ingredient) {
+                $ingText = trim($ingredient);
+                if ($ingText !== '') {
+                    mysqli_stmt_bind_param($stmt, 'is', $id, $ingText);
+                    mysqli_stmt_execute($stmt);
+                }
             }
+            mysqli_stmt_close($stmt);
         }
-        mysqli_stmt_close($stmt);
-        mysqli_stmt_close($stmt);
 
         // Commit la transacción
         mysqli_commit($con);
@@ -82,21 +101,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_rollback($con);
         $error = "Error al actualizar la receta: " . $e->getMessage();
     }
+}
+    
+
 $post = null;
 // Obtener datos del post
-$sql = "SELECT p.postId, p.title, p.description, r.imageData
-        FROM post p JOIN recipeImages r ON p.postId = r.postId
+$sql = "SELECT p.postId, p.title, p.description
+        FROM post p 
         WHERE p.postId=? LIMIT 1";
 if ($stmt = mysqli_prepare($con, $sql)) {
     mysqli_stmt_bind_param($stmt, 'i', $id);
     mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $pid, $ptitle, $pdescription, $pimage);
+    mysqli_stmt_bind_result($stmt, $pid, $ptitle, $pdescription, );
     if (mysqli_stmt_fetch($stmt)) {
         $post = [
             'postId' => $pid,
             'title' => $ptitle,
             'description' => $pdescription,
-            'imageData' => $pimage
         ];
     }
     mysqli_stmt_close($stmt);
@@ -115,10 +136,8 @@ if ($stmtImg) {
     }
     mysqli_stmt_close($stmtImg);
 }
+
         $images[] = base64_encode($imageData);
-    }
-    mysqli_stmt_close($stmtImg);
-}
 
 // Obtener pasos de la receta
 $steps = [];
@@ -141,7 +160,9 @@ if ($stmt = mysqli_prepare($con, $sql)) {
     mysqli_stmt_bind_param($stmt, 'i', $id);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_bind_result($stmt, $ingredient);
-$post['ingredients'] = implode("\n", $ingredients);
+while (mysqli_stmt_fetch($stmt)) {
+        $ingredients[] = $ingredient;
+    }
     mysqli_stmt_close($stmt);
 }
 $post['ingredients'] = implode("\n", $ingredients);
@@ -173,13 +194,60 @@ if (!$post) { header('Location: index.php'); exit; }
         </div>
         
         <div class="form-group">
-            <label>Pasos de preparación (un paso por línea)</label>
-            <textarea name="steps" rows="8" cols="60" required><?= htmlspecialchars($post['steps']) ?></textarea>
+            <label>Ingredientes:</label>
+            <div id="ingredients-list">
+                <?php if (!empty($ingredients)): ?>
+                    <?php foreach ($ingredients as $idx => $ing): ?>
+                        <div class="input-container">
+                            <div class="input-wrapper">
+                                <input type="text" name="ingredientes[]" class="input-ingredient input" placeholder="Ingrediente <?= ($idx+1) ?>" value="<?= htmlspecialchars($ing) ?>" required>
+                            </div>
+                            <div class="button-wrapper">
+                                <button type="button" class="delete-item buttono">&times;</button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="input-container">
+                        <div class="input-wrapper">
+                            <input type="text" name="ingredientes[]" class="input-ingredient input" placeholder="Ingrediente 1" required>
+                        </div>
+                        <div class="button-wrapper">
+                            <button type="button" class="delete-item buttono">&times;</button>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <button type="button" id="addIngrediente" class="buttonw">Agregar ingrediente</button>
+
         </div>
-        
+
         <div class="form-group">
-            <label>Ingredientes (un ingrediente por línea)</label>
-            <textarea name="ingredients" rows="8" cols="60" required><?= htmlspecialchars($post['ingredients']) ?></textarea>
+            <label>Pasos de la receta:</label>
+            <div id="steps-list">
+                <?php if (!empty($steps)): ?>
+                    <?php foreach ($steps as $idx => $st): ?>
+                        <div class="input-container">
+                            <div class="input-wrapper">
+                                <input type="text" name="pasos[]" class="input-step input" placeholder="Paso <?= ($idx+1) ?>" value="<?= htmlspecialchars($st) ?>" required>
+                            </div>
+                            <div class="button-wrapper">
+                                <button type="button" class="delete-item buttono">&times;</button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="input-container">
+                        <div class="input-wrapper">
+                            <input type="text" name="pasos[]" class="input-step input" placeholder="Paso 1" required>
+                        </div>
+                        <div class="button-wrapper">
+                            <button type="button" class="delete-item buttono">&times;</button>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <button type="button" id="addPaso" class="buttonw">Agregar paso</button>
         </div>
         
         <div class="form-group">
@@ -199,6 +267,7 @@ if (!$post) { header('Location: index.php'); exit; }
             <a href="index.php">Cancelar</a>
         </div>
     </form>
+    <script src="../admin/js/edit_post_dynamic.js"></script>
 </body>
 </html>
 

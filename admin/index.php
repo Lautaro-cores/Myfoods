@@ -97,10 +97,9 @@ if ($stmt = mysqli_prepare($con, $sql)) {
             <td><?= htmlspecialchars($u['userType']) ?></td>
             <td><?= htmlspecialchars($u['postCount']) ?></td>
             <td><?= htmlspecialchars($u['commentCount']) ?></td>
-            <td>
-                <a class="btn btn-primary" href="edit_user.php?id=<?= urlencode($u['userId']) ?>">Editar</a>
-                <a class="btn btn-danger" href="delete.php?type=user&id=<?= urlencode($u['userId']) ?>" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?')">Eliminar</a>
-            </td>
+            <td><a class="btn btn-info" href="../visual/account.php?username=<?= urlencode($u['userName']) ?>">Ver</a></td>
+            <td><a class="btn btn-primary" href="edit_user.php?id=<?= urlencode($u['userId']) ?>">Editar</a></td>
+            <td><a class="btn btn-danger" href="delete.php?type=user&id=<?= urlencode($u['userId']) ?>" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?')">Eliminar</a></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -119,11 +118,9 @@ if ($stmt = mysqli_prepare($con, $sql)) {
             <td><?= htmlspecialchars($p['likesCount']) ?></td>
             <td><?= htmlspecialchars($p['commentsCount']) ?></td>
             <td><?= htmlspecialchars($p['favoritesCount']) ?></td>
-            <td>
-                <a class="btn btn-primary" href="view_post.php?id=<?= urlencode($p['postId']) ?>">Ver</a>
-                <a class="btn btn-primary" href="edit_post.php?id=<?= urlencode($p['postId']) ?>">Editar</a>
-                <a class="btn btn-danger" href="delete.php?type=post&id=<?= urlencode($p['postId']) ?>" onclick="return confirm('¿Estás seguro de que quieres eliminar esta receta?')">Eliminar</a>
-            </td>
+            <td><a class="btn btn-primary" href="../visual/viewRecipe.php?id=<?= urlencode($p['postId']) ?>">Ver</a></td>
+            <td><a class="btn btn-primary" href="edit_post.php?id=<?= urlencode($p['postId']) ?>">Editar</a></td>
+            <td><a class="btn btn-danger" href="delete.php?type=post&id=<?= urlencode($p['postId']) ?>" onclick="return confirm('¿Estás seguro de que quieres eliminar esta receta?')">Eliminar</a></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

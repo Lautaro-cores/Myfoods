@@ -251,6 +251,19 @@ if ($title) {
                     <input name="content" id="commentContent"  placeholder="Escribe tu comentario..." class="input"
                         required></input>
                     
+  <p class="clasificacion">
+    <input id="radio1" type="radio" name="stars" value="5">
+        <label class="comment-stars" for="radio1">★</label>
+    <input id="radio2" type="radio" name="stars" value="4">
+        <label class="comment-stars" for="radio2">★</label>
+    <input id="radio3" type="radio" name="stars" value="3">
+        <label class="comment-stars" for="radio3">★</label>
+    <input id="radio4" type="radio" name="stars" value="2">
+        <label class="comment-stars" for="radio4">★</label>
+    <input id="radio5" type="radio" name="stars" value="1">
+        <label class="comment-stars" for="radio5">★</label>
+  </p>
+
                     <!-- Campo para subir imágenes -->
                     <div class="mt-3">
                         <label for="commentImages" class="form-label">

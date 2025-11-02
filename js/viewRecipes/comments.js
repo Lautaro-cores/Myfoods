@@ -23,11 +23,19 @@ export function createCommentHtml(comment, defaultImageUrl, isChild = false, pos
     // Usar el postId pasado como parámetro o el del comentario
     const currentPostId = postId || comment.postId;
 
+    // Generar HTML de puntuación si existe
+    const ratingHtml = (comment.rating && Number(comment.rating) > 0) ? `
+        <div class="comment-rating">
+            ${Array.from({length:5}, (_, i) => `<span class="star ${i < comment.rating ? 'filled' : ''}">★</span>`).join('')}
+        </div>
+    ` : '';
+
     return `
         <div class="comment " data-comment-id="${comment.commentId}">
             <img class="author-image" src="${imageUrl}" alt="Perfil de ${comment.userName}">
              <div class="comment-body">
                  <strong class="comment-username">${comment.displayName}</strong>
+                 ${ratingHtml}
                  <p class="comment-content">${comment.content}</p>
                  
                  <!-- Mostrar imágenes del comentario -->
@@ -166,6 +174,8 @@ export function setupCommentForm(postId, defaultImageUrl) {
 
             const formData = new FormData(commentForm);
             const contentValue = formData.get("content").trim();
+            // Obtener rating desde los radios con name="stars" y adjuntarlo como 'rating'
+            const ratingValue = formData.get("stars");
 
             if (contentValue === "") {
                 commentMessage.textContent = "El comentario no puede estar vacío.";
@@ -175,6 +185,11 @@ export function setupCommentForm(postId, defaultImageUrl) {
             
             commentMessage.textContent = "Publicando...";
             commentMessage.className = "info-message";
+
+            // Agregar rating al FormData si existe
+            if (ratingValue) {
+                formData.append('rating', ratingValue);
+            }
 
             fetch("../postComment.php", {
                 method: "POST",
@@ -187,6 +202,8 @@ export function setupCommentForm(postId, defaultImageUrl) {
 
                     if (result.success) {
                         commentContent.value = "";
+                        // Limpiar puntuación (radios)
+                        document.querySelectorAll('input[name="stars"]').forEach(r => r.checked = false);
                         // Limpiar vista previa de imágenes
                         const imagePreview = document.getElementById('imagePreview');
                         if (imagePreview) {

@@ -98,28 +98,40 @@ if (isset($_FILES['commentImages']) && !empty($_FILES['commentImages']['name'][0
     }
 }
 
-// 3. Insertar comentario en la base de datos
-$sql = "INSERT INTO comment (userId, postId, parentId, content) VALUES (?, ?, ?, ?)";
-$stmt = mysqli_prepare($con, $sql);
-
-if ($stmt === false) {
-    $response['msj'] = 'Error de preparación de la consulta: ' . mysqli_error($con);
-    echo json_encode($response);
-    exit();
-}
-
-// Manejar el bind_param con NULL correctamente
+// 3. Insertar comentario en la base de datos (manejar rating)
+// Construimos la consulta según si se proporciona parentId y/o rating
+$stmt = null;
 if ($parentId === null) {
-    // Usar una consulta diferente para NULL
-    $sql = "INSERT INTO comment (userId, postId, parentId, content) VALUES (?, ?, NULL, ?)";
+    if ($rating === null) {
+        // Comentario principal sin rating
+        $sql = "INSERT INTO comment (userId, postId, parentId, content) VALUES (?, ?, NULL, ?)";
+        $stmt = mysqli_prepare($con, $sql);
+        if ($stmt === false) {
+            $response['msj'] = 'Error de preparación de la consulta (NULL): ' . mysqli_error($con);
+            echo json_encode($response);
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "iis", $userId, $postId, $content);
+    } else {
+        // Comentario principal con rating
+        $sql = "INSERT INTO comment (userId, postId, parentId, content, rating) VALUES (?, ?, NULL, ?, ?)";
+        $stmt = mysqli_prepare($con, $sql);
+        if ($stmt === false) {
+            $response['msj'] = 'Error de preparación de la consulta (rating): ' . mysqli_error($con);
+            echo json_encode($response);
+            exit();
+        }
+        mysqli_stmt_bind_param($stmt, "iisi", $userId, $postId, $content, $rating);
+    }
+} else {
+    // Comentario hijo (no debe llevar rating según validación previa)
+    $sql = "INSERT INTO comment (userId, postId, parentId, content) VALUES (?, ?, ?, ?)";
     $stmt = mysqli_prepare($con, $sql);
     if ($stmt === false) {
-        $response['msj'] = 'Error de preparación de la consulta (NULL): ' . mysqli_error($con);
+        $response['msj'] = 'Error de preparación de la consulta: ' . mysqli_error($con);
         echo json_encode($response);
         exit();
     }
-    mysqli_stmt_bind_param($stmt, "iis", $userId, $postId, $content);
-} else {
     mysqli_stmt_bind_param($stmt, "iiis", $userId, $postId, $parentId, $content);
 }
 
@@ -140,21 +152,8 @@ if (mysqli_stmt_execute($stmt)) {
         }
     }
     
-    // Insertar puntuación si se proporciona (solo para comentarios principales)
-    if ($rating !== null && $parentId === null) {
-        $ratingSql = "INSERT INTO recipeRatings (userId, postId, rating) VALUES (?, ?, ?) 
-                      ON DUPLICATE KEY UPDATE rating = ?";
-        $ratingStmt = mysqli_prepare($con, $ratingSql);
-        
-        if ($ratingStmt) {
-            mysqli_stmt_bind_param($ratingStmt, "iiii", $userId, $postId, $rating, $rating);
-            mysqli_stmt_execute($ratingStmt);
-            mysqli_stmt_close($ratingStmt);
-        }
-    }
-    
-    // Obtener el comentario insertado con datos de usuario
-    $sql2 = "SELECT c.commentId, c.userId, c.postId, c.parentId, c.content, u.userName, u.userImage
+    // Obtener el comentario insertado con datos de usuario (incluyendo rating)
+    $sql2 = "SELECT c.commentId, c.userId, c.postId, c.parentId, c.content, c.rating, u.userName, u.userImage
              FROM comment c
              JOIN users u ON c.userId = u.userId
              WHERE c.commentId = ? LIMIT 1";

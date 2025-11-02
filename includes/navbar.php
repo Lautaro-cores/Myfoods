@@ -8,24 +8,24 @@
         <div class="nav-links d-flex flex-column align-items-center ">
 
             <a href="../visual/index.php" class="nav-link p-3" title="Inicio">
-                <i class="bi bi-house-door fs-2"></i>
+                <i class="bi bi-house-door fs-2"></i> <span class="d-none d-md-inline">Inicio</span>
             </a>
 
             <a href="../visual/publishRecipe.php" class="nav-link p-3" title="Publicar receta">
-                <i class="bi bi-plus-circle fs-2"></i>
+                <i class="bi bi-plus-circle fs-2"></i> <span class="d-none d-md-inline">Publicar receta</span>
             </a>
 
             <a href="../visual/searchPage.php" class="nav-link p-3" title="Buscar recetas" id="scrollTopBtn">
-                <i class="bi bi-search fs-2"></i>
+                <i class="bi bi-search fs-2"></i> <span class="d-none d-md-inline">Buscar recetas</span>
             </a>
 
             <a href="../visual/savedRecipes.php" class="nav-link p-3" title="recetas guardadas">
-                <i class="bi bi-bookmark fs-2"></i>
+                <i class="bi bi-bookmark fs-2"></i> <span class="d-none d-md-inline">Recetas guardadas</span>
             </a>
 
             <a href="../visual/account.php?username=<?php echo urlencode($_SESSION['userName']); ?>"
                 class="nav-link p-3" title="Cuenta">
-                <i class="bi bi-person-circle fs-2"></i>
+                <i class="bi bi-person-circle fs-2"></i> <span class="d-none d-md-inline">Cuenta</span>
             </a>
         </div>
 

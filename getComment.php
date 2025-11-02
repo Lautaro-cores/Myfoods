@@ -11,11 +11,11 @@ if (!isset($_GET["postId"])) {
 $postId = intval($_GET["postId"]);
 
 // Obtener solo comentarios principales (sin comentarios hijos) para la receta
-$sql = "SELECT c.commentId, c.userId, c.postId, c.content, c.parentId, u.userName, u.displayName, u.userImage,
-               COALESCE(cl.likeCount, 0) as likeCount,
-               CASE WHEN cl_user.likeId IS NOT NULL THEN 1 ELSE 0 END as userLiked,
-               COALESCE(child_count.childCount, 0) as childCount
-        FROM comment c
+$sql = "SELECT c.commentId, c.userId, c.postId, c.content, c.parentId, c.rating, u.userName, u.displayName, u.userImage,
+           COALESCE(cl.likeCount, 0) as likeCount,
+           CASE WHEN cl_user.likeId IS NOT NULL THEN 1 ELSE 0 END as userLiked,
+           COALESCE(child_count.childCount, 0) as childCount
+    FROM comment c
         JOIN users u ON c.userId = u.userId
         LEFT JOIN (
             SELECT commentId, COUNT(*) as likeCount 
