@@ -60,7 +60,7 @@ if ($resTags) {
             </div>
 
             <div class="publish-info">
-                <input type="text" name="title" id="recipeTitle" class="input" placeholder="Título de la receta" required>
+                <input type="text" name="title" id="recipeTitle" class="input" placeholder="Título de la receta" maxlength="50" required>
                 
                 <div class="author-info">
                     <a href="account.php?username=<?php echo urlencode($_SESSION['userName']); ?>" class="author-link">
@@ -69,7 +69,7 @@ if ($resTags) {
                     </a>
                 </div>
 
-                <input type="text" name="description" id="recipeDescription" class="input" placeholder="Cuentanos mas acerca de este plato" required>
+                <input type="text" name="description" id="recipeDescription" class="input" placeholder="Cuentanos mas acerca de este plato" required maxlength="150">
                 
             <div class="publish-tags">
                 <button class="btn btn-outline-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#tagsCollapse" aria-expanded="false" aria-controls="tagsCollapse">
@@ -107,8 +107,8 @@ if ($resTags) {
                 <div id="ingredients-list">
                     <div class="input-container">
                         <div class="input-wrapper">
-                            <input type="text" name="ingredientes[]" class="input-ingredient input" placeholder="Ingrediente 1" required>
-                            <input type="text" name="cantidades[]" class="input-quantity input" placeholder="Cantidad" required>
+                            <input type="text" name="ingredientes[]" class="input-ingredient input" placeholder="Ingrediente 1" maxlength="20" required>
+                            <input type="text" name="cantidades[]" class="input-quantity input" placeholder="Cantidad" maxlength="20" required>
                             <input type="hidden" name="ingredientIds[]" class="ingredient-id">
                         </div>
 
@@ -124,7 +124,7 @@ if ($resTags) {
                 <div id="steps-list">
                     <div class="input-container">
                         <div class="input-wrapper">
-                            <input type="text" name="pasos[]" class="input-step input" placeholder="Paso 1" required>
+                            <input type="text" name="pasos[]" class="input-step input" placeholder="Paso 1" maxlength="200" required>
                             <input type="file" name="stepImages[0][]" accept="image/*" multiple class="form-control step-image-input">
                             <div class="step-image-preview"></div>
                         </div>
