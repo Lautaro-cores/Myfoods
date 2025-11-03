@@ -1,9 +1,9 @@
 <nav class="navbar position-fixed start-0 top-0 bottom-0 h-100"
-    style="width: 120px; background-color: #fda087 !important; border-radius: 0 15px 15px 0; z-index: 1000;">
+    style="width: auto; background-color: #fda087 !important; border-radius: 0 15px 15px 0; z-index: 1000;">
     <div class="container-fluid d-flex flex-column h-100 p-0">
 
         <a class=" text-center py-3" href="../visual/index.php">
-            <img src="../img/logo.png" alt="Myfoods" >
+            <img src="../img/logo.png" class="logo-nawbar" alt="Myfoods" >
         </a>
         <div class="nav-links d-flex flex-column align-items-center ">
 
@@ -27,6 +27,12 @@
                 class="nav-link p-3" title="Cuenta">
                 <i class="bi bi-person-circle fs-2"></i> <span class="d-none d-md-inline">Cuenta</span>
             </a>
+
+            <a href="../visual/exposuiza.php" class="nav-link p-3" title="exposuiza">
+            
+                <img src="../img/exposuiza.png" class="logo-exposuiza"></img> <span class="d-none d-md-inline">Exposuiza</span>
+
+            </a>    
         </div>
 
 
@@ -66,11 +72,15 @@
 
     /* Ajuste para el contenido principal */
     body {
-        padding-left: 120px;
+        padding-left: 220px;
     }
 
-    .container-fluid a img {
+    .logo-nawbar{
         width: 120px;
+    }
+
+    .logo-exposuiza{
+        width: 50px;
     }
 
     /* Estilos para los iconos */
