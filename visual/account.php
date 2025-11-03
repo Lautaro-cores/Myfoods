@@ -102,11 +102,11 @@ if (empty($user['userImage'])) {
           <form id="formImage" enctype="multipart/form-data">
             <div class="mb-3">
               <label for="displayName" class="form-label">Nombre a mostrar</label>
-              <input type="text" id="displayName" name="displayName" class="form-control" value="<?php echo htmlspecialchars($displayName); ?>" placeholder="Nombre que se mostrará en tu perfil">
+              <input type="text" id="displayName" name="displayName" class="form-control" value="<?php echo htmlspecialchars($displayName); ?>" maxlength="20" placeholder="Nombre que se mostrará en tu perfil">
             </div>
             <div class="mb-3">
               <label for="description" class="form-label">Descripción</label>
-              <textarea id="description" name="description" class="form-control" rows="3" placeholder="Escribe una breve descripción..."><?php echo htmlspecialchars($userDescription); ?></textarea>
+              <textarea id="description" name="description" class="form-control" rows="3" placeholder="Escribe una breve descripción..." maxlength="150"><?php echo htmlspecialchars($userDescription); ?></textarea>
             </div>
             <div class="form-group mb-3">
               <label for="subirArchivo" class="form-label">Seleccionar nueva foto de perfil (opcional):</label>

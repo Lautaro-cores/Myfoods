@@ -16,7 +16,6 @@ margin-left: 20px;
 margin-right: 20px;
 }
 
-
 .recipe-image {
     display: flex;
     flex-direction: column;
@@ -120,7 +119,6 @@ margin-right: 20px;
 
 .recipe-steps { 
     padding: 10px;
- word-break: break-all;
  margin-left: 60px;
 }
 

@@ -27,17 +27,17 @@
         <div class="login-form">
             <p>Nombre de usuario</p>
             <input type="text" name="userName" id="regUserName" class="input" placeholder="Nombre de usuario" required
-                autocomplete="username">
+                autocomplete="username" maxlength="20" minlength="5">
             <br>
 
             <p>Email</p>
             <input type="email" name="userEmail" id="regUserEmail" class="input" placeholder="Correo electrónico"
-                required autocomplete="email">
+                required autocomplete="email" maxlength="30">
             <br>
 
             <p>Contraseña</p>
             <input type="password" name="userPassword" id="regUserPassword" class="input" placeholder="Contraseña"
-                required minlength="5" autocomplete="new-password">
+                required minlength="5" autocomplete="new-password" maxlength="15">
             <br>
 
             

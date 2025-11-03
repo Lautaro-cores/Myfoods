@@ -42,7 +42,7 @@ if ($resTags) {
     <?php include '../includes/backButton.php'; ?>
     <div class="header-container">
         <div class="search-container">
-            <input type="text" id="searchInput" class="input" placeholder="Buscar recetas" value="<?php echo htmlspecialchars($busqueda); ?>">
+            <input type="text" id="searchInput" class="input" placeholder="Buscar recetas" maxlength="100" value="<?php echo htmlspecialchars($busqueda); ?>">
             <button id="searchButton" class="buttono">Buscar</button>
         </div>
     </div>

@@ -270,7 +270,7 @@ if ($title) {
                 <div class="comment-form">
                     <input type="hidden" name="postId" value="<?php echo $postId; ?>">
                     <input name="content" id="commentContent"  placeholder="Escribe tu comentario..." class="input"
-                        required></input>
+                        required maxlength="255"></input>
                     
   <p class="clasificacion">
     <input id="radio1" type="radio" name="stars" value="5">
