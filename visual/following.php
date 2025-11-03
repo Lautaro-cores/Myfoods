@@ -13,10 +13,11 @@ $username = $_GET['username'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recetas guardadas</title>
+    <title>Siguiendo - <?php echo htmlspecialchars($username); ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/stylePR.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
     <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
 </head>
@@ -24,17 +25,43 @@ $username = $_GET['username'];
 <body>
     <?php include '../includes/navbar.php'; ?>
     <?php include '../includes/backButton.php'; ?>
-    <div class="container mt-4">
+    
+    <div class="container following-container">
         <h2><?php echo htmlspecialchars($username); ?></h2>
-    <div>
-        <a href="followers.php?username=<?php echo urlencode($username); ?>">Ver seguidores</a>
-        <a href="following.php?username=<?php echo urlencode($username); ?>">Ver siguiendo</a>
+        
+        <div class="nav-links">
+            <a href="followers.php?username=<?php echo urlencode($username); ?>" 
+               class="btn btn-outline-dark rounded-pill">
+                <i class="bi bi-people-fill"></i> Seguidores
+            </a>
+            <a href="following.php?username=<?php echo urlencode($username); ?>" 
+               class="btn btn-dark rounded-pill">
+                <i class="bi bi-person-plus-fill"></i> Siguiendo
+            </a>
+        </div>
+
+        <div id="followingList">
+            <template id="following-template">
+                <div class="following-item">
+                    <img class="following-image" src="" alt="Profile picture">
+                    <div class="following-details">
+                        <span class="following-username"></span>
+                        <div class="following-stats">
+                            <span class="followers-count"></span>
+                            <span class="following-count"></span>
+                        </div>
+                    </div>
+                    <button class="follow-button btn btn-outline-dark rounded-pill">Seguir</button>
+                </div>
+            </template>
+            <div class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+        </div>
     </div>
 
-        <div id="followingList">Cargando...</div>
-
-    </div>
     <script type="module" src="../js/account/followersList.js"></script>
 </body>
-
 </html>
