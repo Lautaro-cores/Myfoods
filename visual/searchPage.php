@@ -5,18 +5,25 @@ $activateTag = isset($_GET['activateTag']) ? intval($_GET['activateTag']) : 0;
 require_once '../includes/config.php';
 $topTags = [];
 $allTags = [];
-$sqlTags = "SELECT t.tagId, t.tagName, COUNT(pt.postId) AS used FROM tags t LEFT JOIN postTags pt ON t.tagId = pt.tagId GROUP BY t.tagId ORDER BY used DESC, t.tagId ASC";
+$sqlTags = "SELECT t.tagId, t.tagName, tc.categoryName, COUNT(pt.postId) AS used 
+           FROM tags t 
+           LEFT JOIN postTags pt ON t.tagId = pt.tagId 
+           LEFT JOIN tagCategories tc ON t.categoryId = tc.categoryId 
+           GROUP BY t.tagId, tc.categoryName 
+           ORDER BY tc.categoryId, used DESC, t.tagId ASC";
 $resTags = mysqli_query($con, $sqlTags);
+
+$tagsByCategory = [];
 if ($resTags) {
     while ($r = mysqli_fetch_assoc($resTags)) {
-        $allTags[] = $r;
+        $category = $r['categoryName'] ?? 'Otros';
+        if (!isset($tagsByCategory[$category])) {
+            $tagsByCategory[$category] = [];
+        }
+        $tagsByCategory[$category][] = $r;
     }
     mysqli_free_result($resTags);
 }
-
-
-$topTags = array_slice($allTags, 0, 10);
-$otherTags = array_slice($allTags, 10);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -41,17 +48,35 @@ $otherTags = array_slice($allTags, 10);
     </div>
 
         <div class="container my-3">
-                <div class="d-flex flex-row flex-wrap gap-2 align-items-center" id="topTagsRow">
-                        <?php foreach ($topTags as $t): ?>
-                                <button type="button" class="input btn btn-sm btn-outline-primary tag-filter" data-bs-toggle="button" data-tag="<?php echo intval($t['tagId']); ?>"><?php echo htmlspecialchars($t['tagName']); ?></button>
-                        <?php endforeach; ?>
-                        <?php if (!empty($otherTags)): ?>
-                                <button type="button" class="input btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#allTagsModal">Más etiquetas</button>
-                        <?php endif; ?>
-                </div>
+            <div class="d-flex flex-row flex-wrap gap-2 align-items-center" id="topTagsRow">
+                <?php
+                // Obtener las 10 etiquetas más populares
+                $topTags = [];
+                foreach ($tagsByCategory as $tags) {
+                    foreach ($tags as $tag) {
+                        $topTags[] = $tag;
+                    }
+                }
+                usort($topTags, function($a, $b) {
+                    return $b['used'] - $a['used'];
+                });
+                $topTags = array_slice($topTags, 0, 10);
+                
+                foreach ($topTags as $t): 
+                ?>
+                    <button type="button" class="input btn btn-sm btn-outline-primary tag-filter" 
+                            data-bs-toggle="button" 
+                            data-tag="<?php echo intval($t['tagId']); ?>">
+                        <?php echo htmlspecialchars($t['tagName']); ?>
+                    </button>
+                <?php endforeach; ?>
+                <button type="button" class="input btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#allTagsModal">
+                    Más etiquetas
+                </button>
+            </div>
         </div>
 
-        <!-- Modal con el resto de etiquetas -->
+        <!-- Modal con etiquetas categorizadas -->
         <div class="modal fade" id="allTagsModal" tabindex="-1" aria-labelledby="allTagsModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
@@ -60,11 +85,21 @@ $otherTags = array_slice($allTags, 10);
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="d-flex flex-wrap gap-2">
-                            <?php foreach ($otherTags as $ot): ?>
-                                <button type="button" class="input btn btn-sm btn-outline-primary tag-filter" data-tag="<?php echo intval($ot['tagId']); ?>"><?php echo htmlspecialchars($ot['tagName']); ?></button>
-                            <?php endforeach; ?>
-                        </div>
+                        <?php foreach ($tagsByCategory as $category => $tags): ?>
+                            <div class="mb-3">
+                                <h5 class="mb-2"><?php echo htmlspecialchars($category); ?></h5>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <?php foreach ($tags as $tag): ?>
+                                        <button type="button" class="input btn btn-sm btn-outline-primary tag-filter" 
+                                                data-tag="<?php echo intval($tag['tagId']); ?>"
+                                                data-bs-toggle="button">
+                                            <?php echo htmlspecialchars($tag['tagName']); ?>
+                                            <small class="text-muted">(<?php echo intval($tag['used']); ?>)</small>
+                                        </button>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

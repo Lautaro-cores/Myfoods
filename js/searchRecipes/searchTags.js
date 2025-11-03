@@ -5,10 +5,22 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
     const tagButtons = Array.from(document.querySelectorAll('.tag-filter'));
-    // Usamos window.selectedTags para que sea accesible globalmente por el search_results_handler
+    const modal = document.getElementById('allTagsModal');
     window.selectedTags = new Set(); 
 
     if (tagButtons.length === 0) return;
+
+    // Sincronizar el estado de los botones duplicados
+    if (modal) {
+        modal.addEventListener('shown.bs.modal', () => {
+            tagButtons.forEach(btn => {
+                const tagId = btn.dataset.tag;
+                if (window.selectedTags.has(tagId)) {
+                    btn.classList.add('active');
+                }
+            });
+        });
+    }
 
     /**
      * Actualiza la clase visual de un botón de etiqueta.

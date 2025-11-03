@@ -43,14 +43,26 @@ if ($title) {
 
     // Obtener ingredientes
     $ingredientes = [];
-    $sqlIng = "SELECT ingredient FROM ingredientrecipe WHERE postId = ?";
+    $sqlIng = "SELECT ir.quantity, 
+                      COALESCE(i.name, ir.customIngredient) as ingredient_name,
+                      i.ingredientId,
+                      CASE WHEN i.ingredientId IS NOT NULL THEN 1 ELSE 0 END as is_structured
+               FROM ingredientrecipe ir 
+               LEFT JOIN ingredients i ON ir.ingredientId = i.ingredientId 
+               WHERE ir.postId = ?
+               ORDER BY ir.ingredientRecipeId";
     $stmtIng = mysqli_prepare($con, $sqlIng);
     if ($stmtIng) {
         mysqli_stmt_bind_param($stmtIng, "i", $postId);
         mysqli_stmt_execute($stmtIng);
-        mysqli_stmt_bind_result($stmtIng, $ingrediente);
-        while (mysqli_stmt_fetch($stmtIng)) {
-            $ingredientes[] = $ingrediente;
+        $result = mysqli_stmt_get_result($stmtIng);
+        while ($row = mysqli_fetch_assoc($result)) {
+            $ingredientes[] = [
+                'nombre' => $row['ingredient_name'],
+                'cantidad' => $row['quantity'],
+                'id' => $row['ingredientId'],
+                'estructurado' => $row['is_structured']
+            ];
         }
         mysqli_stmt_close($stmtIng);
     }
@@ -203,9 +215,18 @@ if ($title) {
     <div class="recipe-content">                
         <div class="recipe-ingredients">
             <h2>Ingredientes</h2>
-            <ul >
+            <ul>
                 <?php foreach ($ingredientes as $ing): ?>
-                    <li class="ingredient-input"><?php echo htmlspecialchars($ing); ?></li>
+                    <li class="ingredient-input">
+                        <?php if ($ing['estructurado']): ?>
+                            <a href="searchPage.php?ingredient=<?php echo urlencode($ing['id']); ?>" class="ingredient-link">
+                                <?php echo htmlspecialchars($ing['nombre']); ?>
+                            </a>
+                        <?php else: ?>
+                            <?php echo htmlspecialchars($ing['nombre']); ?>
+                        <?php endif; ?>
+                        <span class="ingredient-quantity"><?php echo htmlspecialchars($ing['cantidad']); ?></span>
+                    </li>
                 <?php endforeach; ?>
             </ul>
         </div>
@@ -218,7 +239,7 @@ if ($title) {
                         <?php if (!empty($p['images'])): ?>
                             <div class="step-image mt-2">
                                 <?php foreach ($p['images'] as $imgBase64): ?>
-                                    <img src="data:image/jpeg;base64,<?php echo $imgBase64; ?>" alt="Imagen del paso" style="max-width:300px; border-radius:8px; margin-right:8px;" />
+                                    <img src="data:image/jpeg;base64,<?php echo $imgBase64; ?>" alt="Imagen del paso"  onclick="openImageModal('data:image/jpeg;base64,<?php echo $imgBase64; ?>')" style="max-width:300px; border-radius:8px; margin-right:8px;" />
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>

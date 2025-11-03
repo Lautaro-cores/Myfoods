@@ -15,7 +15,7 @@ $commentId = intval($_GET["commentId"]);
 $sql = "SELECT c.commentId, c.userId, c.postId, c.content, c.parentId,
                u.userName, u.displayName, u.userImage,
                COALESCE(cl.likeCount, 0) as likeCount,
-               CASE WHEN cl_user.likeId IS NOT NULL THEN 1 ELSE 0 END as isLiked
+               CASE WHEN cl_user.likeId IS NOT NULL THEN 1 ELSE 0 END as userLiked
         FROM comment c
         JOIN users u ON c.userId = u.userId
         LEFT JOIN (
@@ -39,6 +39,25 @@ while ($row = mysqli_fetch_assoc($res)) {
     if (!empty($row['userImage'])) {
         $row['userImage'] = base64_encode($row['userImage']);
     }
+    // Obtener imágenes asociadas al comentario (si las hay)
+    $imageSql = "SELECT imageId, imageData, imageType, imageSize FROM commentImages WHERE commentId = ? ORDER BY imageId ASC";
+    $imageStmt = mysqli_prepare($con, $imageSql);
+    $images = [];
+    if ($imageStmt) {
+        mysqli_stmt_bind_param($imageStmt, "i", $row['commentId']);
+        mysqli_stmt_execute($imageStmt);
+        $imageResult = mysqli_stmt_get_result($imageStmt);
+        while ($imageRow = mysqli_fetch_assoc($imageResult)) {
+            $images[] = [
+                'imageId' => $imageRow['imageId'],
+                'imageData' => base64_encode($imageRow['imageData']),
+                'imageType' => $imageRow['imageType'],
+                'imageSize' => $imageRow['imageSize']
+            ];
+        }
+        mysqli_stmt_close($imageStmt);
+    }
+    $row['images'] = $images;
     $row['replies'] = []; // Inicializar array de respuestas
     $allReplies[] = $row;
 }

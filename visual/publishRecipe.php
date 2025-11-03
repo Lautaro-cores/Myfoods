@@ -108,9 +108,10 @@ if ($resTags) {
                     <div class="input-container">
                         <div class="input-wrapper">
                             <input type="text" name="ingredientes[]" class="input-ingredient input" placeholder="Ingrediente 1" required>
+                            <input type="text" name="cantidades[]" class="input-quantity input" placeholder="Cantidad" required>
+                            <input type="hidden" name="ingredientIds[]" class="ingredient-id">
                         </div>
-                        <div class="button-wrapper">
-                        </div>
+
                     </div>
                 </div>
                 <button type="button" id="addIngrediente" class="buttonw">Agregar ingrediente</button>

@@ -1,4 +1,42 @@
 <?php
+// Desactivar la salida de errores PHP
+error_reporting(0);
+ini_set('display_errors', 0);
+
+// Función para manejar errores y convertirlos a JSON
+function handleError($errno, $errstr, $errfile, $errline) {
+    $error = [
+        'success' => false,
+        'msj' => 'Error del servidor',
+        'debug' => [
+            'message' => $errstr,
+            'file' => basename($errfile),
+            'line' => $errline
+        ]
+    ];
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($error);
+    exit();
+}
+set_error_handler('handleError');
+
+// Función para manejar excepciones y convertirlas a JSON
+function handleException($e) {
+    $error = [
+        'success' => false,
+        'msj' => 'Error del servidor',
+        'debug' => [
+            'message' => $e->getMessage(),
+            'file' => basename($e->getFile()),
+            'line' => $e->getLine()
+        ]
+    ];
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($error);
+    exit();
+}
+set_exception_handler('handleException');
+
 session_start();
 require_once "includes/config.php";
 
@@ -24,9 +62,18 @@ if (isset($_POST["title"]) && isset($_POST["description"])) {
 
     // Validar ingredientes y pasos
     $ingredientes = isset($_POST['ingredientes']) ? $_POST['ingredientes'] : [];
+    $cantidades = isset($_POST['cantidades']) ? $_POST['cantidades'] : [];
+    $ingredientIds = isset($_POST['ingredientIds']) ? $_POST['ingredientIds'] : [];
     $pasos = isset($_POST['pasos']) ? $_POST['pasos'] : [];
+    
     if (!is_array($ingredientes) || count($ingredientes) == 0 || !is_array($pasos) || count($pasos) == 0) {
         $response['msj'] = 'Debes agregar al menos un ingrediente y un paso.';
+        echo json_encode($response);
+        exit();
+    }
+    
+    if (count($ingredientes) !== count($cantidades)) {
+        $response['msj'] = 'La cantidad de ingredientes y cantidades no coinciden.';
         echo json_encode($response);
         exit();
     }
@@ -83,22 +130,27 @@ if (isset($_POST["title"]) && isset($_POST["description"])) {
         }
 
         // Insertar ingredientes
-        $sqlIng = "INSERT INTO ingredientrecipe (postId, ingredient) VALUES (?, ?)";
+        $sqlIng = "INSERT INTO ingredientrecipe (postId, ingredientId, customIngredient, quantity) VALUES (?, ?, ?, ?)";
         $stmtIng = mysqli_prepare($con, $sqlIng);
         if ($stmtIng === false) {
             throw new Exception("Error al preparar la consulta de ingredientes: " . mysqli_error($con));
         }
 
-        foreach ($ingredientes as $ing) {
-            $ing = trim($ing);
-            if ($ing !== '') {
-                mysqli_stmt_bind_param($stmtIng, "is", $postId, $ing);
-                if (!mysqli_stmt_execute($stmtIng)) {
-                    throw new Exception("Error al insertar ingrediente: " . mysqli_error($con));
-                }
+        foreach ($ingredientes as $index => $ingrediente) {
+            $ingredientId = !empty($ingredientIds[$index]) && $ingredientIds[$index] !== 'custom' 
+                ? intval($ingredientIds[$index]) 
+                : null;
+            $customIngredient = $ingredientId === null ? $ingrediente : null;
+            $cantidad = $cantidades[$index];
+            
+            mysqli_stmt_bind_param($stmtIng, "iiss", $postId, $ingredientId, $customIngredient, $cantidad);
+            if (!mysqli_stmt_execute($stmtIng)) {
+                throw new Exception("Error al guardar el ingrediente: " . mysqli_error($con));
             }
         }
         mysqli_stmt_close($stmtIng);
+
+
 
         // Insertar pasos
         // Primero aseguramos que la tabla stepImages existe para guardar múltiples imágenes por paso
@@ -209,8 +261,8 @@ if (isset($_POST["title"]) && isset($_POST["description"])) {
             "postId" => $postId
         ];
     } catch (Exception $e) {
-        mysqli_rollback($con);
-        $response = ["success" => false, "msj" => $e->getMessage()];
+       $response = ["success" => false, "msj" => $e->getMessage() ];
+       echo json_encode($response);
     }
 }
 

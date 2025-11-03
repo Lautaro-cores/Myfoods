@@ -42,9 +42,25 @@ document.addEventListener("DOMContentLoaded", () => {
         const description = document.getElementById("recipeDescription").value.trim();
         
         // 1. Recolección y validación de datos
-        const ingredientes = Array.from(document.querySelectorAll(".input-ingredient"))
-            .map((i) => i.value.trim())
-            .filter(Boolean);
+        const ingredientContainers = document.querySelectorAll(".input-container");
+        const ingredientes = [];
+        const cantidades = [];
+        const ingredientIds = [];
+        
+        ingredientContainers.forEach(container => {
+            const ingredientInput = container.querySelector(".input-ingredient");
+            const quantityInput = container.querySelector(".input-quantity");
+            if (ingredientInput && quantityInput) {
+                const ingredientValue = ingredientInput.value.trim();
+                const quantityValue = quantityInput.value.trim();
+                if (ingredientValue && quantityValue) {
+                    ingredientes.push(ingredientValue);
+                    cantidades.push(quantityValue);
+                    ingredientIds.push(ingredientInput.dataset.ingredientId || 'custom');
+                }
+            }
+        });
+
         const pasos = Array.from(document.querySelectorAll(".input-step"))
             .map((i) => i.value.trim())
             .filter(Boolean);
@@ -78,6 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append("title", title);
         formData.append("description", description);
         ingredientes.forEach((ing) => formData.append("ingredientes[]", ing));
+        cantidades.forEach((cant) => formData.append("cantidades[]", cant));
+        ingredientIds.forEach((id) => formData.append("ingredientIds[]", id));
         pasos.forEach((paso) => formData.append("pasos[]", paso));
         
         const selectedTags = Array.from(document.querySelectorAll('input[name="tags[]"]:checked')).map(i => i.value);
@@ -106,11 +124,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 3. Envío al servidor
         fetch("../publishRecipe.php", { method: "POST", body: formData })
-            .then((res) => {
-                if (!res.ok) throw new Error('Respuesta de red fallida');
-                return res.json();
+            .then(async (res) => {
+                const contentType = res.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    return res.json().then(data => ({
+                        isJson: true,
+                        data: data,
+                        status: res.status,
+                        ok: res.ok
+                    }));
+                } else {
+                    return res.text().then(text => ({
+                        isJson: false,
+                        data: text,
+                        status: res.status,
+                        ok: res.ok
+                    }));
+                }
             })
-            .then((res) => {
+            .then((result) => {
+                if (!result.ok) {
+                    throw new Error(`HTTP error! status: ${result.status}`);
+                }
+                if (!result.isJson) {
+                    console.error("Respuesta no JSON:", result.data);
+                    throw new Error("El servidor no devolvió JSON válido");
+                }
+                const res = result.data;
+                
                 if (res.success) {
                     mensajeDiv.style.color = "green";
                     mensajeDiv.textContent = res.msj;
@@ -131,7 +172,12 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch((err) => {
                 console.error("Error en la publicación:", err);
                 mensajeDiv.style.color = "red";
-                mensajeDiv.textContent = "Error de conexión o JSON inválido.";
+                if (err.message.includes("no devolvió JSON")) {
+                    mensajeDiv.innerHTML = "Error del servidor: <br><pre class='error-details'></pre>";
+                    mensajeDiv.querySelector('.error-details').textContent = err.message;
+                } else {
+                    mensajeDiv.textContent = "Error: " + err.message;
+                }
             });
     });
 });

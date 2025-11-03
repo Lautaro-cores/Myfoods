@@ -89,12 +89,32 @@ margin-right: 20px;
 }
 
 .ingredient-input{
-        border-radius: 15px ;
+    border-radius: 15px;
     margin-bottom: 20px; 
     background-color: #fdf5f3;
     padding: 12px;
     list-style-position: outside;
-    border: 1px  solid#ccc;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ingredient-quantity {
+    color: #666;
+    font-style: italic;
+    margin-left: 10px;
+}
+
+.ingredient-link {
+    color: #ff6f61;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.ingredient-link:hover {
+    color: #ff4f3f;
+    text-decoration: underline;
 }
 
 
@@ -484,4 +504,7 @@ input[type="radio"]:checked ~ .comment-stars {
 }
 
 
-
+.min-width{    
+   min-width: 600px;
+   height: auto;
+}

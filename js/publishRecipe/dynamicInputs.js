@@ -3,13 +3,55 @@
 document.addEventListener("DOMContentLoaded", () => {
     const ingredientsList = document.getElementById("ingredients-list");
     const addIngredienteBtn = document.getElementById("addIngrediente");
-    let ingredienteCount = 0; // Usaremos el conteo de elementos existentes
+    let ingredienteCount = 0;
 
     const stepsList = document.getElementById("steps-list");
     const addPasoBtn = document.getElementById("addPaso");
-    let pasoCount = 0; // Usaremos el conteo de elementos existentes
+    let pasoCount = 0;
 
     // --- Lógica de Ingredientes ---
+    const setupAutocomplete = (input) => {
+        let selectedIngredient = null;
+        const wrapper = input.closest('.input-wrapper');
+        
+        input.addEventListener('input', async (e) => {
+            const term = e.target.value.trim();
+            if (term.length < 2) return;
+
+            try {
+                const response = await fetch(`../getIngredients.php?term=${encodeURIComponent(term)}`);
+                const ingredients = await response.json();
+                
+                // Remove existing dropdown if any
+                const existingDropdown = wrapper.querySelector('.autocomplete-dropdown');
+                if (existingDropdown) {
+                    existingDropdown.remove();
+                }
+
+                if (ingredients.length > 0) {
+                    const dropdown = document.createElement('div');
+                    dropdown.className = 'autocomplete-dropdown';
+                    
+                    ingredients.forEach(ing => {
+                        const item = document.createElement('div');
+                        item.className = 'autocomplete-item';
+                        item.textContent = ing.value;
+                        item.addEventListener('click', () => {
+                            input.value = ing.value;
+                            input.dataset.ingredientId = ing.id;
+                            dropdown.remove();
+                            wrapper.querySelector('.input-quantity').focus();
+                        });
+                        dropdown.appendChild(item);
+                    });
+
+                    wrapper.appendChild(dropdown);
+                }
+            } catch (error) {
+                console.error('Error fetching ingredients:', error);
+            }
+        });
+    };
 
     const updateIngredientNumbers = () => {
         document.querySelectorAll('#ingredients-list .input-ingredient').forEach((input, index) => {
@@ -44,10 +86,25 @@ document.addEventListener("DOMContentLoaded", () => {
         const inputWrapper = document.createElement("div");
         inputWrapper.className = "input-wrapper";
         
+        // Input para el nombre del ingrediente
         const input = document.createElement("input");
         input.type = "text";
         input.name = "ingredientes[]";
         input.className = "input-ingredient input";
+        input.placeholder = "Nombre del ingrediente";
+        
+        // Input oculto para el ID del ingrediente
+        const hiddenInput = document.createElement("input");
+        hiddenInput.type = "hidden";
+        hiddenInput.name = "ingredientIds[]";
+        hiddenInput.className = "ingredient-id";
+        
+        // Input para la cantidad
+        const quantityInput = document.createElement("input");
+        quantityInput.type = "text";
+        quantityInput.name = "cantidades[]";
+        quantityInput.className = "input-quantity input";
+        quantityInput.placeholder = "Cantidad";
         input.placeholder = `Ingrediente ${currentCount}`;
         input.required = true;
         
@@ -60,6 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
         
         inputWrapper.appendChild(input);
+        inputWrapper.appendChild(quantityInput);
         
         const buttonWrapper = document.createElement("div");
         buttonWrapper.className = "button-wrapper";
@@ -67,7 +125,9 @@ document.addEventListener("DOMContentLoaded", () => {
         
         container.appendChild(inputWrapper);
         container.appendChild(buttonWrapper);
+        container.appendChild(hiddenInput);
         ingredientsList.appendChild(container);
+        setupAutocomplete(input);
         updateIngredientNumbers();
     });
     

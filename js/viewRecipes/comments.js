@@ -37,8 +37,6 @@ export function createCommentHtml(comment, defaultImageUrl, isChild = false, pos
                  <strong class="comment-username">${comment.displayName}</strong>
                  ${ratingHtml}
                  <p class="comment-content">${comment.content}</p>
-                 
-                 <!-- Mostrar imágenes del comentario -->
                  ${comment.images && comment.images.length > 0 ? `
                      <div class="comment-images mt-2">
                          ${comment.images.map(image => `
@@ -239,13 +237,9 @@ window.openImageModal = function(imageSrc) {
         modal.className = 'modal fade';
         modal.innerHTML = `
             <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Imagen del comentario</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
+                <div class="">
                     <div class="modal-body text-center">
-                        <img id="modalImage" src="" class="img-fluid" alt="Imagen ampliada">
+                        <img id="modalImage" src="" class="img-fluid min-width" alt="Imagen ampliada">
                     </div>
                 </div>
             </div>
