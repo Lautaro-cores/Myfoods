@@ -103,9 +103,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const contenido = input.value.trim();
         // Usamos window.selectedTags definido en search_tags_handler.js
         const selectedTags = window.selectedTags || new Set(); 
+        // selectedIngredients contiene elementos en formato "id||name"
+        const selectedIngredients = window.selectedIngredients || new Set();
         
-        if (!contenido && selectedTags.size === 0) {
-            postsDiv.innerHTML = "<p>Escribe algo para buscar o selecciona etiquetas.</p>";
+        if (!contenido && selectedTags.size === 0 && selectedIngredients.size === 0) {
+            postsDiv.innerHTML = "<p>Escribe algo para buscar o selecciona etiquetas/ingredientes.</p>";
             return;
         }
 
@@ -113,8 +115,18 @@ document.addEventListener("DOMContentLoaded", () => {
         const params = new URLSearchParams();
         if (contenido) params.set('contenido', contenido);
         if (selectedTags.size > 0) params.set('tags', Array.from(selectedTags).join(','));
+        if (selectedIngredients.size > 0) {
+            // Separamos ids numéricos y nombres custom (los custom empiezan con 'c_')
+            const entries = Array.from(selectedIngredients).map(e => e.split('||'));
+            const numericIds = entries.filter(e => !String(e[0]).startsWith('c_')).map(e => e[0]);
+            const customNames = entries.filter(e => String(e[0]).startsWith('c_')).map(e => e[1]);
+            if (numericIds.length > 0) params.set('ingredients', numericIds.join(','));
+            if (customNames.length > 0) params.set('ingredientNames', customNames.join(','));
+        }
 
-        fetch(`../searchRecipes.php?${params.toString()}`)
+    const requestUrl = `../searchRecipes.php?${params.toString()}`;
+    console.debug('searchRecipes request ->', requestUrl);
+    fetch(requestUrl)
             .then((res) => {
                 if (!res.ok) throw new Error("Error de red");
                 return res.json();

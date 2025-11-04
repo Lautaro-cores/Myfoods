@@ -100,6 +100,18 @@ if ($resTags) {
                                 </div>
                             </div>
                         <?php endforeach; ?>
+
+                        <!-- Sección para filtrar por ingredientes -->
+                        <div class="mb-3">
+                            <h5 class="mb-2">Filtrar por ingredientes</h5>
+                            <div class="d-flex gap-2 align-items-center mb-2">
+                                <input id="ingredientInput" type="text" class="input form-control" placeholder="Escribe un ingrediente" autocomplete="off">
+                                <button id="addIngredientBtn" class="btn btn-outline-primary">Añadir</button>
+                            </div>
+                            <div id="ingredientSuggestions" class="list-group" style="position:relative; z-index:1050; max-height:200px; overflow:auto; display:none;"></div>
+                            <div id="selectedIngredients" class="d-flex flex-wrap gap-2 mt-2"></div>
+                            <small class="text-muted">Puedes seleccionar varios ingredientes; la búsqueda mostrará recetas que contengan todos ellos.</small>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -112,6 +124,7 @@ if ($resTags) {
     </div>
     <script src="../js/searchRecipes/searchPost.js"></script>
     <script src="../js/searchRecipes/searchTags.js"></script>
+    <script src="../js/searchRecipes/searchIngredients.js"></script>
     <script>
 
     document.addEventListener('DOMContentLoaded', function() {
