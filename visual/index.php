@@ -54,6 +54,7 @@ if (!isset($_SESSION['userId'])) {
 
     <h2>Recetas recientes</h2> 
     <button class="buttono" id="loadMoreButton">Mas Likeados</button>
+    <button class="buttono" id="showFollowedButton">Recetas de los que sigo</button>
     <div id="posts"></div>
     <?php include '../includes/reportModal.php'; ?>
     <script src="../js/indexRecipes/posts.js"></script>

@@ -112,6 +112,16 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(err => console.error('Error cargando posts por likes:', err));
     });
   }
+  // botón para mostrar posts de la gente que sigue el usuario
+  const showFollowedBtn = document.getElementById('showFollowedButton');
+  if (showFollowedBtn) {
+    showFollowedBtn.addEventListener('click', () => {
+      fetch('../getFollowedPosts.php')
+        .then(res => res.json())
+        .then(posts => renderPosts(posts))
+        .catch(err => console.error('Error cargando posts de seguidos:', err));
+    });
+  }
   // Delegación única para clicks: abrir modal de reporte o redirigir a la receta
   document.addEventListener('click', function(e) {
     // Si es el botón de reportar (o contiene el icono dentro), abrir modal
