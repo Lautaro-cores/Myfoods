@@ -8,12 +8,22 @@ $posts = [];
 
 if (isset($_SESSION['userId'])) {
     $userId = intval($_SESSION['userId']);
+    // allow ordering by likes via ?order=likes or random via ?order=random
+    $order = isset($_GET['order']) ? $_GET['order'] : '';
+    if ($order === 'likes') {
+        $orderBy = 'likesCount DESC, p.postDate DESC';
+    } elseif ($order === 'random') {
+        $orderBy = 'RAND()';
+    } else {
+        $orderBy = 'p.postDate DESC';
+    }
+
     $sql = "SELECT p.postId, p.title, p.description, p.postDate, u.displayName, u.userImage,
-             (SELECT COUNT(*) FROM likes l WHERE l.postId = p.postId) AS likesCount,
-             (SELECT COUNT(*) FROM likes l2 WHERE l2.postId = p.postId AND l2.userId = ?) AS userLikedCount
-         FROM post p
-         JOIN users u ON p.userId = u.userId
-         ORDER BY p.postDate DESC";
+                 (SELECT COUNT(*) FROM likes l WHERE l.postId = p.postId) AS likesCount,
+                 (SELECT COUNT(*) FROM likes l2 WHERE l2.postId = p.postId AND l2.userId = ?) AS userLikedCount
+             FROM post p
+             JOIN users u ON p.userId = u.userId
+             ORDER BY " . $orderBy;
 
     $stmt = mysqli_prepare($con, $sql);
     if ($stmt === false) {

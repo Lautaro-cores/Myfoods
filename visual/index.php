@@ -52,7 +52,8 @@ if (!isset($_SESSION['userId'])) {
 
     </div>
 
-    <h2>Recetas recientes</h2>
+    <h2>Recetas recientes</h2> 
+    <button class="buttono" id="loadMoreButton">Mas Likeados</button>
     <div id="posts"></div>
     <script src="../js/indexRecipes/posts.js"></script>
 </body>
