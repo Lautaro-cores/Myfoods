@@ -41,7 +41,7 @@
             <hr>
             <div>v2025.11.4</div>
             <div> © MyFoods 2025</div>
-            <div><a href="../visual/terms.php">Terminos y condiciones
+            <div><a href="../visual/terms.php" class="author-link">Terminos y condiciones
             </a></div>
         </div>
 
