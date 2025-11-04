@@ -20,7 +20,7 @@ function loadFollowState(followingUserId) {
                 followBtn.textContent = "Seguir";
             }
         })
-        .catch((err) => console.error("Error cargando estado de seguimiento:", err));
+    .catch((err) => console.error("Error al cargar estado de seguimiento:", err));
 }
 // 2. Setup del Evento para el botón
 function setupFollowToggle(followingUserId) {
@@ -41,7 +41,7 @@ function setupFollowToggle(followingUserId) {
                 loadFollowState(followingUserId);
             })
             .catch((err) => {
-                console.error("Error toggling follow:", err);
+                console.error("Error al alternar seguimiento:", err);
             });
     });
 }

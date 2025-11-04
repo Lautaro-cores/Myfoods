@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Delegated click handler to remove step image
+    // Manejador delegado (click) para eliminar imágenes de un paso
     document.addEventListener('click', (e) => {
         const target = e.target;
         if (target && target.classList && target.classList.contains('remove-step-image')) {

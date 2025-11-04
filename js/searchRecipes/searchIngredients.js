@@ -6,8 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!input || !suggestions || !selectedContainer) return;
 
-    // Ensure window.selectedIngredients is a Set. If another script set it to
-    // an array or plain object (persisted across reloads), convert it.
+    // Asegurar que window.selectedIngredients sea un Set. Si otro script lo
+    // inicializó como array u objeto iterable (p. ej. desde la consola), lo
+    // convertimos a Set.
     if (!window.selectedIngredients) {
         window.selectedIngredients = new Set();
     } else if (!(window.selectedIngredients instanceof Set)) {
@@ -20,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.selectedIngredients = new Set();
             }
         } catch (e) {
-            // Fallback to empty Set on any error
+            // En caso de error, usar un Set vacío
             window.selectedIngredients = new Set();
         }
     }
@@ -56,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
             showSuggestions(data);
         } catch (err) {
-            console.error('Error fetching ingredient suggestions', err);
+            console.error('Error al obtener sugerencias de ingredientes', err);
             showSuggestions([]);
         }
     }
@@ -83,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (exact) {
                 addIngredient(exact.id, exact.value);
             } else {
-                // Si no existe, añadir como ingrediente "custom" usando nombre como id negativo timestamp
+                // Si no existe, añadir como ingrediente "personalizado" usando un id temporal (c_<timestamp>)
                 const tempId = `c_${Date.now()}`;
                 addIngredient(tempId, val);
             }
@@ -97,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderSelected() {
         selectedContainer.innerHTML = '';
         Array.from(window.selectedIngredients).forEach(entry => {
-            // entry can be either numeric id or custom id like c_...
+            // entry puede ser id numérico o id personalizado como c_...
             const [id, name] = entry.split('||');
             const chip = document.createElement('div');
             chip.className = 'badge bg-primary text-white d-inline-flex align-items-center';

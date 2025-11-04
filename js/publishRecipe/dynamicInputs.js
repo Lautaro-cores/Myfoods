@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     wrapper.appendChild(dropdown);
                 }
             } catch (error) {
-                console.error('Error fetching ingredients:', error);
+                console.error('Error al obtener ingredientes:', error);
             }
         });
     };

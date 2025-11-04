@@ -1,6 +1,6 @@
-<nav class="navbar position-fixed start-0 top-0 bottom-0 h-100"
+<nav class="navbar position-fixed start-0 top-0 bottom-0 "
     style="width: auto; background-color: #fda087 !important; border-radius: 0 15px 15px 0; z-index: 1000;">
-    <div class="container-fluid d-flex flex-column h-100 p-0">
+    <div class="container-fluid d-flex flex-column  p-0">
 
         <a class=" text-center py-3" href="../visual/index.php">
             <img src="../img/logo.png" class="logo-nawbar" alt="Myfoods" >
@@ -34,6 +34,9 @@
                 <img src="../img/exposuiza.png" class="logo-exposuiza"></img> <span class="d-none d-md-inline">Exposuiza</span>
 
             </a>    
+            <a href="../logout.php" class="nav-link p-3" title="Sobre Nosotros">
+                <i class="bi bi-box-arrow-right fs-2"></i> <span class="d-none d-md-inline">cerrar sesion</span>
+            </a>
         </div>
 
 
@@ -75,7 +78,7 @@
     }
 
     .logo-nawbar{
-        width: 120px;
+        width: 100px;
     }
 
     .logo-exposuiza{

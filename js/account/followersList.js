@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    // Detect whether this page is the followers or following page
+    // Detectar si esta página es la de 'following' o 'followers'
     const path = window.location.pathname || '';
     const isFollowingPage = path.toLowerCase().endsWith('following.php');
     const isFollowersPage = path.toLowerCase().endsWith('followers.php');
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         listContainer.appendChild(grid);
 
     } catch (err) {
-        console.error('Error fetching list:', err);
+        console.error('Error al obtener la lista:', err);
         listContainer.innerHTML = '<div class="alert alert-danger">Error al comunicarse con el servidor.</div>';
     }
 });
