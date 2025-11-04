@@ -55,7 +55,9 @@ if (!isset($_SESSION['userId'])) {
     <h2>Recetas recientes</h2> 
     <button class="buttono" id="loadMoreButton">Mas Likeados</button>
     <div id="posts"></div>
+    <?php include '../includes/reportModal.php'; ?>
     <script src="../js/indexRecipes/posts.js"></script>
+    <script src="../js/report/report.js" defer></script>
 </body>
 
 </html>

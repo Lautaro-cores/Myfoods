@@ -132,9 +132,11 @@ foreach ($indexedReplies as $id => &$reply) {
                             <i class="bi bi-heart<?php echo $mainComment['isLiked'] ? '-fill' : ''; ?>"></i>
                             <span class="like-count"><?php echo $mainComment['likeCount']; ?></span>
                         </button>
+            
                         <span class="comment-count">
                             <i class="bi bi-chat"></i> <?php echo count($allReplies); ?> comentarios
                         </span>
+                          <button class="report-btn btn btn-outline-danger btn-sm ms-2" data-target-type="comment" data-target-id="<?php echo $mainComment['commentId']; ?>" type="button" aria-label="Denunciar comentario"><i class="bi bi-flag"></i></button>
                     </div>
                 </div>
             </div>
@@ -187,10 +189,11 @@ foreach ($indexedReplies as $id => &$reply) {
     </div>
 
     <script type="module" src="../js/viewRecipes/commentThread.js" 
-            data-default-image-url="../img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg"
-            data-comment-id="<?php echo $mainComment['commentId']; ?>"
-            data-post-id="<?php echo $mainComment['postId']; ?>"></script>
-    
+        data-default-image-url="../img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg"
+        data-comment-id="<?php echo $mainComment['commentId']; ?>"
+        data-post-id="<?php echo $mainComment['postId']; ?>"></script>
+    <?php include '../includes/reportModal.php'; ?>
+    <script src="../js/report/report.js" defer></script>
     <script>
     // Función para vista previa de imágenes de comentarios
     function previewReplyImages(input) {

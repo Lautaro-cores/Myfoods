@@ -52,6 +52,7 @@ export function createCommentHtml(comment, defaultImageUrl, isChild = false, pos
                  <div class="comment-actions">
                      ${likeButton}
                      ${viewCommentsButton}
+                     <button class="report-btn btn btn-sm ms-2" data-target-type="comment" data-target-id="${comment.commentId}" type="button" aria-label="Denunciar comentario"><i class="bi bi-flag"></i></button>
                  </div>
              </div>
         </div>
@@ -237,7 +238,11 @@ window.openImageModal = function(imageSrc) {
         modal.className = 'modal fade';
         modal.innerHTML = `
             <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Imagen ampliada</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
                     <div class="modal-body text-center">
                         <img id="modalImage" src="" class="img-fluid min-width" alt="Imagen ampliada">
                     </div>

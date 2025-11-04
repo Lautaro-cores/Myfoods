@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("No se encontró el contenedor #posts en la página");
     return;
   }
+    // ...existing code...
 
   function renderPosts(posts) {
     if (!posts || posts.length === 0) {
@@ -67,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="post-image">
                 ${carouselHtml}
               </div>
-              <div class="post-content" onclick="location.href='../visual/viewRecipe.php?id=${post.postId}'">
+              <div class="post-content" data-post-id="${post.postId}">
                 <div class="post-header">
                   <div class="post-left">
                     <img class="post-avatar" src="${avatarUrl}" alt="Avatar ${
@@ -78,12 +79,15 @@ document.addEventListener("DOMContentLoaded", () => {
                       <div class="post-time">${timeAgo(post.postDate)}</div>
                     </div>
                   </div>
-                  <div class="post-likes"><i class="${post.userLiked > 0 ? "bi bi-heart-fill" : "bi bi-heart"}"></i> <span class="likes-count">${likesCount}</span></div>
-                </div>
+                  <div class="post-likes"><i class="${post.userLiked > 0 ? "bi bi-heart-fill" : "bi bi-heart"}"></i> <span class="likes-count">${likesCount}</span>
+                   <button class="report-btn btn  btn-sm" data-post-id="${post.postId}" type="button" aria-label="Denunciar publicación"><i class="bi bi-flag"></i></button></div>
+                
+                  </div>
                 <h3 class="post-title">${post.title}</h3>
                 <p class="post-desc">${
                   post.description ? post.description : ""
                 }</p>
+                 
               </div>
             </article>
           `;
@@ -108,6 +112,34 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(err => console.error('Error cargando posts por likes:', err));
     });
   }
+  // Delegación única para clicks: abrir modal de reporte o redirigir a la receta
+  document.addEventListener('click', function(e) {
+    // Si es el botón de reportar (o contiene el icono dentro), abrir modal
+    const reportBtn = e.target.closest('.report-btn');
+    if (reportBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const postId = reportBtn.getAttribute('data-post-id');
+      const reportModalEl = document.getElementById('reportModal');
+      if (reportModalEl) {
+        const input = document.getElementById('reportPostId');
+        if (input) input.value = postId;
+        const reportModal = new bootstrap.Modal(reportModalEl);
+        reportModal.show();
+      }
+      return;
+    }
+
+    // Si el click fue dentro de .post-content y no sobre el botón de reportar, redirigir
+    const postContent = e.target.closest('.post-content');
+    if (postContent) {
+      const postId = postContent.getAttribute('data-post-id');
+      if (postId) {
+        window.location.href = `../visual/viewRecipe.php?id=${postId}`;
+      }
+    }
+  });
+  // ...existing code...
 });
  const btn = document.getElementById('searchButton');
   const input = document.getElementById('searchInput');

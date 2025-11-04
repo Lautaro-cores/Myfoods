@@ -46,6 +46,31 @@ if ($type === 'user') {
     }
 
     foreach ($posts as $pid) {
+        // Primero eliminar imágenes de pasos asociadas a los pasos de la receta
+        $stepIds = [];
+        $sqlStep = "SELECT recipeStepId FROM recipestep WHERE postId=?";
+        if ($stp = mysqli_prepare($con, $sqlStep)) {
+            mysqli_stmt_bind_param($stp, 'i', $pid);
+            mysqli_stmt_execute($stp);
+            mysqli_stmt_bind_result($stp, $recipeStepId);
+            while (mysqli_stmt_fetch($stp)) $stepIds[] = $recipeStepId;
+            mysqli_stmt_close($stp);
+        }
+        if (!empty($stepIds)) {
+            // Eliminar todas las imágenes de pasos por recipeStepId
+            $placeholders = implode(',', array_fill(0, count($stepIds), '?'));
+            $types = str_repeat('i', count($stepIds));
+            $sqlDelStepImgs = "DELETE FROM stepImages WHERE recipeStepId IN ($placeholders)";
+            // Eliminar individualmente por cada recipeStepId (más simple y compatible)
+            foreach ($stepIds as $sid) {
+                if ($st2 = mysqli_prepare($con, "DELETE FROM stepImages WHERE recipeStepId=?")) {
+                    mysqli_stmt_bind_param($st2, 'i', $sid);
+                    mysqli_stmt_execute($st2);
+                    mysqli_stmt_close($st2);
+                }
+            }
+        }
+
         $sqls = [
             "DELETE FROM comment WHERE postId=?",
             "DELETE FROM ingredientrecipe WHERE postId=?",
@@ -63,6 +88,30 @@ if ($type === 'user') {
 }
 elseif ($type === 'post') {
     $pid = $id;
+    // Eliminar imágenes de pasos: primero obtener los recipeStepId y borrar sus imágenes
+    $stepIds = [];
+    $sqlStep = "SELECT recipeStepId FROM recipestep WHERE postId=?";
+    if ($stp = mysqli_prepare($con, $sqlStep)) {
+        mysqli_stmt_bind_param($stp, 'i', $pid);
+        mysqli_stmt_execute($stp);
+        mysqli_stmt_bind_result($stp, $recipeStepId);
+        while (mysqli_stmt_fetch($stp)) $stepIds[] = $recipeStepId;
+        mysqli_stmt_close($stp);
+    }
+    if (!empty($stepIds)) {
+        $placeholders = implode(',', array_fill(0, count($stepIds), '?'));
+        $types = str_repeat('i', count($stepIds));
+        $sqlDelStepImgs = "DELETE FROM stepImages WHERE recipeStepId IN ($placeholders)";
+            // Eliminar individualmente por cada recipeStepId (más simple y compatible)
+            foreach ($stepIds as $sid) {
+                if ($st2 = mysqli_prepare($con, "DELETE FROM stepImages WHERE recipeStepId=?")) {
+                    mysqli_stmt_bind_param($st2, 'i', $sid);
+                    mysqli_stmt_execute($st2);
+                    mysqli_stmt_close($st2);
+                }
+            }
+    }
+
     $sqls = [
         "DELETE FROM comment WHERE postId=?",
         "DELETE FROM ingredientrecipe WHERE postId=?",
@@ -70,7 +119,6 @@ elseif ($type === 'post') {
         "DELETE FROM likes WHERE postId=?",
         "DELETE FROM post WHERE postId=?",
         "DELETE FROM recipeImages WHERE postId=?",
-        "DELETE FROM stepImages WHERE postId=?",
         "DELETE FROM posttags WHERE postId=?"
     ];
     foreach ($sqls as $s) {

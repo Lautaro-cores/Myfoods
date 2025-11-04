@@ -51,20 +51,50 @@ if ($stmt = mysqli_prepare($con, $sql)) {
 if (!$user) { header('Location: index.php'); exit; }
 ?>
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><title>Editar Usuario</title></head><body>
-<h1>Editar Usuario #<?= htmlspecialchars($user['userId']) ?></h1>
-<form method="post">
-    <label>Nombre de usuario<br><input name="userName" value="<?= htmlspecialchars($user['userName']) ?>"></label><br>
-    <label>Nombre<br><input name="displayName" value="<?= htmlspecialchars($user['displayName']) ?: htmlspecialchars($user['userName']) ?>"></label><br>
-    <label>Email<br><input name="userEmail" value="<?= htmlspecialchars($user['userEmail']) ?>"></label><br>
-    <label>Descripción<br><textarea name="description"><?= htmlspecialchars($user['description']) ?></textarea></label><br>
-    <label>Tipo<br>
-        <select name="userType">
-            <option value="user" <?= $user['userType'] === 'user' ? 'selected' : '' ?>>Usuario</option>
-            <option value="admin" <?= $user['userType'] === 'admin' ? 'selected' : '' ?>>Administrador</option>
-        </select>
-    </label><br>
-    <button type="submit">Guardar</button>
-    <a href="index.php">Cancelar</a>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Editar Usuario</title>
+    <link href="../css/main.css" rel="stylesheet">
+    <link href="css/admin.css" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-header">
+        <h1>Editar Usuario #<?= htmlspecialchars($user['userId']) ?></h1>
+    </div>
+    
+    <form method="post" class="admin-form">
+    <div class="form-group">
+            <label>Nombre de usuario</label>
+            <input type="text" name="userName" value="<?= htmlspecialchars($user['userName']) ?>" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" name="displayName" value="<?= htmlspecialchars($user['displayName']) ?: htmlspecialchars($user['userName']) ?>" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="userEmail" value="<?= htmlspecialchars($user['userEmail']) ?>" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Descripción</label>
+            <textarea name="description" rows="4"><?= htmlspecialchars($user['description']) ?></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label>Tipo de usuario</label>
+            <select name="userType">
+                <option value="user" <?= $user['userType'] === 'user' ? 'selected' : '' ?>>Usuario</option>
+                <option value="admin" <?= $user['userType'] === 'admin' ? 'selected' : '' ?>>Administrador</option>
+            </select>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="admin-btn">Guardar cambios</button>
+            <a href="index.php" class="admin-btn secondary">Cancelar</a>
+        </div>
 </form>
 </body></html>

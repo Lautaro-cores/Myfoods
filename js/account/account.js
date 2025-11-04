@@ -79,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 if (editProfileModal) editProfileModal.hide();
-                alert(result.message || 'Perfil actualizado');
             } else {
                 alert(result.message || 'Error al actualizar perfil');
             }

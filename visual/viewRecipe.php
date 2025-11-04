@@ -261,6 +261,9 @@ if ($title) {
                     <i class="bi bi-bookmark"></i>
                 </button>
             </div>
+            <div class="report-section">
+                <button class="report-btn btn btn-sm" data-target-type="post" data-target-id="<?php echo $postId; ?>" type="button" aria-label="Denunciar publicación"><i class="bi bi-flag"></i></button>
+            </div>
         </div>
 
         <div class="recipe-comments">
@@ -268,10 +271,24 @@ if ($title) {
 
             <form id="commentForm" enctype="multipart/form-data">
                 <div class="comment-form">
+                    <div>
                     <input type="hidden" name="postId" value="<?php echo $postId; ?>">
-                    <input name="content" id="commentContent"  placeholder="Escribe tu comentario..." class="input"
+                    <input name="content" id="commentContent"  placeholder="Escribe tu comentario..." class="input input-comment"
                         required maxlength="255"></input>
+
+                      <div class="mt-3">
+                        <label for="commentImages" class="form-label">
+                            <i class="bi bi-image"></i> Agregar imágenes (máximo 3)
+                        </label>
+                        <input type="file" id="commentImages" name="commentImages[]" 
+                               class="form-control" multiple accept="image/*" 
+                               onchange="previewCommentImages(this)">
+                        <div id="imagePreview" class="mt-2"></div>
+                    </div>
                     
+                    </div>   
+
+                    <div class="summit-section">
   <p class="clasificacion">
     <input id="radio1" type="radio" name="stars" value="5">
         <label class="comment-stars" for="radio1">★</label>
@@ -285,22 +302,12 @@ if ($title) {
         <label class="comment-stars" for="radio5">★</label>
   </p>
 
-                    <!-- Campo para subir imágenes -->
-                    <div class="mt-3">
-                        <label for="commentImages" class="form-label">
-                            <i class="bi bi-image"></i> Agregar imágenes (máximo 3)
-                        </label>
-                        <input type="file" id="commentImages" name="commentImages[]" 
-                               class="form-control" multiple accept="image/*" 
-                               onchange="previewCommentImages(this)">
-                        <div id="imagePreview" class="mt-2"></div>
-                        <small class="form-text text-muted">
-                            Formatos permitidos: JPG, PNG, GIF, WebP. Máximo 5MB por imagen.
-                        </small>
-                    </div>
+ 
+                  
+
                     
-                    <br>
                     <button type="submit" id="submitCommentBtn" class="buttono">Publicar Comentario</button>
+                                </div>
                 </div>
             </form>
             <div id="commentMessage" role="alert" aria-live="polite"></div>
@@ -349,6 +356,8 @@ if ($title) {
             }
         }
         </script>
+    <?php include '../includes/reportModal.php'; ?>
+    <script src="../js/report/report.js" defer></script>
     </body>
 
     </html>

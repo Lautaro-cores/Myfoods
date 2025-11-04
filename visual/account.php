@@ -88,6 +88,7 @@ if (empty($user['userImage'])) {
       <button class="buttonw" id="followBtn">
 
       </button>
+      <button style="width: auto;" class="report-btn btn btn-sm ms-2" data-target-type="user" data-target-id="<?php echo $userId; ?>" type="button" aria-label="Denunciar usuario"><i class="bi bi-flag"></i></button>
     </div>
   <?php endif; ?>
 
@@ -132,6 +133,8 @@ if (empty($user['userImage'])) {
   <script src="../js/account/account.js"></script>
   <script src="../js/account/userPost.js"></script>
   <script src="../js/account/followAccount.js"></script>
+  <?php include '../includes/reportModal.php'; ?>
+  <script src="../js/report/report.js" defer></script>
 </body>
 
 </html>
