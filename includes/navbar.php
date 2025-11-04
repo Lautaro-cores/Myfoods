@@ -4,6 +4,7 @@
 
         <a class=" text-center py-3" href="../visual/index.php">
             <img src="../img/logo.png" class="logo-nawbar" alt="Myfoods" >
+    
         </a>
         <div class="nav-links d-flex flex-column align-items-center ">
 
@@ -37,13 +38,11 @@
 
 
         <div class="nav-bottom mt-auto mb-3 text-center w 100 dropup">
-            <button class="nav-link p-2 d-flex justify-content-center align-items-center mx-auto" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-three-dots fs-2"></i>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="../visual/aboutUs.php">Sobre Nosotros</a></li>
-                <li><a class="dropdown-item" href="../logout.php">Cerrar Sesión</a></li>
-            </ul>
+            <hr>
+            <div>v2025.11.4</div>
+            <div> © MyFoods 2025</div>
+            <div><a href="../visual/terms.php">Terminos y condiciones
+            </a></div>
         </div>
 
     </div>

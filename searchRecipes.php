@@ -66,12 +66,7 @@ if (!empty($tags)) {
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
 
-} else {
-    // No search text nor tags -> devolver vacío
-    echo json_encode([]);
-    exit();
-}
-
+} 
 // Después de obtener las recetas básicas
 while ($row = mysqli_fetch_assoc($res)) {
     if (!empty($row['userImage'])) {
