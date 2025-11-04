@@ -18,4 +18,8 @@
 <body>
     <?php include '../includes/navbar.php'; ?>
     <?php include '../includes/backButton.php'; ?>
+
+    <a href="../visual/aboutUs.php">
+        <button class="buttono">sobre nosotros</button>
+    </a>
 </body>
