@@ -54,11 +54,10 @@ if ($targetType === 'post') {
         mysqli_stmt_close($stmt);
     }
 } elseif ($targetType === 'user') {
-    // target is a user, owner = user itself
+
     $targetOwnerId = $targetId;
 }
 
-// Insert report
 $insert = "INSERT INTO reports (reporterId, targetType, targetId, targetOwnerId, reason, status) VALUES (?, ?, ?, ?, ?, 'pending')";
 $stmt = mysqli_prepare($con, $insert);
 if (!$stmt) {

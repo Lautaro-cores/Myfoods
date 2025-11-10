@@ -1,50 +1,55 @@
-// js/saved_post_actions.js
-
-/**
- * Configura los event listeners para los botones "Ver" y "Quitar de Guardados"
- * una vez que se ha renderizado el contenido.
- * @param {HTMLElement} container - El contenedor que contiene las post-card.
- */
 export function setupPostActions(container) {
     
-    // 1. Handlers para el botón "Ver"
+    // Configuración de la lógica para los botones "Ver"
+    // Busca todos los botones de 'Ver' dentro del contenedor dado
     container.querySelectorAll('.view-btn').forEach(btn => {
         btn.addEventListener('click', () => {
+            // Obtiene el ID de la receta guardado en el atributo data-id
             const id = btn.getAttribute('data-id');
+            // Redirige al usuario a la página de vista de la receta
             window.location.href = `viewRecipe.php?id=${id}`;
         });
     });
 
-    // 2. Handlers para el botón "Quitar de Guardados"
+    // Configuración de la lógica para el botón "Quitar de Guardados"
+    // Busca todos los botones de 'Quitar de Guardados'
     container.querySelectorAll('.remove-fav').forEach(btn => {
         btn.addEventListener('click', () => {
+            // Obtiene el ID de la receta a eliminar
             const id = btn.getAttribute('data-id');
+            // Crea un objeto para enviar los datos como x-www-form-urlencoded
             const form = new URLSearchParams();
             form.append('postId', id);
             
+            // Envía la solicitud al endpoint que alterna el estado de favorito
             fetch('../toggleFavorite.php', {
                 method: 'POST',
                 body: form.toString(),
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             })
+            // Procesa la respuesta JSON del servidor
             .then(res => res.json())
             .then(r => {
+                // Si la acción fue exitosa
                 if (r.success) {
-                    // Elimina la tarjeta visualmente del DOM
+                    // Busca el elemento padre (tarjeta de la receta) para eliminarlo del DOM
                     const postCard = btn.closest('article');
                     if(postCard) postCard.remove(); 
                     
-                    // Si ya no quedan posts, muestra el mensaje de lista vacía
+                    // Verifica si el contenedor ha quedado vacío después de la eliminación
                     if (container.querySelectorAll('article').length === 0) {
+                        // Si no quedan tarjetas, muestra un mensaje indicando que la lista está vacía
                         container.innerHTML = '<p>Ya no tienes recetas guardadas.</p>';
                     }
                 } else {
+                    // Muestra una alerta si el servidor devuelve un error
                     alert(r.msj || 'Error al quitar de guardados');
                 }
             })
             .catch(err => {
+                // Maneja los errores de red o del proceso de Fetch
                 console.error('Error al alternar favorito:', err);
-                alert('Error de red al intentar quitar el favorito.');
+                alert('Error de red al intentar quitar el favorito');
             });
         });
     });

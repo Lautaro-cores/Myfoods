@@ -1,27 +1,22 @@
-// register.js
-// Maneja el envío del formulario de registro.
-// Entrada: los campos del formulario con los nombres userName, userPassword, userEmail.
-// Salida: muestra mensajes en el elemento con id "mensaje" y redirige al index en caso de éxito.
-// Errores: muestra mensajes de error en el mismo elemento y registra errores de red en la consola.
-
 document.addEventListener("DOMContentLoaded", () => {
   const formRegister = document.getElementById("formRegister");
   const mensajeDiv = document.getElementById("mensaje");
 
-  // Si existe el formulario, interceptamos el submit para enviarlo por fetch
+  // Si el formulario de registro está presente, se configura el evento de envío
   if (formRegister) {
     formRegister.addEventListener("submit", (e) => {
+      // Evita que el formulario se envíe por el método predeterminado
       e.preventDefault();
 
       const formData = new FormData(formRegister);
 
-      // Validación básica: todos los campos obligatorios deben estar presentes
+      // Verifica que los tres campos requeridos tengan valores
       if (
         formData.get("userName") &&
         formData.get("userPassword") &&
         formData.get("userEmail")
       ) {
-        // Enviamos los datos al endpoint PHP usando application/x-www-form-urlencoded
+        // Envía los datos al archivo register.php mediante una solicitud POST
         fetch("../register.php", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -33,29 +28,30 @@ document.addEventListener("DOMContentLoaded", () => {
             "&userEmail=" +
             encodeURIComponent(formData.get("userEmail")),
         })
+          // Convierte la respuesta de register.php en formato JSON
           .then((res) => res.json())
           .then((res) => {
-            // Mostrar resultado devuelto por el servidor
+            // Si register.php devuelve éxito, muestra el mensaje y redirige a index.php
             if (res.success) {
               mensajeDiv.style.color = "green";
               mensajeDiv.textContent = res.msj;
-              // Redirigir al index después de un breve retraso
               setTimeout(() => {
                 window.location.href = "index.php";
               }, 1000);
             } else {
+              // Si register.php devuelve error, muestra el mensaje de error
               mensajeDiv.style.color = "red";
               mensajeDiv.textContent = res.msj;
             }
           })
+          // Captura errores de red o fallos en la solicitud
           .catch((err) => {
-            // Manejo de errores de red
             mensajeDiv.style.color = "red";
             mensajeDiv.textContent = "Error de red al registrar.";
             console.error("register fetch error:", err);
           });
       } else {
-        // Mensaje cuando faltan campos
+        // Si faltan campos, muestra un mensaje indicándolo
         mensajeDiv.style.color = "red";
         mensajeDiv.textContent = "Completa todos los campos.";
       }

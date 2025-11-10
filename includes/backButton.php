@@ -1,5 +1,4 @@
 <?php
-// Verificar si no estamos en la página principal
 $currentPage = basename($_SERVER['PHP_SELF']);
 if ($currentPage !== 'index.php'): 
 ?>

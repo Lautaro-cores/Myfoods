@@ -1,5 +1,3 @@
-// js/publish_dynamic_fields.js
-
 document.addEventListener("DOMContentLoaded", () => {
     const ingredientsList = document.getElementById("ingredients-list");
     const addIngredienteBtn = document.getElementById("addIngrediente");
@@ -9,29 +7,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const addPasoBtn = document.getElementById("addPaso");
     let pasoCount = 0;
 
-    // --- Lógica de Ingredientes ---
+    // Autocompleta los ingredientes al escribir
     const setupAutocomplete = (input) => {
-        let selectedIngredient = null;
         const wrapper = input.closest('.input-wrapper');
-        
         input.addEventListener('input', async (e) => {
             const term = e.target.value.trim();
             if (term.length < 2) return;
-
             try {
                 const response = await fetch(`../getIngredients.php?term=${encodeURIComponent(term)}`);
                 const ingredients = await response.json();
-                
-                // Remove existing dropdown if any
                 const existingDropdown = wrapper.querySelector('.autocomplete-dropdown');
-                if (existingDropdown) {
-                    existingDropdown.remove();
-                }
-
+                if (existingDropdown) existingDropdown.remove();
                 if (ingredients.length > 0) {
                     const dropdown = document.createElement('div');
                     dropdown.className = 'autocomplete-dropdown';
-                    
                     ingredients.forEach(ing => {
                         const item = document.createElement('div');
                         item.className = 'autocomplete-item';
@@ -44,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
                         dropdown.appendChild(item);
                     });
-
                     wrapper.appendChild(dropdown);
                 }
             } catch (error) {
@@ -53,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
+    // Reasigna los números de los ingredientes
     const updateIngredientNumbers = () => {
         document.querySelectorAll('#ingredients-list .input-ingredient').forEach((input, index) => {
             input.placeholder = `Ingrediente ${index + 1}`;
@@ -60,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ingredienteCount = document.querySelectorAll('#ingredients-list .input-ingredient').length;
     };
 
+    // Elimina un ingrediente del formulario
     const handleDeleteIngredient = (container) => {
         const totalIngredients = document.querySelectorAll('#ingredients-list .input-container').length;
         if (totalIngredients > 1) {
@@ -70,14 +60,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
     
-    // Inicializar listeners de borrado para campos existentes
+    // Asigna el botón de borrado a los ingredientes existentes
     ingredientsList.querySelectorAll('.delete-item').forEach(btn => {
         btn.onclick = function() {
             handleDeleteIngredient(btn.closest('.input-container'));
         };
     });
 
-
+    // Agrega un nuevo ingrediente al formulario
     addIngredienteBtn.addEventListener("click", () => {
         const currentCount = document.querySelectorAll('#ingredients-list .input-container').length + 1;
         const container = document.createElement("div");
@@ -86,27 +76,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const inputWrapper = document.createElement("div");
         inputWrapper.className = "input-wrapper";
         
-        // Input para el nombre del ingrediente
         const input = document.createElement("input");
         input.type = "text";
         input.name = "ingredientes[]";
         input.className = "input-ingredient input";
-        input.placeholder = "Nombre del ingrediente";
+        input.placeholder = `Ingrediente ${currentCount}`;
+        input.required = true;
         
-        // Input oculto para el ID del ingrediente
         const hiddenInput = document.createElement("input");
         hiddenInput.type = "hidden";
         hiddenInput.name = "ingredientIds[]";
         hiddenInput.className = "ingredient-id";
         
-        // Input para la cantidad
         const quantityInput = document.createElement("input");
         quantityInput.type = "text";
         quantityInput.name = "cantidades[]";
         quantityInput.className = "input-quantity input";
         quantityInput.placeholder = "Cantidad";
-        input.placeholder = `Ingrediente ${currentCount}`;
-        input.required = true;
         
         const deleteBtn = document.createElement("button");
         deleteBtn.type = "button";
@@ -118,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
         
         inputWrapper.appendChild(input);
         inputWrapper.appendChild(quantityInput);
-        
         const buttonWrapper = document.createElement("div");
         buttonWrapper.className = "button-wrapper";
         buttonWrapper.appendChild(deleteBtn);
@@ -131,16 +116,14 @@ document.addEventListener("DOMContentLoaded", () => {
         updateIngredientNumbers();
     });
     
-    updateIngredientNumbers(); // Establecer números iniciales
+    updateIngredientNumbers();
 
-    // --- Lógica de Pasos ---
-
+    // Reasigna los números y nombres de los pasos e imágenes
     const updateStepNumbers = () => {
         document.querySelectorAll('#steps-list .input-step').forEach((input, index) => {
             input.placeholder = `Paso ${index + 1}`;
         });
         pasoCount = document.querySelectorAll('#steps-list .input-step').length;
-        // Reindexar nombres de inputs de imagen por paso para que sean stepImages[IDX][]
         document.querySelectorAll('#steps-list .input-container').forEach((container, idx) => {
             const fileInput = container.querySelector('.step-image-input');
             if (fileInput) {
@@ -152,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
+    // Elimina un paso del formulario
     const handleDeleteStep = (container) => {
         const totalSteps = document.querySelectorAll('#steps-list .input-container').length;
         if (totalSteps > 1) {
@@ -162,14 +146,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Inicializar listeners de borrado para campos existentes
+    // Asigna el botón de borrado a los pasos existentes
     stepsList.querySelectorAll('.delete-item').forEach(btn => {
         btn.onclick = function() {
             handleDeleteStep(btn.closest('.input-container'));
         };
     });
 
-
+    // Agrega un nuevo paso con campo de texto e imagen
     addPasoBtn.addEventListener("click", () => {
         const currentCount = document.querySelectorAll('#steps-list .input-container').length + 1;
         const container = document.createElement("div");
@@ -185,17 +169,16 @@ document.addEventListener("DOMContentLoaded", () => {
         input.placeholder = `Paso ${currentCount}`;
         input.required = true;
 
-    const fileInput = document.createElement("input");
-    fileInput.type = "file";
-    // asignar nombre con índice para que PHP reciba stepImages[IDX][]
-    const newIndex = currentCount - 1;
-    fileInput.name = `stepImages[${newIndex}][]`;
-    fileInput.accept = "image/*";
-    fileInput.multiple = true;
-    fileInput.className = "form-control step-image-input mt-2";
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        const newIndex = currentCount - 1;
+        fileInput.name = `stepImages[${newIndex}][]`;
+        fileInput.accept = "image/*";
+        fileInput.multiple = true;
+        fileInput.className = "form-control step-image-input mt-2";
 
-    const previewDiv = document.createElement('div');
-    previewDiv.className = 'step-image-preview mt-2';
+        const previewDiv = document.createElement('div');
+        previewDiv.className = 'step-image-preview mt-2';
 
         const deleteBtn = document.createElement("button");
         deleteBtn.type = "button";
@@ -205,10 +188,9 @@ document.addEventListener("DOMContentLoaded", () => {
             handleDeleteStep(container);
         };
         
-    inputWrapper.appendChild(input);
-    inputWrapper.appendChild(fileInput);
-    inputWrapper.appendChild(previewDiv);
-
+        inputWrapper.appendChild(input);
+        inputWrapper.appendChild(fileInput);
+        inputWrapper.appendChild(previewDiv);
         const buttonWrapper = document.createElement("div");
         buttonWrapper.className = "button-wrapper";
         buttonWrapper.appendChild(deleteBtn);
@@ -219,5 +201,5 @@ document.addEventListener("DOMContentLoaded", () => {
         updateStepNumbers();
     });
     
-    updateStepNumbers(); // Establecer números iniciales
+    updateStepNumbers();
 });

@@ -8,7 +8,7 @@ $posts = [];
 
 if (isset($_SESSION['userId'])) {
     $userId = intval($_SESSION['userId']);
-    // allow ordering by likes via ?order=likes or random via ?order=random
+
     $order = isset($_GET['order']) ? $_GET['order'] : '';
     if ($order === 'likes') {
         $orderBy = 'likesCount DESC, p.postDate DESC';
@@ -51,7 +51,7 @@ if (isset($_SESSION['userId'])) {
             }
             mysqli_stmt_close($stmtImg);
         }
-        // normalize userLiked as boolean
+
         $row['likesCount'] = isset($row['likesCount']) ? intval($row['likesCount']) : 0;
         $row['userLiked'] = (isset($row['userLikedCount']) && intval($row['userLikedCount']) > 0) ? true : false;
         unset($row['userLikedCount']);

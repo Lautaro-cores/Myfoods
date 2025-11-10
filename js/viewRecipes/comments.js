@@ -1,6 +1,4 @@
-// js/comment_handler.js
-
-// 1. Renderizado de un único comentario con soporte para comentarios hijos
+// Renderiza un comentario individual con soporte para comentarios hijos
 export function createCommentHtml(comment, defaultImageUrl, isChild = false, postId = null) {
     const imageUrl = comment.userImage
         ? `data:image/jpeg;base64,${comment.userImage}`
@@ -8,22 +6,21 @@ export function createCommentHtml(comment, defaultImageUrl, isChild = false, pos
 
   
     
-    // Botón para ver comentarios hijos si los tiene (todos los comentarios tienen este botón)
+    // Botón para ver los comentarios hijos si existen
     const viewCommentsButton = `<a href="commentThread.php?commentId=${comment.commentId}" class="author-link   me-2">
          <i class="bi bi-chat"></i>${comment.childCount && comment.childCount > 0 ? ` ${comment.childCount}` : '0'}
        </a>`;
     
-    // Botón de like para cada comentario
-    // Usar la misma lógica que los likes de las recetas
+    // Botón de like para cada comentario (misma lógica que los likes de recetas)
     const likeButton = `<button class="comment-like-btn ${comment.userLiked ? 'liked' : ''}" data-comment-id="${comment.commentId}">
         <i class="bi ${comment.userLiked ? 'bi-heart-fill' : 'bi-heart'}"></i>
         <span class="like-count">${comment.likeCount || 0}</span>
     </button>`;
     
-    // Usar el postId pasado como parámetro o el del comentario
+    // Usa el postId pasado como parámetro o el del comentario
     const currentPostId = postId || comment.postId;
 
-    // Generar HTML de puntuación si existe
+    // Genera el HTML de la puntuación si existe
     const ratingHtml = (comment.rating && Number(comment.rating) > 0) ? `
         <div class="comment-rating">
             ${Array.from({length:5}, (_, i) => `<span class="star ${i < comment.rating ? 'filled' : ''}">★</span>`).join('')}
@@ -59,7 +56,7 @@ export function createCommentHtml(comment, defaultImageUrl, isChild = false, pos
     `;
 }
 
-// 2. Función de Carga de Comentarios
+// Carga los comentarios de un post
 export function loadComments(postId, defaultImageUrl) {
     const commentsContainer = document.getElementById("commentsContainer");
     if (!commentsContainer) return;
@@ -84,7 +81,7 @@ export function loadComments(postId, defaultImageUrl) {
                     .map((comment) => createCommentHtml(comment, defaultImageUrl, false, postId))
                     .join("");
                 
-                // IMPORTANTE: Configurar handlers después de renderizar comentarios
+                // Configurar los handlers después de renderizar los comentarios
                 setupCommentHandlers(postId, defaultImageUrl);
             }
         })
@@ -94,37 +91,37 @@ export function loadComments(postId, defaultImageUrl) {
         });
 }
 
-// 3. Función para manejar likes en comentarios
+// Variable para evitar configurar los handlers varias veces
 let commentHandlersSetup = false;
 
-// Función para configurar handlers de comentarios (botones de responder y likes)
+// Configura los handlers de los comentarios (botones de responder y likes)
 export function setupCommentHandlers(postId, defaultImageUrl) {
     // Solo configurar una vez a nivel global
     if (commentHandlersSetup) {
-        console.log('Handlers ya configurados, saltando...');
+        console.log('Los handlers ya están configurados, se omite...');
         return;
     }
     commentHandlersSetup = true;
-    
+
     console.log('Configurando handlers de comentarios');
-    
-    // Delegación de eventos para likes a nivel de document (solo una vez)
+
+    // Delegación de eventos para likes a nivel de documento
     document.addEventListener('click', (e) => {
         if (e.target.classList.contains('comment-like-btn') || e.target.closest('.comment-like-btn')) {
             e.preventDefault();
             e.stopPropagation();
-            
+
             const likeBtn = e.target.closest('.comment-like-btn');
             if (likeBtn) {
                 const commentId = likeBtn.getAttribute('data-comment-id');
-                console.log('Like clicked:', commentId);
+                console.log('Like clickeado:', commentId);
                 handleCommentLike(commentId, likeBtn);
             }
         }
     });
 }
 
-// 4. Función para manejar likes de comentarios (exportada para uso en otras páginas)
+// Maneja el like de un comentario
 export function handleCommentLike(commentId, likeBtn) {
     const formData = new FormData();
     formData.append('commentId', commentId);
@@ -136,14 +133,14 @@ export function handleCommentLike(commentId, likeBtn) {
     .then(response => response.json())
     .then(result => {
         if (result.success) {
-            // Actualizar el botón visualmente - misma lógica que likes de recetas
+            // Actualiza el botón visualmente (misma lógica que los likes de recetas)
             const icon = likeBtn.querySelector('i');
             const countSpan = likeBtn.querySelector('.like-count');
-            
-            // Actualizar contador
+
+            // Actualiza el contador
             countSpan.textContent = result.likeCount;
-            
-            // Cambiar entre corazón lleno y vacío según el estado
+
+            // Cambia entre corazón lleno y vacío según el estado
             if (result.liked) {
                 likeBtn.classList.add("liked");
                 icon.className = 'bi bi-heart-fill';
@@ -160,8 +157,7 @@ export function handleCommentLike(commentId, likeBtn) {
     });
 }
 
-// 5. Setup del Formulario de Comentarios
-// Para simplificar, lo dejamos en un solo archivo, pero envuelto para ser llamado.
+// Configura el formulario de comentarios
 export function setupCommentForm(postId, defaultImageUrl) {
     const commentForm = document.getElementById("commentForm");
     const commentContent = document.getElementById("commentContent");
@@ -173,7 +169,7 @@ export function setupCommentForm(postId, defaultImageUrl) {
 
             const formData = new FormData(commentForm);
             const contentValue = formData.get("content").trim();
-            // Obtener rating desde los radios con name="stars" y adjuntarlo como 'rating'
+            // Obtener la puntuación desde los radios con name="stars" y adjuntarla como 'rating'
             const ratingValue = formData.get("stars");
 
             if (contentValue === "") {
@@ -185,7 +181,7 @@ export function setupCommentForm(postId, defaultImageUrl) {
             commentMessage.textContent = "Publicando...";
             commentMessage.className = "info-message";
 
-            // Agregar rating al FormData si existe
+            // Agregar la puntuación al FormData si existe
             if (ratingValue) {
                 formData.append('rating', ratingValue);
             }
@@ -201,21 +197,21 @@ export function setupCommentForm(postId, defaultImageUrl) {
 
                     if (result.success) {
                         commentContent.value = "";
-                        // Limpiar puntuación (radios)
+                        // Limpiar la puntuación (radios)
                         document.querySelectorAll('input[name="stars"]').forEach(r => r.checked = false);
-                        // Limpiar vista previa de imágenes
+                        // Limpiar la vista previa de imágenes
                         const imagePreview = document.getElementById('imagePreview');
                         if (imagePreview) {
                             imagePreview.innerHTML = '';
                         }
-                        // Limpiar input de archivos
+                        // Limpiar el input de archivos
                         const imageInput = document.getElementById('commentImages');
                         if (imageInput) {
                             imageInput.value = '';
                         }
                         loadComments(postId, defaultImageUrl); // Recarga la lista
-                        
-                        // Disparar evento para recargar puntuación
+
+                        // Disparar evento para recargar la puntuación
                         window.dispatchEvent(new CustomEvent('commentPosted'));
                     }
                 })
@@ -228,9 +224,9 @@ export function setupCommentForm(postId, defaultImageUrl) {
     }
 }
 
-// Función global para abrir imágenes en modal
+// Función global para abrir imágenes en un modal
 window.openImageModal = function(imageSrc) {
-    // Crear modal si no existe
+    // Crear el modal si no existe
     let modal = document.getElementById('imageModal');
     if (!modal) {
         modal = document.createElement('div');
@@ -241,7 +237,7 @@ window.openImageModal = function(imageSrc) {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Imagen ampliada</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
                     <div class="modal-body text-center">
                         <img id="modalImage" src="" class="img-fluid min-width" alt="Imagen ampliada">
@@ -251,29 +247,29 @@ window.openImageModal = function(imageSrc) {
         `;
         document.body.appendChild(modal);
     }
-    
-    // Configurar la imagen
+
+    // Configura la imagen
     document.getElementById('modalImage').src = imageSrc;
-    
-    // Mostrar modal
+
+    // Muestra el modal
     const bsModal = new bootstrap.Modal(modal);
     bsModal.show();
 };
 
-// Función global para vista previa de imágenes de comentarios
+// Función global para la vista previa de imágenes de comentarios
 window.previewCommentImages = function(input, previewId) {
     const preview = document.getElementById(previewId);
     if (!preview) return;
-    
+
     preview.innerHTML = '';
-    
+
     if (input.files && input.files.length > 0) {
         const maxFiles = Math.min(input.files.length, 3);
-        
-        for (let i = 0; i < maxFiles; i++) {
+
+    for (let i = 0; i < maxFiles; i++) {
             const file = input.files[i];
             const reader = new FileReader();
-            
+
             reader.onload = function(e) {
                 const img = document.createElement('img');
                 img.src = e.target.result;
@@ -282,10 +278,10 @@ window.previewCommentImages = function(input, previewId) {
                 img.style.maxHeight = '80px';
                 preview.appendChild(img);
             };
-            
+
             reader.readAsDataURL(file);
         }
-        
+
         if (input.files.length > 3) {
             const warning = document.createElement('div');
             warning.className = 'text-warning small';

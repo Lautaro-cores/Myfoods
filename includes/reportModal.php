@@ -1,4 +1,4 @@
-<!-- Modal de Reporte reutilizable -->
+
 <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

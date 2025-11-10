@@ -45,7 +45,7 @@ if (isset($_FILES['userImage']) && $_FILES['userImage']['error'] === UPLOAD_ERR_
     }
 
 }
-// --- Si NO hay imagen pero sí descripción ---
+
 else if (!empty($description)) {
     $sql = "UPDATE users SET description = ?, displayName = ? WHERE userId = ?";
     $stmt = mysqli_prepare($con, $sql);
@@ -85,7 +85,6 @@ else if (!empty($displayName)) {
     }
 }
 
-// --- Si no se envió ni imagen ni descripción ---
 else {
     $response['msj'] = 'No se envió ningún cambio.';
 }

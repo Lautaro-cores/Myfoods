@@ -25,7 +25,7 @@ mysqli_stmt_execute($stmt);
 $res = mysqli_stmt_get_result($stmt);
 
 if ($row = mysqli_fetch_assoc($res)) {
-    // Ya existe -> eliminar
+
     $sqlDel = "DELETE FROM likes WHERE likeId = ?";
     $stmtDel = mysqli_prepare($con, $sqlDel);
     mysqli_stmt_bind_param($stmtDel, "i", $row['likeId']);
