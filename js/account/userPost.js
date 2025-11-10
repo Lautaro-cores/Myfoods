@@ -1,11 +1,9 @@
-// js/userPost.js
 document.addEventListener("DOMContentLoaded", () => {
     const userPostsDiv = document.getElementById('userPosts');
     if (!userPostsDiv) return;
 
-    // --- Función para construir el HTML de una tarjeta de receta (POST) ---
+    // Crea el HTML de una publicación con los datos obtenidos
     const createPostCard = (post) => {
-        // Mejor práctica: Usar variables claras para los datos
         const avatarUrl = post.userImage 
             ? `data:image/jpeg;base64,${post.userImage}` 
             : '../img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg';
@@ -17,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const likesCount = post.likesCount || 0;
         const heartIconClass = post.userLiked ? "bi bi-heart-fill" : "bi bi-heart";
 
-        // Usamos template literals (` `) para HTML, es más legible
+        // Devuelve la estructura visual de la tarjeta con su contenido
         return `
             <article class="post-card">
                 <div class="post-image">
@@ -44,26 +42,30 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
     };
 
-    // --- Lógica principal de carga de posts ---
+    // Obtiene el nombre de usuario desde la URL y carga sus publicaciones
     const params = new URLSearchParams(window.location.search);
     const username = params.get('username');
 
     if (username) {
+        // Solicita al servidor las publicaciones del usuario
         fetch(`../getUserPosts.php?username=${encodeURIComponent(username)}`)
             .then(res => {
                 if (!res.ok) throw new Error('Error en la respuesta de la API');
                 return res.json();
             })
             .then(data => {
+                // Si no hay resultados, muestra mensaje informativo
                 if (!Array.isArray(data) || data.length === 0) {
                     userPostsDiv.innerHTML = '<p>No hay recetas recientes.</p>';
                     return;
                 }
 
+                // Inserta todas las publicaciones en la vista
                 const postsHTML = data.map(createPostCard).join('');
                 userPostsDiv.innerHTML = `<div class="posts-grid">${postsHTML}</div>`;
             })
             .catch(err => {
+                // Maneja errores de red o respuesta inválida
                 console.error('Error cargando recetas de usuario:', err);
                 userPostsDiv.innerHTML = '<p>Error cargando recetas. Inténtalo más tarde.</p>';
             });

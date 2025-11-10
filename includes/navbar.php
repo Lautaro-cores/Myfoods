@@ -40,7 +40,7 @@
         </div>
 
 
-        <div class="nav-bottom mt-auto mb-3 text-center w 100 dropup">
+        <div class="nav-bottom mt-auto  text-center w-100 dropup">
             <hr>
             <div>v2025.11.4</div>
             <div> © MyFoods 2025</div>

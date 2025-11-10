@@ -128,7 +128,6 @@ while ($row = mysqli_fetch_assoc($res)) {
         }
         mysqli_stmt_close($stmtImg);
     }
-    // normalize userLiked as boolean
     $row['likesCount'] = isset($row['likesCount']) ? intval($row['likesCount']) : 0;
     $row['userLiked'] = (isset($row['userLikedCount']) && intval($row['userLikedCount']) > 0) ? true : false;
     unset($row['userLikedCount']);

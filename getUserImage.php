@@ -29,8 +29,7 @@ if ($user && !empty($user['userImage'])) {
     echo $user['userImage'];
     exit();
 } else {
-    // fallback a archivo por defecto en el directorio del proyecto
-    $defaultImage = __DIR__ . '/img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg';
+        $defaultImage = __DIR__ . '/img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg';
     if (is_file($defaultImage)) {
         header('Content-Type: image/jpeg');
         readfile($defaultImage);

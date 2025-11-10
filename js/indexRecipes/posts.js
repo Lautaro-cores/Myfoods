@@ -1,8 +1,6 @@
-// posts.js
-// Descarga la lista de recetas publicadas y la renderiza en la página principal.
 
-// Convierte una fecha en una cadena relativa (ej. "hace 2 horas").
 function timeAgo(dateString) {
+  // Convierte una fecha a formato relativo (ejemplo: "hace 2 horas")
   const now = new Date();
   const date = new Date(dateString.replace(" ", "T"));
   const diff = Math.floor((now - date) / 1000);
@@ -14,12 +12,9 @@ function timeAgo(dateString) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const postsDiv = document.getElementById("posts");
-  if (!postsDiv) {
-    console.error("No se encontró el contenedor #posts en la página");
-    return;
-  }
-    // ...existing code...
+  if (!postsDiv) return;
 
+  // Renderiza todas las publicaciones en la cuadrícula principal
   function renderPosts(posts) {
     if (!posts || posts.length === 0) {
       postsDiv.innerHTML = "<p>No hay recetas publicadas aún.</p>";
@@ -28,26 +23,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     postsDiv.innerHTML =
       '<div class="posts-grid">' +
-      posts
-        .map((post) => {
-          const avatarUrl = post.userImage
-            ? `data:image/jpeg;base64,${post.userImage}`
-            : "../img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg";
-          // Carrousel de imágenes
-          let carouselHtml = "";
-          if (post.images && post.images.length > 0) {
-            const carouselId = `carouselPost${post.postId}`;
-            carouselHtml = `
-              <div id="${carouselId}" class="carousel slide">
-                <div class="carousel-inner">
-                  ${post.images.map((img, idx) => ` <div class="carousel-item${idx === 0 ? " active" : ""}">
-                      <img src="data:image/jpeg;base64,${img}" class="d-block w-100" alt="Imagen ${idx + 1} de ${post.title}">
-                    </div>
-                  `
-                    )
-                    .join("")}
-                </div>
-                ${ post.images.length > 1 ? `
+      posts.map((post) => {
+        const avatarUrl = post.userImage
+          ? `data:image/jpeg;base64,${post.userImage}`
+          : "../img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg";
+
+        // Genera un carrusel de imágenes si hay más de una
+        let carouselHtml = "";
+        if (post.images && post.images.length > 0) {
+          const carouselId = `carouselPost${post.postId}`;
+          carouselHtml = `
+            <div id="${carouselId}" class="carousel slide">
+              <div class="carousel-inner">
+                ${post.images.map((img, idx) => `
+                  <div class="carousel-item${idx === 0 ? " active" : ""}">
+                    <img src="data:image/jpeg;base64,${img}" class="d-block w-100" alt="Imagen ${idx + 1} de ${post.title}">
+                  </div>`).join("")}
+              </div>
+              ${post.images.length > 1 ? `
                 <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Anterior</span>
@@ -55,54 +48,50 @@ document.addEventListener("DOMContentLoaded", () => {
                 <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
                   <span class="carousel-control-next-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Siguiente</span>
-                </button>
-                `
-                : ""}
-              </div>
-            `;
-          }
-          const likesCount = post.likesCount ? post.likesCount : 0;
-
-          return `
-            <article class="post-card">
-              <div class="post-image">
-                ${carouselHtml}
-              </div>
-              <div class="post-content" data-post-id="${post.postId}">
-                <div class="post-header">
-                  <div class="post-left">
-                    <img class="post-avatar" src="${avatarUrl}" alt="Avatar ${
-            post.userName
-          }">
-                    <div class="post-meta">
-                      <div class="post-author">${post.displayName}</div>
-                      <div class="post-time">${timeAgo(post.postDate)}</div>
-                    </div>
-                  </div>
-                  <div class="post-likes"><i class="${post.userLiked > 0 ? "bi bi-heart-fill" : "bi bi-heart"}"></i> <span class="likes-count">${likesCount}</span>
-                   <button class="report-btn btn  btn-sm" data-post-id="${post.postId}" type="button" aria-label="Denunciar publicación"><i class="bi bi-flag"></i></button></div>
-                
-                  </div>
-                <h3 class="post-title">${post.title}</h3>
-                <p class="post-desc">${
-                  post.description ? post.description : ""
-                }</p>
-                 
-              </div>
-            </article>
+                </button>` : ""}
+            </div>
           `;
-        })
-        .join("") +
+        }
+
+        const likesCount = post.likesCount || 0;
+
+        // Estructura visual de cada post
+        return `
+          <article class="post-card">
+            <div class="post-image">${carouselHtml}</div>
+            <div class="post-content" data-post-id="${post.postId}">
+              <div class="post-header">
+                <div class="post-left">
+                  <img class="post-avatar" src="${avatarUrl}" alt="Avatar ${post.userName}">
+                  <div class="post-meta">
+                    <div class="post-author">${post.displayName}</div>
+                    <div class="post-time">${timeAgo(post.postDate)}</div>
+                  </div>
+                </div>
+                <div class="post-likes">
+                  <i class="${post.userLiked > 0 ? "bi bi-heart-fill" : "bi bi-heart"}"></i>
+                  <span class="likes-count">${likesCount}</span>
+                  <button class="report-btn btn btn-sm" data-post-id="${post.postId}" type="button" aria-label="Denunciar publicación">
+                    <i class="bi bi-flag"></i>
+                  </button>
+                </div>
+              </div>
+              <h3 class="post-title">${post.title}</h3>
+              <p class="post-desc">${post.description || ""}</p>
+            </div>
+          </article>
+        `;
+      }).join("") +
       "</div>";
   }
 
-  // initial load (randomize on page load)
+  // Carga inicial: muestra posts aleatorios
   fetch("../getPosts.php?order=random")
-    .then((res) => res.json())
-    .then((posts) => renderPosts(posts))
-    .catch((err) => console.error("Error cargando posts:", err));
+    .then(res => res.json())
+    .then(posts => renderPosts(posts))
+    .catch(err => console.error("Error cargando posts:", err));
 
-  // handle 'Mas Likeados' button
+  // Botón "Más Likeados"
   const loadMoreBtn = document.getElementById('loadMoreButton');
   if (loadMoreBtn) {
     loadMoreBtn.addEventListener('click', () => {
@@ -112,7 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(err => console.error('Error cargando posts por likes:', err));
     });
   }
-  // botón para mostrar posts de la gente que sigue el usuario
+
+  // Botón "Seguidos"
   const showFollowedBtn = document.getElementById('showFollowedButton');
   if (showFollowedBtn) {
     showFollowedBtn.addEventListener('click', () => {
@@ -122,9 +112,9 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(err => console.error('Error cargando posts de seguidos:', err));
     });
   }
-  // Delegación única para clicks: abrir modal de reporte o redirigir a la receta
-  document.addEventListener('click', function(e) {
-    // Si es el botón de reportar (o contiene el icono dentro), abrir modal
+
+  // Delegación de eventos: manejar clicks en botones o posts
+  document.addEventListener('click', (e) => {
     const reportBtn = e.target.closest('.report-btn');
     if (reportBtn) {
       e.preventDefault();
@@ -134,13 +124,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (reportModalEl) {
         const input = document.getElementById('reportPostId');
         if (input) input.value = postId;
-        const reportModal = new bootstrap.Modal(reportModalEl);
-        reportModal.show();
+        new bootstrap.Modal(reportModalEl).show();
       }
       return;
     }
 
-    // Si el click fue dentro de .post-content y no sobre el botón de reportar, redirigir
+    // Redirige al detalle de la receta
     const postContent = e.target.closest('.post-content');
     if (postContent) {
       const postId = postContent.getAttribute('data-post-id');
@@ -149,22 +138,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
-  // ...existing code...
 });
- const btn = document.getElementById('searchButton');
-  const input = document.getElementById('searchInput');
 
+// --- Búsqueda de recetas ---
+const btn = document.getElementById('searchButton');
+const input = document.getElementById('searchInput');
 
-                function goSearch() {
-                    const search = input.value.trim();
-                    if (search === '') {
-                        window.location.href = 'searchPage.php';
-                    } else {
-                        window.location.href = 'searchPage.php?search=' + encodeURIComponent(search);
-                    }
-                    input.value = '';
-                }
-                btn.addEventListener('click', goSearch);
-                input.addEventListener('keydown', function(e){
-                    if (e.key === 'Enter') goSearch();
-                });
+function goSearch() {
+  const search = input.value.trim();
+  window.location.href = search === ''
+    ? 'searchPage.php'
+    : 'searchPage.php?search=' + encodeURIComponent(search);
+  input.value = '';
+}
+
+btn.addEventListener('click', goSearch);
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') goSearch();
+});
