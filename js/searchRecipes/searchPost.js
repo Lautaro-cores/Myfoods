@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Obtiene referencias a los elementos clave del DOM (input/button opcionales)
+    // Obtiene referencias a los elementos clave del DOM
     const btn = document.getElementById("searchButton");
     const input = document.getElementById("searchInput");
     const postsDiv = document.getElementById("posts");
 
-    // postsDiv es obligatorio
-    if (!postsDiv) {
-        console.error("Falta el contenedor #posts en la página");
+    // Verifica que todos los elementos HTML necesarios existan
+    if (!btn || !input || !postsDiv) {
+        console.error("Faltan elementos HTML necesarios (btn, input, o postsDiv)");
         return;
     }
 
@@ -94,8 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Realiza la búsqueda al servidor utilizando los parámetros de filtro
-    function doSearch(term) {
-        const contenido = (typeof term === 'string') ? term.trim() : (input ? input.value.trim() : '');
+    function doSearch() {
+        const contenido = input.value.trim();
         // Obtiene el Set de tags seleccionados de la variable global
         const selectedTags = window.selectedTags || new Set(); 
         // Obtiene el Set de ingredientes seleccionados de la variable global
@@ -125,8 +125,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (customNames.length > 0) params.set('ingredientNames', customNames.join(','));
         }
 
-    // Construye la URL final de la petición
-    const requestUrl = `../searchRecipes.php?${params.toString()}`;
+        // Construye la URL final de la petición
+        const requestUrl = `../searchRecipes.php?${params.toString()}`;
         console.debug('searchRecipes request ->', requestUrl);
         
         // Ejecuta la petición de búsqueda
@@ -145,21 +145,20 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
-    // Exponer una función global que otras partes puedan invocar
-    window.performSearch = function(term) { doSearch(term); };
-
-    // Configura el evento de clic en el botón de búsqueda (si existe)
-    if (btn) btn.addEventListener("click", () => doSearch());
-    // Configura el evento de tecla 'Enter' en el campo de búsqueda (si existe)
-    if (input) input.addEventListener("keydown", (e) => { if (e.key === "Enter") doSearch(); });
+    // Configura el evento de clic en el botón de búsqueda
+    btn.addEventListener("click", doSearch);
+    // Configura el evento de tecla 'Enter' en el campo de búsqueda
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") doSearch();
+    });
 
     // Búsqueda inicial al cargar la página si hay un parámetro 'search' en la URL
     const urlParams = new URLSearchParams(window.location.search);
     const initialContent = urlParams.get('search');
     
-    // Si existe un término inicial, ejecuta la búsqueda con ese término
+    // Si existe un término inicial, lo coloca en el input y ejecuta la búsqueda
     if (initialContent) {
-        if (input) input.value = initialContent;
-        doSearch(initialContent);
+        input.value = initialContent;
+        doSearch();
     }
 });
