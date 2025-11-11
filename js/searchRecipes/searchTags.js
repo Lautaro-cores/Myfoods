@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para actualizar el estilo del botón basado en si está seleccionado o no
     function updateTagButtonState(btn) {
-
+         const tagId = btn.dataset.tag;
         if (window.selectedTags.has(tagId)) {
             btn.classList.remove('btn-outline-primary');
             btn.classList.add('btn-primary');
