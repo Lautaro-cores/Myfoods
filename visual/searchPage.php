@@ -42,37 +42,53 @@ if ($resTags) {
     <?php include '../includes/backButton.php'; ?>
     <div class="header-container">
         <div class="search-container">
-            <input type="text" id="searchInput" class="input" placeholder="Buscar recetas" maxlength="100" value="<?php echo htmlspecialchars($busqueda); ?>">
-            <button id="searchButton" class="buttono">Buscar</button>
+            <input type="text" placeholder="buscar recetas" id="searchInput" class="input">
+            <button id="searchButton" class="buttono" type="button">Buscar</button>
         </div>
     </div>
 
         <div class="container my-3">
             <div class="d-flex flex-row flex-wrap gap-2 align-items-center" id="topTagsRow">
-                <?php
-                // Obtener las 10 etiquetas más populares
-                $topTags = [];
-                foreach ($tagsByCategory as $tags) {
-                    foreach ($tags as $tag) {
-                        $topTags[] = $tag;
-                    }
-                }
-                usort($topTags, function($a, $b) {
-                    return $b['used'] - $a['used'];
-                });
-                $topTags = array_slice($topTags, 0, 10);
-                
-                foreach ($topTags as $t): 
-                ?>
-                    <button type="button" class="input btn btn-sm btn-outline-primary tag-filter" 
-                            data-bs-toggle="button" 
-                            data-tag="<?php echo intval($t['tagId']); ?>">
-                        <?php echo htmlspecialchars($t['tagName']); ?>
-                    </button>
-                <?php endforeach; ?>
+                <!-- Solo dejar el botón 'Más etiquetas' aquí para simplicidad visual -->
                 <button type="button" class="input btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#allTagsModal">
                     Más etiquetas
                 </button>
+            </div>
+        </div>
+
+        <!-- Sección: mostrar únicamente las etiquetas más usadas (top N). Modal sigue mostrando todas. -->
+        <div class="container my-3">
+            <div class="row">
+                <div class="col-12">
+                    <h5>Etiquetas más usadas</h5>
+                    <div id="popularTagsList" class="d-flex flex-wrap gap-2">
+                        <?php
+                        // Construir lista plana de tags con uso > 0, ordenada por 'used' desc y limitada a top 20
+                        $popularTags = [];
+                        foreach ($tagsByCategory as $category => $tags) {
+                            foreach ($tags as $tag) {
+                                if (isset($tag['used']) && intval($tag['used']) > 0) {
+                                    $tag['categoryName'] = $category;
+                                    $popularTags[] = $tag;
+                                }
+                            }
+                        }
+                        usort($popularTags, function($a, $b) {
+                            return intval($b['used']) - intval($a['used']);
+                        });
+                        // Mostrar como máximo 10 etiquetas para evitar que se formen bloques grandes
+                        $popularTags = array_slice($popularTags, 0, 10);
+
+                        foreach ($popularTags as $tag): ?>
+                            <button type="button" class="tag-filter btn btn-sm btn-outline-primary" data-tag="<?php echo intval($tag['tagId']); ?>">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span><?php echo htmlspecialchars($tag['tagName']); ?></span>
+                                    <small class="text-muted">(<?php echo intval($tag['used']); ?>)</small>
+                                </div>
+                            </button>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -126,22 +142,23 @@ if ($resTags) {
     <script src="../js/searchRecipes/searchTags.js"></script>
     <script src="../js/searchRecipes/searchIngredients.js"></script>
     <script>
-
     document.addEventListener('DOMContentLoaded', function() {
         var search = <?php echo json_encode($busqueda); ?>;
         var activateTag = <?php echo json_encode($activateTag); ?>;
-        
-        if(search) {
-            document.getElementById('searchInput').value = search;
-        }
-        
-        if(activateTag) {
+
+        if (activateTag) {
             const tagButton = document.querySelector(`.tag-filter[data-tag="${activateTag}"]`);
-            if(tagButton) {
-                tagButton.click();
+            if (tagButton) tagButton.click();
+        } else if (search) {
+            // If a global performSearch exists (exposed by searchPost.js), use it, otherwise try legacy button
+            if (typeof window.performSearch === 'function') {
+                window.performSearch(search);
+            } else {
+                const inputEl = document.getElementById('searchInput');
+                if (inputEl) inputEl.value = search;
+                const btn = document.getElementById('searchButton');
+                if (btn) btn.click();
             }
-        } else if(search) {
-            document.getElementById('searchButton').click();
         }
     });
     </script>

@@ -23,16 +23,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Función para actualizar el estilo del botón basado en si está seleccionado o no
+    // Función para actualizar el estilo de todos los botones que representan el mismo tag
     function updateTagButtonState(btn) {
-
-        if (window.selectedTags.has(tagId)) {
-            btn.classList.remove('btn-outline-primary');
-            btn.classList.add('btn-primary');
-        } else {
-            btn.classList.remove('btn-primary');
-            btn.classList.add('btn-outline-primary');
-        }
+        const tagId = btn.dataset.tag;
+        const isSelected = window.selectedTags.has(String(tagId));
+        // actualizar todos los botones con el mismo data-tag (modal y lista principal)
+        const sameBtns = document.querySelectorAll(`.tag-filter[data-tag="${tagId}"]`);
+        sameBtns.forEach(b => {
+            if (isSelected) {
+                b.classList.remove('btn-outline-primary');
+                b.classList.add('btn-primary');
+                b.classList.add('active');
+            } else {
+                b.classList.remove('btn-primary');
+                b.classList.remove('active');
+                b.classList.add('btn-outline-primary');
+            }
+        });
     }
 
     // Inicializa el estado visual de todos los botones al cargar la página
@@ -53,13 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // Actualiza la apariencia visual del botón
             updateTagButtonState(btn);
             
-            // Ejecuta la búsqueda delegando el clic al botón de búsqueda principal
-            const searchButton = document.getElementById('searchButton');
-            if (searchButton) {
-                searchButton.click(); 
+            // Ejecuta la búsqueda: preferimos la API global performSearch si existe
+            if (typeof window.performSearch === 'function') {
+                window.performSearch();
             } else {
-                // Muestra un error si el botón de búsqueda no se encuentra
-                console.error("No se encontró el botón de búsqueda para ejecutarla");
+                const searchButton = document.getElementById('searchButton');
+                if (searchButton) searchButton.click();
+                else console.error("No se encontró el botón de búsqueda ni performSearch()");
             }
         });
     });
