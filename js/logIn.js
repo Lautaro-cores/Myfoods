@@ -1,25 +1,28 @@
+// logIn.js
+// este archivo maneja la funcionalidad de inicio de sesión de usuarios
+
 document.addEventListener("DOMContentLoaded", () => {
+  // obtiene referencias al formulario de inicio de sesión y al div de mensajes
   const formLogin = document.getElementById("formLogin");
   const mensajeDiv = document.getElementById("mensaje");
 
-  // Si el formulario no existe en la página, se detiene la ejecución
   if (!formLogin) return;
 
   formLogin.addEventListener("submit", (e) => {
-    // Evita que el formulario se envíe por el método predeterminado
     e.preventDefault();
 
+    // obtiene los valores de los campos de nombre de usuario y contraseña
     const userName = document.getElementById("loginUserName").value;
     const userPassword = document.getElementById("loginUserPassword").value;
 
-    // Verifica que ambos campos estén completos antes de continuar
+    // verifica que ambos campos tengan valor
     if (!userName || !userPassword) {
       mensajeDiv.style.color = "red";
       mensajeDiv.textContent = "Completa todos los campos.";
       return;
     }
 
-    // Envía los datos del formulario al archivo logIn.php mediante una solicitud POST
+    // envia al logIn.php los valores para iniciar sesión
     fetch("../logIn.php", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -29,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "&userPassword=" +
         encodeURIComponent(userPassword),
     })
-      // Convierte la respuesta de logIn.php a formato JSON
       .then((res) => res.json())
       .then((res) => {
         // Si logIn.php devuelve éxito, muestra el mensaje y redirige a la página principal

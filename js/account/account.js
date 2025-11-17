@@ -1,3 +1,7 @@
+// account.js
+// este archivo maneja la edicion del perfil del usuario
+
+
 document.addEventListener("DOMContentLoaded", () => {
   // Obtiene los elementos del DOM necesarios para manejar la edición del perfil
   const form = document.getElementById("formImage");
@@ -9,17 +13,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const descriptionField = document.getElementById("description");
   const displayNameField = document.getElementById("displayName");
 
-  // Si el formulario no está presente, se detiene la ejecución
   if (!form) return;
 
-  // Muestra una vista previa de la imagen seleccionada antes de subirla
+  // muestra una vista previa de la imagen seleccionada antes de subirla
   if (userImageInput && imagePreview) {
     userImageInput.addEventListener("change", () => {
       imagePreview.innerHTML = "";
       const file = userImageInput.files && userImageInput.files[0];
       if (!file) return;
-
-      // Lee el archivo seleccionado como una URL base64 y la muestra como imagen
       const reader = new FileReader();
       reader.onload = (e) => {
         const img = document.createElement("img");
@@ -33,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Limpia los campos del modal al cerrarse
+  // limpia los campos del modal al cerrarse
   if (editProfileModalEl) {
     editProfileModalEl.addEventListener("hidden.bs.modal", () => {
       if (imagePreview) imagePreview.innerHTML = "";
@@ -41,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Envía los datos del formulario al servidor para actualizar el perfil
+  // al hacer submit en el formulario crea un formdata
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -50,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     formData.set("displayName", displayNameField ? displayNameField.value.trim() : "");
 
     try {
-      // Envía los datos al script PHP mediante fetch
+      // envia el formulario al uploadProfile.php para actualizar los datos
       const response = await fetch("../uploadProfile.php", {
         method: "POST",
         body: formData,
@@ -58,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const result = await response.json();
 
-      // Si el servidor responde con éxito, actualiza la interfaz sin recargar la página
+      // si responde con éxito, actualiza la interfaz sin recargar la página
       if (result.success) {
         profileImage.src = `../getUserImage.php?ts=${new Date().getTime()}`;
 
@@ -74,13 +75,13 @@ document.addEventListener("DOMContentLoaded", () => {
           descriptionElement.textContent = newDescription || "Sin descripción";
         }
 
-        // Oculta el modal al finalizar la actualización
+        // oculta el modal al finalizar la actualización
         if (editProfileModal) editProfileModal.hide();
       } else {
         alert(result.message || "Error al actualizar perfil");
       }
     } catch (err) {
-      // Maneja errores de red o de formato JSON
+      // maneja errores de red o de formato JSON
       console.error("Error en fetch upload:", err);
       alert("Error al comunicarse con el servidor o JSON inválido.");
     }

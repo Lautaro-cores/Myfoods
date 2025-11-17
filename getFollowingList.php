@@ -1,5 +1,9 @@
-<?php
+<?php 
+// getFollowingList.php
+// este archivo obtiene la lista de usuarios que el usuario especificado sigue
+
 session_start();
+//se conecta a la base de datos
 require_once 'includes/config.php';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -9,9 +13,10 @@ if (!isset($_GET['username']) || empty($_GET['username'])) {
     exit;
 }
 
+// obtiene el nombre de usuario del parámetro GET
 $username = $_GET['username'];
 
-// Buscar el userId del username
+// hace la consulta para obtener el userId del username
 $sqlUser = "SELECT userId FROM users WHERE userName = ? LIMIT 1";
 if (!$stmtUser = mysqli_prepare($con, $sqlUser)) {
     echo json_encode(['success' => false, 'error' => 'db_prepare_failed', 'msj' => 'Error preparando consulta']);
@@ -25,9 +30,10 @@ if (!$userRow = mysqli_fetch_assoc($resUser)) {
     exit;
 }
 
+// obtiene el userId del usuario del perfil
 $profileUserId = intval($userRow['userId']);
 
-// Obtener lista de usuarios que el perfil sigue (following)
+// hacer la consulta para obtener la lista de usuarios que el perfil sigue (following)
 $sqlFollowing = "SELECT u.userId, u.userName, u.userImage, u.description
 FROM users u
 INNER JOIN followers f ON u.userId = f.following_userId
@@ -43,13 +49,16 @@ mysqli_stmt_bind_param($stmt, 'i', $profileUserId);
 mysqli_stmt_execute($stmt);
 $res = mysqli_stmt_get_result($stmt);
 
+// crea un array para almacenar la lista de usuarios que el perfil sigue
 $following = [];
+
+// por cada usuario seguido, se agrega la información
 while ($row = mysqli_fetch_assoc($res)) {
     $img = null;
     if (!empty($row['userImage'])) {
         $img = base64_encode($row['userImage']);
     }
-
+    // agrega el usuario al array de following
     $following[] = [
         'userId' => intval($row['userId']),
         'userName' => $row['userName'],

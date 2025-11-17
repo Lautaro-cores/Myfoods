@@ -1,3 +1,7 @@
+// viewRecipe.js
+// este archivo maneja la vista de una receta individual, incluyendo comentarios, likes y favoritos
+
+// importa las funciones necesarias para manejar comentarios, likes y favoritos
 import { loadComments, setupCommentForm } from './comments.js';
 import { loadLikes, setupLikeToggle } from './likes.js';
 import { loadFavorite, setupFavoriteToggle } from './favorites.js';
@@ -9,19 +13,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const defaultImageUrl = 'img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg';
     if (!postId) return;
 
-    // Inicializar comentarios
+    // se cargan los comentarios y se configura el formulario de comentarios
     loadComments(postId, defaultImageUrl);
     setupCommentForm(postId, defaultImageUrl);
 
-    // Inicializar likes
+    // se cargan los likes
     loadLikes(postId);
     setupLikeToggle(postId);
 
-    // Inicializar favoritos
+    // se cargan los favoritos
     loadFavorite(postId);
     setupFavoriteToggle(postId);
 
-    // Recargar la puntuación después de enviar un comentario
+    // recargar la puntuación después de enviar un comentario
     window.addEventListener('commentPosted', () => {
         if (typeof loadRecipeRating === 'function') {
             loadRecipeRating();

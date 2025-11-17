@@ -1,8 +1,11 @@
-// js/comment_thread.js
+// commentThread.js
+// este archivo maneja la carga y el envío de comentarios hijos en un hilo de comentarios
 
+// importa las funciones necesarias desde comments.js
 import { createCommentHtml, setupCommentHandlers } from './comments.js';
 
 document.addEventListener("DOMContentLoaded", () => {
+
     const script = document.querySelector('script[data-comment-id]');
     const commentId = script.getAttribute('data-comment-id');
     const postId = script.getAttribute('data-post-id');
@@ -15,17 +18,17 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    // Cargar comentarios hijos del comentario principal
+    // se cargan los comentarios hijos de este comentario
     loadCommentChildren(commentId, postId, defaultImageUrl);
     
-    // Configurar formulario de comentario principal
+    // se configura el formulario de comentario principal
     setupMainCommentForm(postId, defaultImageUrl);
     
-    // Configurar likes (setupCommentHandlers ya maneja los likes)
+    // se configuran los likes 
     setupCommentHandlers(postId, defaultImageUrl);
 });
 
-// Función para cargar comentarios hijos de un comentario específico
+// funcion para cargar los comentarios hijos de un comentario dado
 function loadCommentChildren(commentId, postId, defaultImageUrl) {
     console.log('Cargando comentarios hijos para:', { commentId, postId, defaultImageUrl });
     
@@ -34,7 +37,7 @@ function loadCommentChildren(commentId, postId, defaultImageUrl) {
         console.error('No se encontró el contenedor de comentarios');
         return;
     }
-
+    // hace la consulta al getCommentReplies.php para obtener los comentarios hijos
     fetch(`../getCommentReplies.php?commentId=${commentId}`)
         .then(response => {
             if (!response.ok) throw new Error("Error en el servidor al obtener comentarios hijos.");
@@ -57,7 +60,7 @@ function loadCommentChildren(commentId, postId, defaultImageUrl) {
                     .map((comment) => createCommentHtml(comment, defaultImageUrl, true, postId))
                     .join("");
                 
-                // Configurar handlers después de renderizar
+                // configura los handlers para los comentarios cargados
                 setupCommentHandlers(postId, defaultImageUrl);
             }
         })
@@ -67,7 +70,7 @@ function loadCommentChildren(commentId, postId, defaultImageUrl) {
         });
 }
 
-// Función para configurar el formulario de comentario principal
+// funcon para configurar el formulario de comentario principal
 function setupMainCommentForm(postId, defaultImageUrl) {
     const commentForm = document.getElementById("replyToMainForm");
     const commentMessage = document.getElementById("replyMessage");
@@ -87,32 +90,33 @@ function setupMainCommentForm(postId, defaultImageUrl) {
             
             commentMessage.textContent = "Publicando...";
             commentMessage.className = "alert alert-info";
-
+            // envia al postComment.php para publicar el comentario
             fetch("../postComment.php", {
                 method: "POST",
-                body: formData, // Usar FormData directamente para enviar archivos
+                body: formData, 
             })
                 .then((response) => response.json())
                 .then((result) => {
+                    
                     commentMessage.textContent = result.msj;
                     commentMessage.className = result.success ? "alert alert-success" : "alert alert-danger";
 
                     if (result.success) {
                         commentForm.reset();
-                        // Limpiar vista previa de imágenes
+                        // limpiar vista previa de imágenes
                         const imagePreview = document.getElementById('replyImagePreview');
                         if (imagePreview) {
                             imagePreview.innerHTML = '';
                         }
-                        // Limpiar input de archivos
+                        // limpiar input de archivos
                         const imageInput = document.getElementById('replyImages');
                         if (imageInput) {
                             imageInput.value = '';
                         }
-                        // Recargar comentarios hijos
+                        // recargar comentarios hijos
                         const commentId = formData.get('parentId');
                         loadCommentChildren(commentId, postId, defaultImageUrl);
-                        // Actualizar contador de comentarios
+                        // actualizar contador de comentarios
                         updateCommentCount();
                     }
                 })
@@ -126,7 +130,7 @@ function setupMainCommentForm(postId, defaultImageUrl) {
 }
 
 
-// Función para actualizar el contador de comentarios
+// funcion para actualizar el contador de comentarios en la interfaz
 function updateCommentCount() {
     const commentCountElement = document.querySelector('.comment-count');
     if (commentCountElement) {

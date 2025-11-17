@@ -1,19 +1,27 @@
 <?php
-require_once 'includes/config.php';
+// searchRecipes.php
+// este archivo maneja la funcionalidad de búsqueda de recetas con filtros de contenido, etiquetas e ingredientes
 session_start();
+// se conecta a la base de datos
+require_once 'includes/config.php';
 
-// Nuevo comportamiento: si se pasan tags, filtrar por posts que contengan todas las tags (AND)
+// se crea un array para almacenar las recetas encontradas
 $posts = [];
 
+// obtiene el userId del usuario de la sesión
 $userId = isset($_SESSION['userId']) ? intval($_SESSION['userId']) : 0;
 
+// obtiene los parámetros de búsqueda desde la URL 
 $search = isset($_GET['contenido']) ? trim($_GET['contenido']) : '';
 $tagsParam = isset($_GET['tags']) ? trim($_GET['tags']) : '';
+
+// procesa los tags en un array de enteros
 $tags = [];
 if ($tagsParam !== '') {
     $tags = array_filter(array_map('intval', explode(',', $tagsParam)));
 }
 
+// procesa los ingredientes en arrays de ids y nombres
 $ingredientsParam = isset($_GET['ingredients']) ? trim($_GET['ingredients']) : '';
 $ingredientNamesParam = isset($_GET['ingredientNames']) ? trim($_GET['ingredientNames']) : '';
 $ingredients = [];
@@ -22,41 +30,46 @@ if ($ingredientsParam !== '') {
     $ingredients = array_filter(array_map('intval', explode(',', $ingredientsParam)));
 }
 if ($ingredientNamesParam !== '') {
-    // split and trim names
     $tmp = array_map('trim', explode(',', $ingredientNamesParam));
-    $ingredientNames = array_values(array_filter($tmp, function($v){ return $v !== ''; }));
+    $ingredientNames = array_values(array_filter($tmp, function ($v) {
+        return $v !== '';
+    }));
 }
-// Construir consulta base y filtros dinámicos según tags/ingredients/search
+
+// crea un array para las cláusulas WHERE
 $where = [];
+// 1. hacer consulta base y filtros dinámicos según tags/ingredients/search
 $sql = "SELECT p.postId, p.title, p.description, p.postDate, u.displayName, u.userImage,
              (SELECT COUNT(*) FROM likes l WHERE l.postId = p.postId) AS likesCount,
              (SELECT COUNT(*) FROM likes l2 WHERE l2.postId = p.postId AND l2.userId = ?) AS userLikedCount
          FROM post p
          JOIN users u ON p.userId = u.userId";
 
-// Si hay búsqueda de texto, añadimos condición
+// 2. si hay búsqueda de texto añade la condición
 if ($search !== '') {
     $where[] = "(p.title LIKE ? OR p.description LIKE ? )";
 }
 
-// Si hay tags, restringimos a posts que contengan todas las tags (subquery)
+// 3. si hay tags, restringimos a posts que contengan todas las tags 
 if (!empty($tags)) {
     $safeTagIds = implode(',', array_map('intval', $tags));
     $tagsCount = count($tags);
     $where[] = "p.postId IN (SELECT postId FROM postTags WHERE tagId IN ($safeTagIds) GROUP BY postId HAVING COUNT(DISTINCT tagId) = $tagsCount)";
 }
 
-// Si hay ingredient ids, restringimos a posts que contengan todas las ingredient ids
+// 4. si hay ingredient ids, restringimos a posts que contengan todas las ingredient ids
 if (!empty($ingredients)) {
     $safeIngIds = implode(',', array_map('intval', $ingredients));
     $ingCount = count($ingredients);
     $where[] = "p.postId IN (SELECT postId FROM ingredientrecipe WHERE ingredientId IN ($safeIngIds) GROUP BY postId HAVING COUNT(DISTINCT ingredientId) = $ingCount)";
 }
 
-// Si hay ingredient names (custom o no), filtramos por nombre o customIngredient
+// 5. si hay ingredient names, filtramos por nombre o customIngredient
 if (!empty($ingredientNames)) {
     // escapar y preparar lista de nombres
-    $escaped = array_map(function($n) use ($con){ return "'" . mysqli_real_escape_string($con, $n) . "'"; }, $ingredientNames);
+    $escaped = array_map(function ($n) use ($con) {
+        return "'" . mysqli_real_escape_string($con, $n) . "'";
+    }, $ingredientNames);
     $namesList = implode(',', $escaped);
     $nameCount = count($ingredientNames);
     $where[] = "p.postId IN (
@@ -67,7 +80,7 @@ if (!empty($ingredientNames)) {
     )";
 }
 
-// unir where clauses
+//6. se anaden las condiciones puestas a la consulta 
 if (!empty($where)) {
     $sql .= " WHERE " . implode(' AND ', $where);
 }
@@ -75,12 +88,13 @@ if (!empty($where)) {
 $sql .= " ORDER BY p.postDate DESC";
 
 $stmt = mysqli_prepare($con, $sql);
+//si preparacion de la consulta falla
 if ($stmt === false) {
     echo json_encode(['error' => 'db_prepare_failed', 'msj' => mysqli_error($con), 'sql' => $sql]);
     exit();
 }
 
-// bind params: siempre el userId primero, luego posibles like params
+// 7. prepara los parámetros para vincular las variables en el bind_param
 $bindTypes = 'i';
 $bindValues = [$userId];
 if ($search !== '') {
@@ -91,7 +105,7 @@ if ($search !== '') {
 }
 
 $bind_ok = true;
-// Ejecutar bind dinámico (usar call_user_func_array para pasar refs)
+
 if (!empty($bindValues)) {
     // preparar array de referencias
     $refs = [];
@@ -107,17 +121,17 @@ if (!empty($bindValues)) {
         error_log('bind_param failed: ' . mysqli_error($con));
     }
 }
-
+// 8. ejecuta la consulta
 mysqli_stmt_execute($stmt);
 $res = mysqli_stmt_get_result($stmt);
-// Después de obtener las recetas básicas
+// por cada publicación se obtiene la información y sus imágenes
 while ($row = mysqli_fetch_assoc($res)) {
     if (!empty($row['userImage'])) {
         $row['userImage'] = base64_encode($row['userImage']);
     }
-    // Obtener todas las imágenes de la receta
     $imageData = '';
     $row['images'] = [];
+    // hacer la consulta para obtener las imágenes de la publicación
     $sqlImg = "SELECT imageData FROM recipeImages WHERE postId = ? ORDER BY imageOrder ASC";
     $stmtImg = mysqli_prepare($con, $sqlImg);
     if ($stmtImg) {
@@ -129,6 +143,7 @@ while ($row = mysqli_fetch_assoc($res)) {
         }
         mysqli_stmt_close($stmtImg);
     }
+    // se procesan los conteos y estados de "me gusta"
     $row['likesCount'] = isset($row['likesCount']) ? intval($row['likesCount']) : 0;
     $row['userLiked'] = (isset($row['userLikedCount']) && intval($row['userLikedCount']) > 0) ? true : false;
     unset($row['userLikedCount']);

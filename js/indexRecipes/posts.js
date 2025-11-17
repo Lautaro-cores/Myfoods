@@ -89,13 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
                   </div>
                 </div>
                 <div class="post-likes">
-                  <i class="${
-                    post.userLiked > 0 ? "bi bi-heart-fill" : "bi bi-heart"
-                  }"></i>
+                  <i class="${  post.userLiked > 0 ? "bi bi-heart-fill" : "bi bi-heart" }"></i>
                   <span class="likes-count">${likesCount}</span>
-                  <button class="report-btn btn btn-sm" data-post-id="${
-                    post.postId
-                  }" type="button" aria-label="Denunciar publicación">
+                  <button class="report-btn btn btn-sm" data-post-id="${ post.postId }" type="button" aria-label="Denunciar publicación">
                     <i class="bi bi-flag"></i>
                   </button>
                 </div>
@@ -151,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (reportModalEl) {
         const input = document.getElementById("reportPostId");
         if (input) input.value = postId;
-        new bootstrap.Modal(reportModalEl).show();
+        reportModalEl.show();
       }
       return;
     }

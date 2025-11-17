@@ -1,159 +1,170 @@
-// js/publish_image_handler.js
+// imagePreview.js
+// este archivo maneja la vista previa de las imágenes antes de subirlas en la página de publicar receta
 
 document.addEventListener("DOMContentLoaded", () => {
-    const imagePreview = document.getElementById("imagePreview");
-    const imageInput = document.getElementById("imageInput");
-    const mensajeDiv = document.getElementById("mensaje");
+    // obtiene los elementos clave del DOM
+    const imagePreview = document.getElementById("imagePreview");
+    const imageInput = document.getElementById("imageInput");
+    const mensajeDiv = document.getElementById("mensaje");
 
-    if (!imageInput || !imagePreview || !mensajeDiv) return;
+    if (!imageInput || !imagePreview || !mensajeDiv) return;
 
-    // --- Manejo de la selección (change) para imágenes principales ---
-    if (imageInput) {
-        imageInput.addEventListener("change", () => {
-            // Limpiar preview existente
-            imagePreview.innerHTML = "";
-            mensajeDiv.textContent = "";
+    if (imageInput) {
+        imageInput.addEventListener("change", () => {
+            // limpia la vista previa y los mensajes de error existentes
+            imagePreview.innerHTML = "";
+            mensajeDiv.textContent = "";
 
-            // Validar número máximo de imágenes
-            if (imageInput.files.length > 3) {
-                mensajeDiv.style.color = "red";
-                mensajeDiv.textContent = "Máximo 3 imágenes permitidas";
-                imageInput.value = "";
-                return;
-            }
+            // valida el número máximo de imágenes permitidas
+            if (imageInput.files.length > 3) {
+                mensajeDiv.style.color = "red";
+                mensajeDiv.textContent = "Máximo 3 imágenes permitidas";
+                imageInput.value = "";
+                return;
+            }
 
-            // Crear previews para cada imagen
-            Array.from(imageInput.files).forEach((file, index) => {
-                const reader = new FileReader();
-                const container = document.createElement("div");
-                container.className = "preview-container";
-                
-                reader.onload = (e) => {
-                    container.innerHTML = `
-                        <img src="${e.target.result}" alt="Vista previa ${index + 1}">
-                        <button type="button" class="remove-image" data-index="${index}">&times;</button>
-                    `;
-                    imagePreview.appendChild(container);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
+            // pasa sobre cada archivo seleccionado para crear su vista previa
+            Array.from(imageInput.files).forEach((file, index) => {
+                const reader = new FileReader();
+                const container = document.createElement("div");
+                container.className = "preview-container";
+                
+                // cuando el archivo se carga, inserta la imagen y el botón de borrado
+                reader.onload = (e) => {
+                    container.innerHTML = `
+                        <img src="${e.target.result}" alt="Vista previa ${index + 1}">
+                        <button type="button" class="remove-image" data-index="${index}">&times;</button>
+                    `;
+                    imagePreview.appendChild(container);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
 
-        // --- Manejo de eliminación (click en el preview) ---
-        imagePreview.addEventListener("click", (e) => {
-            if (e.target.classList.contains("remove-image")) {
-                const index = parseInt(e.target.dataset.index);
-                const dt = new DataTransfer();
-                const { files } = imageInput;
-                
-                // Reconstruir la lista de archivos omitiendo el índice a eliminar
-                for (let i = 0; i < files.length; i++) {
-                    if (i !== index) {
-                        dt.items.add(files[i]);
-                    }
-                }
-                
-                imageInput.files = dt.files;
-                e.target.parentElement.remove();
-                
-                // Reindexar los botones de eliminación restantes
-                document.querySelectorAll(".remove-image").forEach((btn, idx) => {
-                    btn.dataset.index = idx;
-                });
-            }
-        });
-    }
+        //Maneja la eliminacion de las prewiews de las imagenes
+        imagePreview.addEventListener("click", (e) => {
+            // verifica que el clic fue en el botón de eliminar
+            if (e.target.classList.contains("remove-image")) {
+                const index = parseInt(e.target.dataset.index);
+                const dt = new DataTransfer();
+                const { files } = imageInput;
+                
+                // reconstruye la lista de archivos (FileList) omitiendo el índice a eliminar
+                for (let i = 0; i < files.length; i++) {
+                    if (i !== index) {
+                        dt.items.add(files[i]);
+                    }
+                }
+                
+                // actualiza el input de archivo con la nueva lista
+                imageInput.files = dt.files;
+                e.target.parentElement.remove();
+                document.querySelectorAll(".remove-image").forEach((btn, idx) => {
+                    btn.dataset.index = idx;
+                });
+            }
+        });
+    }
 
-    // --- Manejo de previews para inputs de imagen de pasos (delegación)
-    // Mantenemos un map por input para acumular selecciones sucesivas (los file inputs reemplazan por defecto)
-    const stepFilesMap = new WeakMap();
-    document.addEventListener('change', (e) => {
-        const target = e.target;
-        if (!target || !target.matches) return;
-        if (target.matches('.step-image-input')) {
-            const newFiles = target.files ? Array.from(target.files) : [];
-            const container = target.closest('.input-container');
-            if (!container) return;
-            let stored = stepFilesMap.get(target) || [];
+    // Maneja los prewiew de las imagene en los pasos de la receta
+    // usamos weakmap para almacenar archivos, ya que los file inputs por defecto no acumulan
+    const stepFilesMap = new WeakMap();
+    document.addEventListener('change', (e) => {
+        const target = e.target;
+        if (!target || !target.matches) return;
+        // verifica si el input es un input de imagen de paso
+        if (target.matches('.step-image-input')) {
+            const newFiles = target.files ? Array.from(target.files) : [];
+            const container = target.closest('.input-container');
+            if (!container) return;
+            // recupera los archivos almacenados para este input
+            let stored = stepFilesMap.get(target) || [];
 
-            // Combinar archivos previos con los nuevos, evitando duplicados por name+size
-            const combined = stored.concat(newFiles).reduce((acc, file) => {
-                const exists = acc.some(f => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified);
-                if (!exists) acc.push(file);
-                return acc;
-            }, []);
+            // combina archivos previos con los nuevos, eliminando duplicados
+            const combined = stored.concat(newFiles).reduce((acc, file) => {
+                const exists = acc.some(f => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified);
+                if (!exists) acc.push(file);
+                return acc;
+            }, []);
 
-            const maxPerStep = 3;
-            if (combined.length > maxPerStep) {
-                // Truncar y avisar
-                combined.length = maxPerStep;
-            }
+            const maxPerStep = 3;
+            // verifica el límite de archivos por paso y trunca si es necesario
+            if (combined.length > maxPerStep) {
+                combined.length = maxPerStep;
+            }
 
-            // Reconstruir FileList usando DataTransfer
-            const dt = new DataTransfer();
-            combined.forEach(f => dt.items.add(f));
-            try {
-                target.files = dt.files;
-            } catch (err) {
-                // En algunos entornos target.files es read-only; en ese caso dejamos el input tal como está
-                console.warn('No se pudo asignar target.files programáticamente:', err);
-            }
+            // reconstruye el filelist del input para enviarlo al servidor
+            const dt = new DataTransfer();
+            combined.forEach(f => dt.items.add(f));
+            try {
+                target.files = dt.files;
+            } catch (err) {
+                // maneja la excepción si target.files es read-only
+                console.warn('No se pudo asignar target.files programáticamente:', err);
+            }
 
-            // Guardar en el map
-            stepFilesMap.set(target, combined);
+            // guarda la lista combinada en el weakmap
+            stepFilesMap.set(target, combined);
 
-            // Renderizar preview
-            let preview = container.querySelector('.step-image-preview');
-            if (!preview) {
-                preview = document.createElement('div');
-                preview.className = 'step-image-preview';
-                target.parentElement.appendChild(preview);
-            }
-            preview.innerHTML = '';
+            // renderiza la vista previa de las imágenes combinadas
+            let preview = container.querySelector('.step-image-preview');
+            // si no existe el contenedor de preview, lo crea
+            if (!preview) {
+                preview = document.createElement('div');
+                preview.className = 'step-image-preview';
+                target.parentElement.appendChild(preview);
+            }
+            preview.innerHTML = '';
 
-            combined.forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    const img = document.createElement('img');
-                    img.src = ev.target.result;
-                    img.alt = `Vista previa del paso ${index + 1}`;
-                    img.style.maxWidth = '140px';
-                    img.style.marginRight = '8px';
-                    img.style.borderRadius = '6px';
-                    preview.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            });
+            // crea y adjunta el elemento img para cada archivo
+            combined.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const img = document.createElement('img');
+                    img.src = ev.target.result;
+                    img.alt = `Vista previa del paso ${index + 1}`;
+                    img.style.maxWidth = '140px';
+                    img.style.marginRight = '8px';
+                    img.style.borderRadius = '6px';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
 
-            if (combined.length === 0) return;
-            if (combined.length >= maxPerStep) {
-                const warn = document.createElement('div');
-                warn.className = 'text-warning small mt-2';
-                warn.textContent = `Se mostrarán solo las primeras ${maxPerStep} imágenes para este paso.`;
-                preview.appendChild(warn);
-            }
+            if (combined.length === 0) return;
+            // muestra una advertencia si se alcanzó el límite máximo
+            if (combined.length >= maxPerStep) {
+                const warn = document.createElement('div');
+                warn.className = 'text-warning small mt-2';
+                warn.textContent = `Se mostrarán solo las primeras ${maxPerStep} imágenes para este paso.`;
+                preview.appendChild(warn);
+            }
 
-            const removeAllBtn = document.createElement('button');
-            removeAllBtn.type = 'button';
-            removeAllBtn.className = 'remove-step-image btn btn-sm btn-outline-danger mt-2';
-            removeAllBtn.textContent = 'Eliminar imágenes';
-            preview.appendChild(removeAllBtn);
-        }
-    });
+            // añade el botón para eliminar todas las imágenes del paso
+            const removeAllBtn = document.createElement('button');
+            removeAllBtn.type = 'button';
+            removeAllBtn.className = 'remove-step-image btn btn-sm btn-outline-danger mt-2';
+            removeAllBtn.textContent = 'Eliminar imágenes';
+            preview.appendChild(removeAllBtn);
+        }
+    });
 
-    // Manejador delegado (click) para eliminar imágenes de un paso
-    document.addEventListener('click', (e) => {
-        const target = e.target;
-        if (target && target.classList && target.classList.contains('remove-step-image')) {
-            const container = target.closest('.input-container');
-            if (!container) return;
-            const fileInput = container.querySelector('.step-image-input');
-            const preview = container.querySelector('.step-image-preview');
-            if (fileInput) {
-                fileInput.value = '';
-                stepFilesMap.delete(fileInput);
-            }
-            if (preview) preview.innerHTML = '';
-        }
-    });
+    // manejador delegado (click) para eliminar todas las imágenes de un paso
+    document.addEventListener('click', (e) => {
+        const target = e.target;
+        // verifica si el clic fue en el botón de eliminar imágenes del paso
+        if (target && target.classList && target.classList.contains('remove-step-image')) {
+            const container = target.closest('.input-container');
+            if (!container) return;
+            const fileInput = container.querySelector('.step-image-input');
+            const preview = container.querySelector('.step-image-preview');
+            if (fileInput) {
+                // limpia el valor del input y borra la referencia en el weakmap
+                fileInput.value = '';
+                stepFilesMap.delete(fileInput);
+            }
+            // limpia la vista previa
+            if (preview) preview.innerHTML = '';
+        }
+    });
 });

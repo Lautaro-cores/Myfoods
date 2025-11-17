@@ -1,3 +1,6 @@
+//searchTags.js
+// este archivo maneja la funcionalidad de selección de tags para filtrar recetas en la búsqueda
+
 document.addEventListener('DOMContentLoaded', () => {
     // Obtiene todos los botones de filtro de tags
     const tagButtons = Array.from(document.querySelectorAll('.tag-filter'));

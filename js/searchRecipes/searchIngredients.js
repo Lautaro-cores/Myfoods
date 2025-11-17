@@ -1,3 +1,6 @@
+//searchIngredients.js
+// este archivo maneja la funcionalidad de búsqueda y selección de ingredientes para filtrar recetas en la búsqueda
+
 document.addEventListener('DOMContentLoaded', () => {
     // Obtiene referencias a los elementos clave del DOM
     const input = document.getElementById('ingredientInput');

@@ -1,3 +1,6 @@
+// savedAccions.js
+// este archivo maneja las acciones de las recetas guardadas, como ver y quitar de guardados
+
 export function setupPostActions(container) {
     
     // Configuración de la lógica para los botones "Ver"

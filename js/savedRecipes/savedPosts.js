@@ -1,3 +1,6 @@
+// savedPosts.js
+// este archivo maneja la carga y renderización de las recetas guardadas por el usuario
+
 import { setupPostActions } from './savedAccions.js'; // Se importa la función para configurar los event listeners de las tarjetas
 
 function timeAgo(dateString) {

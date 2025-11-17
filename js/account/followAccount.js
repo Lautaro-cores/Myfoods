@@ -1,32 +1,35 @@
+//followAccount.js
+// este archivo maneja la funcionalidad de seguir y dejar de seguir a otros usuarios
+
+
 document.addEventListener("DOMContentLoaded", () => {
-    // Obtiene la referencia al botón de seguir
     followBtn = document.getElementById("followBtn");
-    
-    // Obtiene el ID del usuario al que se está siguiendo desde el atributo del contenedor
+
+    // obtiene el ID del usuario al que se está siguiendo desde el atributo del contenedor
     const followingUserId = document.querySelector('.follow-stats').getAttribute('data-following-user-id');
 
-    // Carga el estado inicial de seguimiento desde el servidor
+    // carga el estado inicial de seguimiento desde el servidor
     loadFollowState(followingUserId);
 
-    // Configura el evento para alternar el seguimiento
+    // configura el evento para alternar el seguimiento
     setupFollowToggle(followingUserId);
 });
 
-// Carga el estado actual de seguimiento y las estadísticas de seguidores/seguidos
+// funcion que carga el estado actual de seguimiento 
 function loadFollowState(followingUserId) {
+    // consulta al getFollow.php para saber el estado de seguimiento
     fetch(`../getFollow.php?followingUserId=${followingUserId}`)
         .then((res) => res.json())
         .then((data) => {
-            // Si hay un error en la respuesta, no continúa
             if (data.error) return;
 
-            // Actualiza los contadores de seguidores y seguidos
+            // actualiza los contadores de seguidores y seguidos
             const followers = data.followersCount || 0;
             const following = data.followingCount || 0;
             document.querySelector('.followers-count').textContent = followers;
             document.querySelector('.following-count').textContent = following;
 
-            // Actualiza el estado visual del botón (Seguir / Dejar de seguir)
+            // actualiza el estado visual del botón (Seguir / Dejar de seguir)
             if (!followBtn) return;
             if (data.isFollowing) {
                 followBtn.classList.add("following");
@@ -39,16 +42,16 @@ function loadFollowState(followingUserId) {
         .catch((err) => console.error("Error al cargar estado de seguimiento:", err));
 }
 
-// Configura el evento click del botón para alternar el estado de seguimiento
+// funcion que configura el evento click del botón para alternar el estado de seguimiento
 function setupFollowToggle(followingUserId) {
     if (!followBtn) return;
 
     followBtn.addEventListener("click", () => {
-        // Prepara los datos del usuario a seguir o dejar de seguir
+        // prepara los datos del usuario a seguir o dejar de seguir
         const form = new URLSearchParams();
         form.append("followingUserId", followingUserId);
 
-        // Envía la solicitud para alternar el seguimiento en el servidor
+        // envía la solicitud para alternar el seguimiento al toggleFollow.php
         fetch("../toggleFollow.php", {
             method: "POST",
             body: form.toString(),
@@ -56,7 +59,7 @@ function setupFollowToggle(followingUserId) {
         })
             .then((res) => res.json())
             .then((result) => {
-                // Vuelve a cargar el estado desde el servidor para mantener sincronía visual
+                // vuelve a cargar el estado de seguimiento
                 loadFollowState(followingUserId);
             })
             .catch((err) => {

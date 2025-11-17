@@ -1,5 +1,9 @@
 <?php
+// getLikes.php
+// este archivo obtiene la cantidad de likes de una publicación y si el usuario actual le ha dado like
+
 session_start();
+// se conecta a la base de datos
 require_once "includes/config.php";
 
 header('Content-Type: application/json');
@@ -8,10 +12,10 @@ if (!isset($_GET['postId'])) {
     echo json_encode(['error' => 'postId_required']);
     exit();
 }
-
+// obtiene el ID de la publicación
 $postId = intval($_GET['postId']);
 
-// Obtener cantidad de likes
+// hace la consulta para obtener la cantidad de likes
 $sql = "SELECT COUNT(*) AS cnt FROM likes WHERE postId = ?";
 $stmt = mysqli_prepare($con, $sql);
 mysqli_stmt_bind_param($stmt, "i", $postId);
@@ -21,8 +25,10 @@ $row = mysqli_fetch_assoc($res);
 $count = intval($row['cnt'] ?? 0);
 
 $userLiked = false;
+// verifica si el usuario de la sesión ha dado like a la publicación
 if (isset($_SESSION['userId'])) {
     $userId = intval($_SESSION['userId']);
+    // hace la consulta para verificar si el usuario ha dado like a la publicación
     $sql2 = "SELECT 1 FROM likes WHERE postId = ? AND userId = ? LIMIT 1";
     $stmt2 = mysqli_prepare($con, $sql2);
     mysqli_stmt_bind_param($stmt2, "ii", $postId, $userId);

@@ -1,11 +1,14 @@
+// register.js
+// este archivo maneja la funcionalidad de registro de nuevos usuarios
+
 document.addEventListener("DOMContentLoaded", () => {
+  // obtiene referencias al formulario de registro y al div de mensajes
   const formRegister = document.getElementById("formRegister");
   const mensajeDiv = document.getElementById("mensaje");
 
-  // Si el formulario de registro está presente, se configura el evento de envío
+
   if (formRegister) {
     formRegister.addEventListener("submit", (e) => {
-      // Evita que el formulario se envíe por el método predeterminado
       e.preventDefault();
 
       const formData = new FormData(formRegister);
@@ -16,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.get("userPassword") &&
         formData.get("userEmail")
       ) {
-        // Envía los datos al archivo register.php mediante una solicitud POST
+        // envia al register.php los valores para registrar
         fetch("../register.php", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -28,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
             "&userEmail=" +
             encodeURIComponent(formData.get("userEmail")),
         })
-          // Convierte la respuesta de register.php en formato JSON
           .then((res) => res.json())
           .then((res) => {
             // Si register.php devuelve éxito, muestra el mensaje y redirige a index.php

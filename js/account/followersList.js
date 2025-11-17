@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    // Determina el tipo de lista según la página actual (siguiendo o seguidores)
+    // determina el tipo de lista según la página actual (siguiendo o seguidores)
     const path = window.location.pathname || '';
     const isFollowingPage = path.toLowerCase().endsWith('following.php');
     const isFollowersPage = path.toLowerCase().endsWith('followers.php');

@@ -1,17 +1,23 @@
 <?php
+// getComment.php
+// este archivo obtiene los comentarios principales de una receta junto con sus imágenes, likes y si el usuario ha dado like
+
 session_start();
+//  se conecta a la base de datos
 require_once "includes/config.php";
 
 header('Content-Type: application/json');
 
+// verifica si se proporcionó el postId
 if (!isset($_GET["postId"])) {
     echo json_encode(["error" => "ID de receta no proporcionado."]);
     exit();
 }
 
+// obtiene el ID de la publicación
 $postId = intval($_GET["postId"]);
 
-// Obtener solo comentarios principales (sin comentarios hijos) para la receta
+// Ohace la consulta para obtener los comentarios principales (sin comentarios hijos) para la receta
 $sql = "SELECT c.commentId, c.userId, c.postId, c.content, c.parentId, c.rating, u.userName, u.displayName, u.userImage,
            COALESCE(cl.likeCount, 0) as likeCount,
            CASE WHEN cl_user.likeId IS NOT NULL THEN 1 ELSE 0 END as userLiked,
@@ -39,14 +45,16 @@ mysqli_stmt_bind_param($stmt, "ii", $userId, $postId);
 mysqli_stmt_execute($stmt);
 $res = mysqli_stmt_get_result($stmt);
 
+// crea un array para almacenar los comentarios
 $allComments = [];
+//por cada comentario principal se obtiene la información y sus imágenes
 while ($row = mysqli_fetch_assoc($res)) {
     // Convertir la imagen BLOB a base64
     if (!empty($row['userImage'])) {
         $row['userImage'] = base64_encode($row['userImage']);
     }
     
-    // Obtener imágenes del comentario
+    // hace la consulta para obtener las imágenes del comentario
     $imageSql = "SELECT imageId, imageData, imageType, imageSize 
                  FROM commentImages 
                  WHERE commentId = ? 
@@ -71,7 +79,7 @@ while ($row = mysqli_fetch_assoc($res)) {
     } else {
         $images = [];
     }
-    
+    // asigna las imágenes al comentario
     $row['images'] = $images;
     
     $allComments[] = $row;

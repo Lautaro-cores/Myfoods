@@ -1,3 +1,7 @@
+//searchPost.js
+// este archivo maneja la funcionalidad de búsqueda de recetas con filtros de contenido, etiquetas e ingredientes
+
+
 document.addEventListener("DOMContentLoaded", () => {
     // Obtiene referencias a los elementos clave del DOM
     const btn = document.getElementById("searchButton");
@@ -10,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    // Función de ayuda para formatear la fecha a un formato "hace X tiempo"
+    // funcion para mostrar el tiempo que se subio el post
     function timeAgo(dateString) {
         const now = new Date();
         // Reemplaza el espacio por 'T' para asegurar el correcto parsing de la fecha
@@ -125,12 +129,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (customNames.length > 0) params.set('ingredientNames', customNames.join(','));
         }
 
-        // Construye la URL final de la petición
-        const requestUrl = `../searchRecipes.php?${params.toString()}`;
-        console.debug('searchRecipes request ->', requestUrl);
+
         
         // Ejecuta la petición de búsqueda
-        fetch(requestUrl)
+        fetch(`../searchRecipes.php?${params.toString()}`)
             .then((res) => {
                 // Lanza un error si la respuesta no es OK
                 if (!res.ok) throw new Error("Error de red");

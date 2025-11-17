@@ -1,29 +1,35 @@
 <?php
+//toggleLike.php
+// este archivo maneja la acción de dar o quitar like a una publicación
+
 session_start();
+//se conecta a la base de datos
 require_once "includes/config.php";
 
 header('Content-Type: application/json');
-
+// verifica si el usuario ha iniciado sesión
 if (!isset($_SESSION['userId'])) {
     echo json_encode(['success' => false, 'msj' => 'Debes iniciar sesion para dar like.']);
     exit();
 }
 
+// verifica si se proporcionó el postId
 if (!isset($_POST['postId'])) {
     echo json_encode(['success' => false, 'msj' => 'postId requerido.']);
     exit();
 }
-
+// obtiene el ID de la publicación y el ID del usuario de la sesión
 $postId = intval($_POST['postId']);
 $userId = intval($_SESSION['userId']);
 
-// Verificar si ya existe
+// hace la consulta para verificar si ya existe el like
 $sql = "SELECT likeId FROM likes WHERE postId = ? AND userId = ? LIMIT 1";
 $stmt = mysqli_prepare($con, $sql);
 mysqli_stmt_bind_param($stmt, "ii", $postId, $userId);
 mysqli_stmt_execute($stmt);
 $res = mysqli_stmt_get_result($stmt);
 
+// 1. si el like ya existe, lo elimina
 if ($row = mysqli_fetch_assoc($res)) {
 
     $sqlDel = "DELETE FROM likes WHERE likeId = ?";
@@ -35,7 +41,9 @@ if ($row = mysqli_fetch_assoc($res)) {
         echo json_encode(['success' => false, 'msj' => 'Error al quitar like.']);
     }
     exit();
-} else {
+}
+// 2. si el like no existe, lo inserta
+ else {
     // Insertar nuevo like
     $sqlIns = "INSERT INTO likes (postId, userId) VALUES (?, ?)";
     $stmtIns = mysqli_prepare($con, $sqlIns);
