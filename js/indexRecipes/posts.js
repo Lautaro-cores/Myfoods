@@ -121,8 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener('click', (e) => {
     const reportBtn = e.target.closest('.report-btn');
     if (reportBtn) {
-      e.preventDefault();
-      e.stopPropagation();
       const postId = reportBtn.getAttribute('data-post-id');
       const reportModalEl = document.getElementById('reportModal');
       if (reportModalEl) {
