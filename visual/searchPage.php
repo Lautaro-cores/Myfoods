@@ -46,8 +46,7 @@ if ($resTags) {
             <button id="searchButton" class="buttono">Buscar</button>
         </div>
     </div>
-
-        <div class="container my-3">
+        <div class="my-3" style="margin:auto; max-width: 1500px;"> 
             <div class="d-flex flex-row flex-wrap gap-2 align-items-center" id="topTagsRow">
                 <?php
                 // Obtener las 10 etiquetas más populares
@@ -64,14 +63,14 @@ if ($resTags) {
                 
                 foreach ($topTags as $t): 
                 ?>
-                    <button type="button" class="input btn btn-sm btn-outline-primary tag-filter" 
+                    <button type="button" class="buttonw btn btn-sm btn-outline-primary tag-filter" 
                             data-bs-toggle="button" 
                             data-tag="<?php echo intval($t['tagId']); ?>">
                         <?php echo htmlspecialchars($t['tagName']); ?>
                     </button>
                 <?php endforeach; ?>
-                <button type="button" class="input btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#allTagsModal">
-                    Más etiquetas
+                <button type="button" class="buttono btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#allTagsModal">
+                    Mas Filtros
                 </button>
             </div>
         </div>

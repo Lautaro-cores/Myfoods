@@ -37,7 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="carousel-inner">
                 ${post.images.map((img, idx) => `
                   <div class="carousel-item${idx === 0 ? " active" : ""}">
-                    <img src="data:image/jpeg;base64,${img}" class="d-block w-100" alt="Imagen ${idx + 1} de ${post.title}">
+                  <a href="../visual/viewRecipe.php?id=${post.postId}">
+                    <img src="data:image/jpeg;base64,${img}" class="d-block w-100 image-post" alt="Imagen ${idx + 1} de ${post.title}">
+                  </a>
                   </div>`).join("")}
               </div>
               ${post.images.length > 1 ? `
@@ -59,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return `
           <article class="post-card">
             <div class="post-image">${carouselHtml}</div>
+           <a class="link" href="../visual/viewRecipe.php?id=${post.postId}">
             <div class="post-content" data-post-id="${post.postId}">
               <div class="post-header">
                 <div class="post-left">
@@ -79,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <h3 class="post-title">${post.title}</h3>
               <p class="post-desc">${post.description || ""}</p>
             </div>
+            </a>
           </article>
         `;
       }).join("") +
@@ -130,13 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Redirige al detalle de la receta
-    const postContent = e.target.closest('.post-content');
-    if (postContent) {
-      const postId = postContent.getAttribute('data-post-id');
-      if (postId) {
-        window.location.href = `../visual/viewRecipe.php?id=${postId}`;
-      }
-    }
+    
   });
 });
 

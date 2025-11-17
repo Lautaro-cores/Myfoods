@@ -30,7 +30,7 @@ while ($row = mysqli_fetch_assoc($res)) {
     if (!empty($row['userImage'])) {
         $row['userImage'] = base64_encode($row['userImage']);
     }
-    // Obtener todas las imágenes de la receta
+    $imageData = '';
     $row['images'] = [];
     $sqlImg = "SELECT imageData FROM recipeImages WHERE postId = ? ORDER BY imageOrder ASC";
     $stmtImg = mysqli_prepare($con, $sqlImg);

@@ -1,5 +1,16 @@
 import { setupPostActions } from './savedAccions.js'; // Se importa la función para configurar los event listeners de las tarjetas
 
+function timeAgo(dateString) {
+  // Convierte una fecha a formato relativo (ejemplo: "hace 2 horas")
+  const now = new Date();
+  const date = new Date(dateString.replace(" ", "T"));
+  const diff = Math.floor((now - date) / 1000);
+  if (diff < 60) return "hace unos segundos";
+  if (diff < 3600) return `hace ${Math.floor(diff / 60)} minutos`;
+  if (diff < 86400) return `hace ${Math.floor(diff / 3600)} horas`;
+  return `hace ${Math.floor(diff / 86400)} días`;
+}
+
 function createSavedPostCard(post) {
     // Determina la URL del avatar del usuario, usando una imagen por defecto si no hay imagen de usuario
     const avatarUrl = post.userImage ? `data:image/jpeg;base64,${post.userImage}` : "../img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg";
@@ -41,7 +52,7 @@ function createSavedPostCard(post) {
               <img class="post-avatar" src="${avatarUrl}" alt="Avatar">
               <div class="post-meta">
                 <div class="post-author">${post.displayName}</div>
-                <div class="post-time">${post.postDate}</div>
+                <div class="post-time">${timeAgo(post.postDate)}</div>
               </div>
             </div>
             <div class="post-actions">
