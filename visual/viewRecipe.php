@@ -22,7 +22,12 @@ $stmt = mysqli_prepare($con, $sql);
 mysqli_stmt_bind_param($stmt, "i", $postId);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_bind_result($stmt, $title, $description, $authorId, $authorName, $authorDisplayName, $authorImage);
-mysqli_stmt_fetch($stmt);
+// Si no hay resultado, mostrar mensaje y salir
+if (!mysqli_stmt_fetch($stmt)) {
+    mysqli_stmt_close($stmt);
+    echo "Receta no encontrada.";
+    exit;
+}
 mysqli_stmt_close($stmt);
 
 // Obtener todas las imágenes de la receta
@@ -33,9 +38,11 @@ if ($stmtImg) {
     mysqli_stmt_bind_param($stmtImg, "i", $postId);
     mysqli_stmt_execute($stmtImg);
     mysqli_stmt_bind_result($stmtImg, $imageData);
-    while (mysqli_stmt_fetch($stmtImg)) {
-        $images[] = base64_encode($imageData);
-    }
+        while (mysqli_stmt_fetch($stmtImg)) {
+            if ($imageData !== null && $imageData !== '') {
+                $images[] = base64_encode($imageData);
+            }
+        }
     mysqli_stmt_close($stmtImg);
 }
 
@@ -162,7 +169,7 @@ if ($title) {
                         <div class="carousel-inner">
                             <?php foreach ($images as $img => $imgBase64): ?>
                                 <div class="carousel-item <?php echo $img === 0 ? 'active' : ''; ?>">
-                                    <img src="data:image/jpeg;base64,<?php echo $imgBase64; ?>" class="image-recipe" alt="Imagen <?php echo $img + 1; ?> de <?php echo htmlspecialchars($title); ?>">
+                                    <img src="data:image/jpeg;base64,<?php echo $imgBase64; ?>" class="image-recipe" alt="Imagen <?php echo $img + 1; ?> de <?php echo htmlspecialchars($title ?? ''); ?>">
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -185,17 +192,17 @@ if ($title) {
 
         <div class="recipe-info">
 
-        <h1 class="input"><?php echo ($title); ?></h1>
+        <h1 class="input"><?php echo htmlspecialchars($title ?? ''); ?></h1>
 
           <div class="recipe-author">
-                 <a href="account.php?username=<?php echo urlencode($authorName); ?>" class="author-link">
+                 <a href="account.php?username=<?php echo urlencode($authorName ?? ''); ?>" class="author-link">
                     <img src="<?php echo !empty($authorImage) ? 'data:image/jpeg;base64,' . base64_encode($authorImage) : '../img/default-profile.jpg'; ?>" 
-                         alt="Foto de <?php echo htmlspecialchars($authorName); ?>"
+                         alt="Foto de <?php echo htmlspecialchars($authorName ?? ''); ?>"
                          class="author-image">
                 </a>
-                <a href="account.php?username=<?php echo urlencode($authorName); ?>" class="author-link">
-                    <span class="author-name"><?php echo htmlspecialchars($authorDisplayName); ?></span>
-                    <span class="author-name">@<?php echo htmlspecialchars($authorName); ?></span>
+                <a href="account.php?username=<?php echo urlencode($authorName ?? ''); ?>" class="author-link">
+                    <span class="author-name"><?php echo htmlspecialchars($authorDisplayName ?? ''); ?></span>
+                    <span class="author-name">@<?php echo htmlspecialchars($authorName ?? ''); ?></span>
                 </a>
             </div>            
      
@@ -203,12 +210,12 @@ if ($title) {
             <div class="recipe-tags">
                 <strong>Etiquetas: </strong>
                 <?php foreach ($tags as $t): ?>
-                    <a href="searchPage.php?activateTag=<?php echo intval($t['tagId']); ?>" class="tag-badge input"><?php echo htmlspecialchars($t['tagName']); ?></a>
+                    <a href="searchPage.php?activateTag=<?php echo intval($t['tagId'] ?? 0); ?>" class="tag-badge input"><?php echo htmlspecialchars($t['tagName'] ?? ''); ?></a>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
             <br>
-           <p class="input"><?php echo ($description); ?></p>
+           <p class="input"><?php echo htmlspecialchars($description ?? ''); ?></p>
         </div>
 
     </div>
@@ -235,7 +242,7 @@ if ($title) {
             <ol>
                 <?php foreach ($pasos as $p): ?>
                     <li class="step-input">
-                        <?php echo htmlspecialchars($p['step']); ?>
+                        <?php echo htmlspecialchars($p['step'] ?? ''); ?>
                         <?php if (!empty($p['images'])): ?>
                             <div class="step-image mt-2">
                                 <?php foreach ($p['images'] as $imgBase64): ?>

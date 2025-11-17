@@ -128,10 +128,11 @@ $post = null;
 $sql = "SELECT p.postId, p.title, p.description
         FROM post p 
         WHERE p.postId=? LIMIT 1";
+$images = [];
 if ($stmt = mysqli_prepare($con, $sql)) {
     mysqli_stmt_bind_param($stmt, 'i', $id);
     mysqli_stmt_execute($stmt);
-    mysqli_stmt_bind_result($stmt, $pid, $ptitle, $pdescription, );
+    mysqli_stmt_bind_result($stmt, $pid, $ptitle, $pdescription);
     if (mysqli_stmt_fetch($stmt)) {
         $post = [
             'postId' => $pid,
@@ -142,7 +143,11 @@ if ($stmt = mysqli_prepare($con, $sql)) {
     mysqli_stmt_close($stmt);
 }
 
-$images = [];
+// Si no existe el post redirigir de inmediato (evita usar $post null más abajo)
+if (!$post) { header('Location: index.php'); exit; }
+
+
+// ahora obtener imágenes
 $sqlImg = "SELECT imageData FROM recipeImages WHERE postId = ? ORDER BY imageOrder ASC";
 $stmtImg = mysqli_prepare($con, $sqlImg);
 if ($stmtImg) {
@@ -217,7 +222,7 @@ if (!$post) { header('Location: index.php'); exit; }
 </head>
 <body>
     <div class="admin-header">
-        <h1>Editar Publicación #<?= htmlspecialchars($post['postId']) ?></h1>
+        <h1>Editar Publicación #<?= htmlspecialchars($post['postId'] ?? 0) ?></h1>
     </div>
     
     <?php if (isset($error)): ?>
@@ -227,12 +232,12 @@ if (!$post) { header('Location: index.php'); exit; }
     <form method="post" enctype="multipart/form-data" class="admin-form">
         <div class="form-group">
             <label>Título</label>
-            <input type="text" name="title" value="<?= htmlspecialchars($post['title']) ?>" required>
+            <input type="text" name="title" value="<?= htmlspecialchars($post['title'] ?? '') ?>" required>
         </div>
         
         <div class="form-group">
             <label>Descripción</label>
-            <textarea name="description" rows="8" cols="60" required><?= htmlspecialchars($post['description']) ?></textarea>
+            <textarea name="description" rows="8" cols="60" required><?= htmlspecialchars($post['description'] ?? '') ?></textarea>
         </div>
         
         <div class="form-group">

@@ -1,6 +1,9 @@
+//post.js
+//este archivo maneja la carga de los post y la forma de orden de estos
 
+
+// funcion para mostrar el tiempo que se subio el post
 function timeAgo(dateString) {
-  // Convierte una fecha a formato relativo (ejemplo: "hace 2 horas")
   const now = new Date();
   const date = new Date(dateString.replace(" ", "T"));
   const diff = Math.floor((now - date) / 1000);
@@ -10,11 +13,12 @@ function timeAgo(dateString) {
   return `hace ${Math.floor(diff / 86400)} días`;
 }
 
+
 document.addEventListener("DOMContentLoaded", () => {
   const postsDiv = document.getElementById("posts");
   if (!postsDiv) return;
 
-  // Renderiza todas las publicaciones en la cuadrícula principal
+  // funcion para renderizar los post y su estructura visual
   function renderPosts(posts) {
     if (!posts || posts.length === 0) {
       postsDiv.innerHTML = "<p>No hay recetas publicadas aún.</p>";
@@ -23,26 +27,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     postsDiv.innerHTML =
       '<div class="posts-grid">' +
-      posts.map((post) => {
-        const avatarUrl = post.userImage
-          ? `data:image/jpeg;base64,${post.userImage}`
-          : "../img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg";
+      posts
+        .map((post) => {
+          const avatarUrl = post.userImage
+            ? `data:image/jpeg;base64,${post.userImage}`
+            : "../img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg";
 
-        // Genera un carrusel de imágenes si hay más de una
-        let carouselHtml = "";
-        if (post.images && post.images.length > 0) {
-          const carouselId = `carouselPost${post.postId}`;
-          carouselHtml = `
+          // carrosel de imagenes en el posts
+          let carouselHtml = "";
+          if (post.images && post.images.length > 0) {
+            const carouselId = `carouselPost${post.postId}`;
+            carouselHtml = `
             <div id="${carouselId}" class="carousel slide">
               <div class="carousel-inner">
-                ${post.images.map((img, idx) => `
+                ${post.images
+                  .map(
+                    (img, idx) => `
                   <div class="carousel-item${idx === 0 ? " active" : ""}">
                   <a href="../visual/viewRecipe.php?id=${post.postId}">
-                    <img src="data:image/jpeg;base64,${img}" class="d-block w-100 image-post" alt="Imagen ${idx + 1} de ${post.title}">
+                    <img src="data:image/jpeg;base64,${img}" class="d-block w-100 image-post" alt="Imagen ${
+                      idx + 1
+                    } de ${post.title}">
                   </a>
-                  </div>`).join("")}
+                  </div>`
+                  )
+                  .join("")}
               </div>
-              ${post.images.length > 1 ? `
+              ${
+                post.images.length > 1
+                  ? `
                 <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
                   <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Anterior</span>
@@ -50,31 +63,39 @@ document.addEventListener("DOMContentLoaded", () => {
                 <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
                   <span class="carousel-control-next-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Siguiente</span>
-                </button>` : ""}
+                </button>`
+                  : ""
+              }
             </div>
           `;
-        }
+          }
 
-        const likesCount = post.likesCount || 0;
+          const likesCount = post.likesCount || 0;
 
-        // Estructura visual de cada post
-        return `
+          // estructura del post
+          return `
           <article class="post-card">
             <div class="post-image">${carouselHtml}</div>
            <a class="link" href="../visual/viewRecipe.php?id=${post.postId}">
             <div class="post-content" data-post-id="${post.postId}">
               <div class="post-header">
                 <div class="post-left">
-                  <img class="post-avatar" src="${avatarUrl}" alt="Avatar ${post.userName}">
+                  <img class="post-avatar" src="${avatarUrl}" alt="Avatar ${
+            post.userName
+          }">
                   <div class="post-meta">
                     <div class="post-author">${post.displayName}</div>
                     <div class="post-time">${timeAgo(post.postDate)}</div>
                   </div>
                 </div>
                 <div class="post-likes">
-                  <i class="${post.userLiked > 0 ? "bi bi-heart-fill" : "bi bi-heart"}"></i>
+                  <i class="${
+                    post.userLiked > 0 ? "bi bi-heart-fill" : "bi bi-heart"
+                  }"></i>
                   <span class="likes-count">${likesCount}</span>
-                  <button class="report-btn btn btn-sm" data-post-id="${post.postId}" type="button" aria-label="Denunciar publicación">
+                  <button class="report-btn btn btn-sm" data-post-id="${
+                    post.postId
+                  }" type="button" aria-label="Denunciar publicación">
                     <i class="bi bi-flag"></i>
                   </button>
                 </div>
@@ -85,70 +106,74 @@ document.addEventListener("DOMContentLoaded", () => {
             </a>
           </article>
         `;
-      }).join("") +
+        })
+        .join("") +
       "</div>";
   }
 
-  // Carga inicial: muestra posts aleatorios
+
+  // cuando se carga la pagina busca los post con orden aleatorio y los renderiza
   fetch("../getPosts.php?order=random")
-    .then(res => res.json())
-    .then(posts => renderPosts(posts))
-    .catch(err => console.error("Error cargando posts:", err));
+    .then((res) => res.json())
+    .then((posts) => renderPosts(posts))
+    .catch((err) => console.error("Error cargando posts:", err));
 
-  // Botón "Más Likeados"
-  const loadMoreBtn = document.getElementById('loadMoreButton');
+  // si se da click en el boton de mas populares busca los post con mas likes
+  const loadMoreBtn = document.getElementById("loadMoreButton");
   if (loadMoreBtn) {
-    loadMoreBtn.addEventListener('click', () => {
-      fetch('../getPosts.php?order=likes')
-        .then(res => res.json())
-        .then(posts => renderPosts(posts))
-        .catch(err => console.error('Error cargando posts por likes:', err));
+    loadMoreBtn.addEventListener("click", () => {
+      fetch("../getPosts.php?order=likes")
+        .then((res) => res.json())
+        .then((posts) => renderPosts(posts))
+        .catch((err) => console.error("Error cargando posts por likes:", err));
     });
   }
 
-  // Botón "Seguidos"
-  const showFollowedBtn = document.getElementById('showFollowedButton');
+  // si se da click en el boton de seguidos busca los post de los usuarios que seguis
+  const showFollowedBtn = document.getElementById("showFollowedButton");
   if (showFollowedBtn) {
-    showFollowedBtn.addEventListener('click', () => {
-      fetch('../getFollowedPosts.php')
-        .then(res => res.json())
-        .then(posts => renderPosts(posts))
-        .catch(err => console.error('Error cargando posts de seguidos:', err));
+    showFollowedBtn.addEventListener("click", () => {
+      fetch("../getFollowedPosts.php")
+        .then((res) => res.json())
+        .then((posts) => renderPosts(posts))
+        .catch((err) =>
+          console.error("Error cargando posts de seguidos:", err)
+        );
     });
   }
 
-  // Delegación de eventos: manejar clicks en botones o posts
-  document.addEventListener('click', (e) => {
-    const reportBtn = e.target.closest('.report-btn');
+  // maneja la logica del boton de reportar post
+  document.addEventListener("click", (e) => {
+    const reportBtn = e.target.closest(".report-btn");
     if (reportBtn) {
-      const postId = reportBtn.getAttribute('data-post-id');
-      const reportModalEl = document.getElementById('reportModal');
+      const postId = reportBtn.getAttribute("data-post-id");
+      const reportModalEl = document.getElementById("reportModal");
       if (reportModalEl) {
-        const input = document.getElementById('reportPostId');
+        const input = document.getElementById("reportPostId");
         if (input) input.value = postId;
         new bootstrap.Modal(reportModalEl).show();
       }
       return;
     }
-
-    // Redirige al detalle de la receta
-    
   });
 });
 
-// --- Búsqueda de recetas ---
-const btn = document.getElementById('searchButton');
-const input = document.getElementById('searchInput');
+// logica del input de busqueda en el index
+const btn = document.getElementById("searchButton");
+const input = document.getElementById("searchInput");
 
+// funcion que redirecciona a la pagina de busqueda con el texto ingresado
 function goSearch() {
   const search = input.value.trim();
-  window.location.href = search === ''
-    ? 'searchPage.php'
-    : 'searchPage.php?search=' + encodeURIComponent(search);
-  input.value = '';
+  window.location.href =
+    search === ""
+      ? "searchPage.php"
+      : "searchPage.php?search=" + encodeURIComponent(search);
+  input.value = "";
 }
 
-btn.addEventListener('click', goSearch);
-input.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') goSearch();
+// si hace click en el boton o presiona enter en el input realiza la busqueda
+btn.addEventListener("click", goSearch);
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") goSearch();
 });
