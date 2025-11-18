@@ -44,7 +44,6 @@ if (isset($_FILES['userImage']) && $_FILES['userImage']['error'] === UPLOAD_ERR_
     if (mysqli_stmt_execute($stmt)) {
         $response['success'] = true;
         $response['msj'] = 'Perfil actualizado con éxito.';
-        $response['imageUrl'] = 'data:image/jpeg;base64,' . base64_encode($fileContent);
     } else {
         $response['msj'] = 'Error al actualizar la imagen: ' . mysqli_error($con);
     }

@@ -14,8 +14,13 @@ if (!isset($_GET['followingUserId'])) {
 }
 
 // obtiene el ID del usuario que se está siguiendo y el ID del usuario de la sesión 
-$followingUserId = (int)$_GET['followingUserId'];
-$userId = $_SESSION['userId'] ?? 0;
+$followingUserId = intval($_GET['followingUserId']) ;
+$userId = intval($_SESSION['userId']);
+
+if (!isset($userId)) {
+    echo json_encode(['error'=> 'No se ha iniciado sesión.']);
+    exit();
+}
 
 //hace la consulta para obtener la cantidad de seguidores 
 $sqlFollowers = "SELECT COUNT(*) as followers FROM followers WHERE following_userId = ?";

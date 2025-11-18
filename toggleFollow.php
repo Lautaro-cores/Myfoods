@@ -68,14 +68,7 @@ if ($row = mysqli_fetch_assoc($res)) {
         mysqli_stmt_execute($stmtFollowing);
         $followingCount = mysqli_stmt_get_result($stmtFollowing)->fetch_assoc()['following'];
         
-        // devuelve la respuesta en json
-        echo json_encode([
-            'success' => true, 
-            'action' => 'unfollow',
-            'msj' => 'Dejaste de seguir al usuario.',
-            'followers' => intval($followersCount),
-            'following' => intval($followingCount)
-        ]);
+    
     } else {
         echo json_encode(['success' => false, 'msj' => 'Error al dejar de seguir al usuario.']);
     }
@@ -109,14 +102,6 @@ else {
         mysqli_stmt_execute($stmtFollowing);
         $followingCount = mysqli_stmt_get_result($stmtFollowing)->fetch_assoc()['following'];
 
-        // devuelve la respuesta en json
-        echo json_encode([
-            'success' => true,
-            'action' => 'follow',
-            'msj' => 'Ahora sigues al usuario.',
-            'followers' => intval($followersCount),
-            'following' => intval($followingCount)
-        ]);
     } else {
         echo json_encode(['success' => false, 'msj' => 'Error al seguir al usuario.']);
     }

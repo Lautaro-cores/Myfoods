@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // si responde con éxito, actualiza la interfaz sin recargar la página
       if (result.success) {
-        profileImage.src = `../getUserImage.php?ts=${new Date().getTime()}`;
+        profileImage.src = `../getUserImage.php?`;
 
         const displayNameElement = document.querySelector(".profile-details h3");
         const newDisplayName = displayNameField ? displayNameField.value.trim() : "";
