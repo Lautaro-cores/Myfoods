@@ -7,9 +7,9 @@
 @import url('styleAG.css');
 @import url('responsive.css');
 @import url('stylePR.css');
-@import url('styleMar.css');
 @import url('imagePreview.css');
 @import url('exposuiza.css');
+@import url('navbar.css');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 
@@ -19,6 +19,7 @@ body {
     line-height: 1.6;
     margin: 10px;
     color: #333;
+    overflow-x: hidden;
 }
 #fototrivia {
     display: block;
@@ -59,6 +60,8 @@ body {
     border: 1px solid #ccc;
     border-radius: 20px;
 }
+
+
 
 .logo {
   text-align: center;
@@ -110,7 +113,7 @@ body {
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 1000;
+    z-index: 997;
     background-color: #ff6f61;
     color: white;
     border: none;

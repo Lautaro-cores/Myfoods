@@ -48,11 +48,13 @@ session_start();
                 </div>
 
                 <div class="expo-card">
+                    <a href="aboutUs.php" class="card-link" aria-label="Ir a Conoce al equipo">
                     <div class="card-image" style="background-image:url('../img/istockphoto-1303554344-612x612.jpg')"></div>
                     <div class="card-body">
                         <h3>Conoce al equipo</h3>
                         <p>Conoce al equipo detrás de este proyecto</p>
                     </div>
+                    </a>
                 </div>
             </div>
         </main>

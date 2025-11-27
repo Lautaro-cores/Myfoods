@@ -25,13 +25,7 @@ if (!isset($_SESSION['userId'])) {
 
 <body>
     <?php include '../includes/navbar.php'; ?>
-    <a href="publishRecipe.php">
-        <button class="buttono">Publicar receta</button>
-    </a>
-
-    <a href="account.php?username=<?php echo urlencode($_SESSION['userName']); ?>">
-        <button class="buttonw">Ir a tu perfil</button>
-    </a>
+   
 
     <div class="header-container">
         <div class="logo-container">

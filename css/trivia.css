@@ -1,0 +1,44 @@
+
+		
+	#triviaCard {
+		max-width: 1000px;
+		margin: 1.5rem auto;
+	}
+
+    .seccion-pregunta {
+        padding: 50px;
+        text-align: center;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        margin-bottom: 50px;
+    }
+
+    .pregunta {
+        font-size: 1.25rem;
+
+        font-weight: bold;
+       
+    }
+	#choices {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 25px;
+	}
+
+	#choices .list-group-item {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		cursor: pointer;
+		border: 1px solid rgba(0,0,0,0.08);
+		border-radius: .5rem;
+		box-sizing: border-box;
+		background-clip: padding-box;
+	}
+
+	@media (max-width: 480px) {
+		#choices { grid-template-columns: 1fr; }
+	}

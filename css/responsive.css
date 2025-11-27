@@ -209,18 +209,30 @@
   /* Los links se ponen en fila centrados */
   .nav-links {
     flex-direction: row !important;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     width: 100%;
-  }
-
-  .nav-link {
-    padding: 0.5rem !important;
+    flex: 1;
   }
 
   /* Ajuste de iconos */
   .bi {
     font-size: 1.7rem !important;
+  }
+
+  /* Centrar links en celular */
+  .nav-link {
+    justify-content: center !important;
+    padding: 8px 5px !important;
+  }
+
+  .nav-link span {
+    display: none !important;
+  }
+
+  /* Mostrar botón de perfil en celular */
+  .profile-button {
+    display: flex !important;
   }
 
   /* Menú inferior dropup (se mueve a la derecha) */
@@ -237,4 +249,140 @@
     padding-bottom: 80px !important; /* espacio para la barra inferior */
   }
 }
+
+/* === RESPONSIVE PUBLISH RECIPE === */
+@media (max-width: 768px) {
+  /* Cambiar grillas a una sola columna */
+  .publish-header {
+    grid-template-columns: 1fr !important;
+    gap: 15px !important;
+    padding: 10px !important;
+  }
+
+  .publish-content {
+    grid-template-columns: 1fr !important;
+    gap: 15px !important;
+    padding: 10px !important;
+  }
+
+  /* Imagen de publicación */
+  .publish-image {
+    min-height: 200px !important;
+    width: 100% !important;
+  }
+
+  .publish-info {
+    width: 100% !important;
+  }
+
+  .publish-info input {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Ingredientes y pasos */
+  .publish-ingredients,
+  .publish-steps {
+    width: 100% !important;
+  }
+
+  .input-wrapper {
+    flex-direction: column !important;
+  }
+
+  .input-ingredient,
+  .input-quantity,
+  .input-step {
+    width: 100% !important;
+    min-width: 100% !important;
+    flex: none !important;
+    margin-left: 0 !important;
+  }
+
+  .input-container {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  /* Botones */
+  form > .buttono,
+  form > .buttonw {
+    width: calc(50% - 5px) !important;
+    padding: 8px 10px !important;
+    font-size: 14px !important;
+  }
+
+  form > .buttonw {
+    margin-left: 5px;
+  }
+
+  /* Etiquetas más compactas */
+  .tags-container {
+    max-height: 150px !important;
+  }
+
+  .tag-item {
+    font-size: 0.75rem !important;
+    padding: 0.2rem 0.4rem !important;
+  }
+
+  /* Autor info */
+  .author-info {
+    width: 100% !important;
+  }
+
+  .author-link {
+    flex-wrap: wrap !important;
+  }
+
+  .author-image {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .author-name {
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .publish-header,
+  .publish-content {
+    padding: 8px !important;
+  }
+
+  .input {
+    font-size: 14px !important;
+  }
+
+  form > .buttono,
+  form > .buttonw {
+    font-size: 12px !important;
+    padding: 6px 8px !important;
+  }
+
+  #addIngrediente,
+  #addPaso {
+    font-size: 12px !important;
+    padding: 6px 10px !important;
+  }
+
+  .input-ingredient,
+  .input-quantity,
+  .input-step {
+    font-size: 12px !important;
+  }
+
+  .publish-image {
+    min-height: 150px !important;
+  }
+
+  .delete-item {
+    padding: 3px 6px !important;
+    min-width: 28px !important;
+    height: 28px !important;
+    font-size: 14px !important;
+  }
+}
+
 

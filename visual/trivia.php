@@ -46,6 +46,8 @@ $selected = array_slice($questions, 0, 10);
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="../css/main.css">
 	<link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" href="../css/trivia.css">
+
 </head>
 
 <body>
@@ -54,12 +56,13 @@ $selected = array_slice($questions, 0, 10);
 	<div class="container my-4">
 		<h2 class="mb-3">Trivia: Cocina y comida</h2>
 
-		<div id="triviaCard" class="card">
+		<div id="triviaCard" class="">
 			<div class="card-body">
 				<div id="progress" class="mb-2">Pregunta <span id="currentNum">1</span> / <span id="totalNum">10</span></div>
-				<h5 id="questionText" class="card-title">Cargando pregunta...</h5>
-
-				<div id="choices" class="list-group mb-3"></div>
+				<div class="seccion-pregunta">
+				<h5 id="questionText" class="pregunta">Cargando pregunta...</h5>
+				</div>
+				<div id="choices" class=" mb-3 "></div>
 				<div id="feedback" class="mb-3" style="min-height:1.5em;"></div>
 
 				<button id="nextBtn" class="btn btn-primary" disabled>Siguiente</button>
@@ -105,7 +108,7 @@ $selected = array_slice($questions, 0, 10);
 
 			q.choices.forEach((choice, i) => {
 				const btn = document.createElement('button');
-				btn.className = 'list-group-item list-group-item-action';
+				btn.className = 'list-group-item list-group-item-action buttonw';
 				btn.type = 'button';
 				btn.textContent = choice;
 				btn.dataset.index = i;
