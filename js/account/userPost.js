@@ -52,11 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (username) {
         // consulta al getUserPosts.php los posts del usuario
         fetch(`../getUserPosts.php?username=${encodeURIComponent(username)}`)
-            .then(res => {
-                if (!res.ok) throw new Error('Error en la respuesta de la API');
-                return res.json();
-            })
-            .then(data => {
+           .then((res) => res.json())
+           .then((data) => {
                 // si no hay resultados, muestra mensaje informativo
                 if (!Array.isArray(data) || data.length === 0) {
                     userPostsDiv.innerHTML = '<p>No hay recetas recientes.</p>';
@@ -72,5 +69,4 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.error('Error cargando recetas de usuario:', err);
                 userPostsDiv.innerHTML = '<p>Error cargando recetas. Inténtalo más tarde.</p>';
             });
-    }
-});
+         } });

@@ -34,6 +34,7 @@ if ($resTags) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
         <link rel="stylesheet" href="../css/main.css">
+        <link rel="stylesheet" href="../css/navbar.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
         <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
 </head>
@@ -42,7 +43,7 @@ if ($resTags) {
     <?php include '../includes/backButton.php'; ?>
     <div class="header-container">
         <div class="search-container">
-            <input type="text" id="searchInput" class="input" placeholder="Buscar recetas" maxlength="100" value="<?php echo htmlspecialchars($busqueda); ?>">
+            <input type="text" id="searchInput" class="input search" placeholder="Buscar recetas" maxlength="100" value="<?php echo htmlspecialchars($busqueda); ?>">
             <button id="searchButton" class="buttono">Buscar</button>
         </div>
     </div>

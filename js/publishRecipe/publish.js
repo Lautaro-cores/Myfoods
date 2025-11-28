@@ -14,8 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function setupTagSelection() {
         const getAllTagCheckboxes = () => Array.from(document.querySelectorAll('input[name="tags[]"]'));
 
-        document.addEventListener('change', (evt) => {
-            const target = evt.target;
+        document.addEventListener('change', (e) => {
+            const target = e.target;
             // verifica si el elemento que disparó el evento es un checkbox de tag
             if (!target || !target.matches || !target.matches('input[name="tags[]"]')) return;
 

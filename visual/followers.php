@@ -18,6 +18,7 @@ $username = $_GET['username'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/navbar.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
     <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
 </head>
@@ -25,14 +26,17 @@ $username = $_GET['username'];
 <body>
     <?php include '../includes/navbar.php'; ?>
     <?php include '../includes/backButton.php'; ?>
-    <div class="container mt-4">
-        <h2>Usuarios que sigue <?php echo htmlspecialchars($username); ?></h2>
-            <div>
-        <a href="followers.php?username=<?php echo urlencode($username); ?>">Ver seguidores</a>
-        <a href="following.php?username=<?php echo urlencode($username); ?>">Ver siguiendo</a>
-    </div>
+    <div class="followers-following-container">
+        <h1><?php echo htmlspecialchars($username); ?> - Seguidores</h1>
+        <div class="nav-links">
+            <a href="followers.php?username=<?php echo urlencode($username); ?>" class="btn btn-dark rounded-pill">
+                <i class="bi bi-people-fill"></i> Seguidores
+            </a>
+            <a href="following.php?username=<?php echo urlencode($username); ?>" class="btn btn-outline-dark rounded-pill">
+                <i class="bi bi-person-plus-fill"></i> Siguiendo
+            </a>
+        </div>
         <div id="followingList">Cargando...</div>
-
     </div>
     <script type="module" src="../js/account/followersList.js"></script>
 </body>

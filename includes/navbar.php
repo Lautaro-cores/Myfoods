@@ -67,14 +67,25 @@
         transition: color 0.2s;
         padding: 0.5rem;
         /* make icon above text and center both */
-       
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        text-align: center;
     }
 
     .nav-link:hover {
         color: rgba(0, 0, 0, 1);
     }
 
-
+    /* ensure the label (span) displays as block and is centered even if Bootstrap utility classes
+       try to display it inline at certain breakpoints */
+    .nav-link span {
+        display: block !important;
+        text-align: center;
+        line-height: 1;
+    }
 
     /* Ajuste para el contenido principal */
     body {

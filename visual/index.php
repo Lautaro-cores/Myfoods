@@ -18,6 +18,7 @@ if (!isset($_SESSION['userId'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/navbar.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
 
@@ -25,13 +26,7 @@ if (!isset($_SESSION['userId'])) {
 
 <body>
     <?php include '../includes/navbar.php'; ?>
-    <a href="publishRecipe.php">
-        <button class="buttono">Publicar receta</button>
-    </a>
-
-    <a href="account.php?username=<?php echo urlencode($_SESSION['userName']); ?>">
-        <button class="buttonw">Ir a tu perfil</button>
-    </a>
+   
 
     <div class="header-container">
         <div class="logo-container">

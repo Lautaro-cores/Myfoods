@@ -1,0 +1,143 @@
+
+		
+	#triviaCard {
+		max-width: 1000px;
+		margin: 1.5rem auto;
+	}
+
+    .question-seccion {
+        padding: 50px;
+        text-align: center;
+        background-color: white;
+        border: 3px solid #333;
+        border-radius: 10px;
+        margin-bottom: 50px;
+    }
+
+    .question {
+        font-size: 1.25rem;
+
+        font-weight: bold;
+       
+    }
+
+	.trivia{
+		display: block;
+		margin: auto;
+
+	}
+
+	#choices {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 25px;
+	}
+
+	#choices .list-group-item {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		cursor: pointer;
+		border: 2px solid #333;
+		border-radius: .5rem;
+		box-sizing: border-box;
+		background-clip: padding-box;
+	}
+
+	@media (max-width: 480px) {
+		#choices { grid-template-columns: 1fr; }
+	}
+
+	/* Centrar el botón siguiente dentro de la tarjeta */
+	#nextBtn {
+		display: block;
+		margin: 1.25rem auto 0 auto;
+		width: 300px;
+		border: 1px solid #333;
+	}
+
+/* Cuadrados de progreso (pregunta / vidas / puntuación) */
+.progress-boxes {
+	display: flex;
+	gap: 0.75rem;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: nowrap;
+}
+.pbox {
+	min-width: 120px;
+	background: #ffffff83;
+	border: 2px solid #333;
+	border-radius: 8px;
+	padding: 6px 10px;
+	margin: 0px 100px;
+	text-align: center;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+.pbox small {
+	display: block;
+	font-size: 0.75rem;
+	color: #666;
+}
+.pvalue {
+	font-weight: 700;
+	font-size: 1.05rem;
+	margin-top: 4px;
+}
+
+/* Hearts for lives */
+.pvalue .heart {
+	color: #dc3545;
+	margin: 0 6px;
+	font-size: 1.5rem;
+	line-height: 1;
+	transition: transform .12s ease;
+}
+.pvalue .heart.empty {
+	color: #ddd;
+}
+.pvalue .heart + .heart { margin-left: 4px; }
+
+/* Leaderboard table tweaks */
+#leaderboard { width: 100%; }
+#leaderboard td, #leaderboard th { vertical-align: middle; }
+#leaderboard tbody tr:nth-child(odd) { background: rgba(0,0,0,0.02); }
+
+@media (max-width: 480px) {
+	/* Mantener en fila y permitir scroll horizontal en móviles */
+	.progress-boxes {
+		flex-direction: row;
+		align-items: center;
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		justify-content: flex-start;
+		gap: .5rem;
+		padding-bottom: 6px;
+	}
+	.pbox {
+		flex: 0 0 auto;
+		min-width: 90px;
+	}
+}
+
+	/* Forzar colores para respuestas correctas/incorrectas cuando se añaden las clases */
+	#choices .buttonw.list-group-item-success {
+		background-color: #28a745 !important;
+		color: #fff !important;
+		border-color: #28a745 !important;
+	}
+
+	#choices .buttonw.list-group-item-danger {
+		background-color: #dc3545 !important;
+		color: #fff !important;
+		border-color: #dc3545 !important;
+	}
+
+	#choices .buttonw.disabled,
+	#choices .buttonw:disabled {
+		opacity: 0.85;
+		cursor: not-allowed;
+	}
