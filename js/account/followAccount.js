@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // funcion que carga el estado actual de seguimiento 
 function loadFollowState(followingUserId) {
     // consulta al getFollow.php para saber el estado de seguimiento
-    fetch(`../getFollow.php?followingUserId=${followingUserId}`)
+    fetch(`../../getFollow.php?followingUserId=${followingUserId}`)
         .then((res) => res.json())
         .then((data) => {
             if (data.error) return;
@@ -52,7 +52,7 @@ function setupFollowToggle(followingUserId) {
         form.append("followingUserId", followingUserId);
 
         // envía la solicitud para alternar el seguimiento al toggleFollow.php
-        fetch("../toggleFollow.php", {
+        fetch("../../toggleFollow.php", {
             method: "POST",
             body: form.toString(),
             headers: { "Content-Type": "application/x-www-form-urlencoded" },

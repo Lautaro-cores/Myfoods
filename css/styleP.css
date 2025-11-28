@@ -72,3 +72,190 @@
   object-fit: cover;
 }
 
+/* === ESTILOS PARA SEGUIDORES Y SEGUIDOS === */
+
+.followers-following-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.followers-following-container h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  color: #333;
+}
+
+.followers-following-container .nav-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.followers-following-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.follower-following-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.follower-following-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.follower-profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.follower-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+
+.follower-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.follower-username {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.follower-username:hover {
+  color: #fda087;
+}
+
+.follower-displayname {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.follower-stats {
+  display: flex;
+  gap: 15px;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.follower-action {
+  margin-left: auto;
+}
+
+.follow-btn {
+  padding: 8px 20px;
+  background-color: #fda087;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.follow-btn:hover {
+  background-color: #ff8a6a;
+  transform: scale(1.05);
+}
+
+.follow-btn.following {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.follow-btn.following:hover {
+  background-color: #d0d0d0;
+}
+
+.empty-followers-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 1.1rem;
+}
+
+/* Responsive para dispositivos pequeños */
+@media (max-width: 768px) {
+  .follower-following-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .follower-profile {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .follower-action {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .follow-btn {
+    width: 100%;
+  }
+
+  .followers-following-container h1 {
+    font-size: 1.5rem;
+  }
+
+  .followers-following-container .nav-links {
+    flex-direction: column;
+  }
+
+  .followers-following-container .nav-links a {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .followers-following-container {
+    padding: 10px;
+    margin: 20px auto;
+  }
+
+  .follower-following-item {
+    padding: 10px;
+  }
+
+  .follower-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  .follower-username {
+    font-size: 0.95rem;
+  }
+
+  .follow-btn {
+    padding: 6px 15px;
+    font-size: 0.85rem;
+  }
+}
+

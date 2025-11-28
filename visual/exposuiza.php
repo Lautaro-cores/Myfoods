@@ -25,7 +25,7 @@ session_start();
         <main class="content-area container-fluid">
             <div class="hero text-center">
                 <img src="../img/exposuiza(titulo).png" alt="EXPOSUIZA" class="expo-title-image">
-                <p class="expo-desc">La exposuiza es un evento el cual se realiza cada año en la E.T.N 26° con el fin de que los estudiantes de cursos superiores muestren el proyecto. Aquí podrás jugar, dejar tu marca en el graffiti y conocer al equipo detrás del proyecto.</p>
+                <p class="expo-desc">La exposuiza es un evento el cual se realiza cada año en la E.T.N 26° con el fin de que los estudiantes de cursos superiores muestren el proyecto. Aquí podrás jugar y conocer al equipo detrás del proyecto.</p>
             </div>
 
             <div class="cards-row d-flex justify-content-center">
@@ -39,17 +39,9 @@ session_start();
                   </div>
                 </a>
 
-                <div class="expo-card me-3">
-                    <div class="card-image" style="background-image:url('../img/istockphoto-1303554344-612x612.jpg')"></div>
-                    <div class="card-body">
-                        <h3>Crear mi graffiti</h3>
-                        <p>Deja tu marca en nuestra pared digital</p>
-                    </div>
-                </div>
-
                 <div class="expo-card">
                     <a href="aboutUs.php" class="card-link" aria-label="Ir a Conoce al equipo">
-                    <div class="card-image" style="background-image:url('../img/istockphoto-1303554344-612x612.jpg')"></div>
+                    <div class="card-image" style="background-image:url('../img/1000_F_270367957_mZ2HNmTtQeQHQH4MkUDTXBf3fM8xq2mS.jpg')"></div>
                     <div class="card-body">
                         <h3>Conoce al equipo</h3>
                         <p>Conoce al equipo detrás de este proyecto</p>

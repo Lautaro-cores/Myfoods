@@ -1,3 +1,4 @@
+
 <nav class="navbar position-fixed start-0 top-0 bottom-0 "
     style="width: auto; background-color: #fda087; border-radius: 0 15px 15px 0; z-index: 1000;">
     <div class="container-fluid d-flex flex-column  p-0">
@@ -101,13 +102,7 @@
 </nav>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
-
-<!-- Estilos específicos para el navbar -->
-<style>
-    
-   
-</style>
+<link rel="stylesheet" href="../css/navbar.css">
 <!-- Scroll to top script -->
 <script src="../js/scrollTop.js" defer></script>
 <script>

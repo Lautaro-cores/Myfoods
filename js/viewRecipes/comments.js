@@ -11,7 +11,7 @@ export function createCommentHtml(
 ) {
   const imageUrl = comment.userImage
     ? `data:image/jpeg;base64,${comment.userImage}`
-    : defaultImageUrl;
+    : "../img/icono-imagen-perfil-predeterminado-alta-resolucion_852381-3658.jpg";
 
   // Botón para ver los comentarios hijos si existen
   const viewCommentsButton = `<a href="commentThread.php?commentId=${
@@ -58,7 +58,7 @@ export function createCommentHtml(
   }">
              <div class="comment-body">
                  <strong class="comment-username">${
-                   comment.displayName
+                   comment.displayName ? comment.displayName : comment.userName
                  }</strong>
                  ${ratingHtml}
                  <p class="comment-content">${comment.content}</p>

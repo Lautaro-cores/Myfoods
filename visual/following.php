@@ -17,6 +17,7 @@ $username = $_GET['username'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/navbar.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
     <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
 </head>
@@ -25,8 +26,8 @@ $username = $_GET['username'];
     <?php include '../includes/navbar.php'; ?>
     <?php include '../includes/backButton.php'; ?>
     
-    <div class="container following-container">
-        <h2><?php echo htmlspecialchars($username); ?></h2>
+    <div class="followers-following-container">
+        <h1><?php echo htmlspecialchars($username); ?> - Siguiendo</h1>
         
         <div class="nav-links">
             <a href="followers.php?username=<?php echo urlencode($username); ?>" 
@@ -39,14 +40,11 @@ $username = $_GET['username'];
             </a>
         </div>
 
-        <div id="followingList">
-            <template id="following-template">
-                <div class="following-item">
-                    <img class="following-image" src="" alt="Profile picture">
-                    <div class="following-details">
-                        <span class="following-username"></span>
-                        <div class="following-stats">
-                            <span class="followers-count"></span>
+        <div id="followingList">Cargando...</div>
+    </div>
+
+    <script type="module" src="../js/account/followersList.js"></script>
+</body>
                             <span class="following-count"></span>
                         </div>
                     </div>
