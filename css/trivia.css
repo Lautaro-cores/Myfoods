@@ -5,21 +5,28 @@
 		margin: 1.5rem auto;
 	}
 
-    .seccion-pregunta {
+    .question-seccion {
         padding: 50px;
         text-align: center;
         background-color: white;
-        border: 1px solid #ccc;
+        border: 3px solid #333;
         border-radius: 10px;
         margin-bottom: 50px;
     }
 
-    .pregunta {
+    .question {
         font-size: 1.25rem;
 
         font-weight: bold;
        
     }
+
+	.trivia{
+		display: block;
+		margin: auto;
+
+	}
+
 	#choices {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
@@ -33,7 +40,7 @@
 		justify-content: center;
 		text-align: center;
 		cursor: pointer;
-		border: 1px solid rgba(0,0,0,0.08);
+		border: 2px solid #333;
 		border-radius: .5rem;
 		box-sizing: border-box;
 		background-clip: padding-box;
@@ -41,4 +48,31 @@
 
 	@media (max-width: 480px) {
 		#choices { grid-template-columns: 1fr; }
+	}
+
+	/* Centrar el botón siguiente dentro de la tarjeta */
+	#nextBtn {
+		display: block;
+		margin: 1.25rem auto 0 auto;
+		width: 300px;
+		border: 1px solid #333;
+	}
+
+	/* Forzar colores para respuestas correctas/incorrectas cuando se añaden las clases */
+	#choices .buttonw.list-group-item-success {
+		background-color: #28a745 !important;
+		color: #fff !important;
+		border-color: #28a745 !important;
+	}
+
+	#choices .buttonw.list-group-item-danger {
+		background-color: #dc3545 !important;
+		color: #fff !important;
+		border-color: #dc3545 !important;
+	}
+
+	#choices .buttonw.disabled,
+	#choices .buttonw:disabled {
+		opacity: 0.85;
+		cursor: not-allowed;
 	}
