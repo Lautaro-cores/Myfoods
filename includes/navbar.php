@@ -55,5 +55,55 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
 
+<!-- Estilos específicos para el navbar -->
+<style>
+    
+    .navbar {
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
 
+    .nav-link {
+        color: rgba(0, 0, 0, 0.7);
+        transition: color 0.2s;
+        padding: 0.5rem;
+        /* make icon above text and center both */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        text-align: center;
+    }
+
+    .nav-link:hover {
+        color: rgba(0, 0, 0, 1);
+    }
+
+    /* ensure the label (span) displays as block and is centered even if Bootstrap utility classes
+       try to display it inline at certain breakpoints */
+    .nav-link span {
+        display: block !important;
+        text-align: center;
+        line-height: 1;
+    }
+
+    /* Ajuste para el contenido principal */
+    body {
+        padding-left: 220px;
+    }
+
+    .logo-nawbar{
+        width: 100px;
+    }
+
+    .logo-exposuiza{
+        width: 50px;
+    }
+
+    /* Estilos para los iconos */
+    .bi {
+        font-size: 1.5rem;
+    }
+</style>
+<!-- Scroll to top script -->
 <script src="../js/scrollTop.js" defer></script>
