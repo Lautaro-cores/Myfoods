@@ -42,7 +42,7 @@
 .expo-card {
   width: 320px;
   border-radius: 12px;
-  box-shadow: 0 6px 0 rgba(0,0,0,0.25);
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.22);
   overflow: hidden;
   background: #fdeceb;
 }
