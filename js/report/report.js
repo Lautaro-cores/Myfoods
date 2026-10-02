@@ -26,9 +26,7 @@
         if (reason) reason.value = '';
 
         // muestra el modal
-   const bsModal = new bootstrap.Modal(modalEl);
-        bsModal.show();
-        modalEl.show();
+        bootstrap.Modal.getOrCreateInstance(modalEl).show();
     });
 
     // manejar el envío del formulario de reporte

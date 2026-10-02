@@ -50,6 +50,12 @@
   overflow: hidden;
   flex: 0 0 auto;
 }
+.post-image .carousel,
+.post-image .carousel-inner,
+.post-image .carousel-item,
+.post-image .carousel-item > a {
+  height: 100%;
+}
 .image-post {
   width: 100%;
   height: 100%;

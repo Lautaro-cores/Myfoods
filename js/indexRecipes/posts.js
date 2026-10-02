@@ -138,20 +138,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // maneja la logica del boton de reportar post
-  document.addEventListener("click", (e) => {
-    const reportBtn = e.target.closest(".report-btn");
-    if (reportBtn) {
-      const postId = reportBtn.getAttribute("data-post-id");
-      const reportModalEl = document.getElementById("reportModal");
-      if (reportModalEl) {
-        const input = document.getElementById("reportPostId");
-        if (input) input.value = postId;
-        reportModalEl.show();
-      }
-      return;
-    }
-  });
 });
 
 // logica del input de busqueda en el index
